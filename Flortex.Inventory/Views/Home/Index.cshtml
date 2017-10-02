@@ -1,0 +1,200 @@
+﻿@using Flortex.Inventory.Models
+@using System.Data
+@{ 
+    var ShowReOrdQty = Request.Cookies["ShowReOrdQty"];
+    var ShowBlckQty = Request.Cookies["ShowBlckQty"];
+    bool ShowReOrdQty_Val = false;
+    bool ShowBlckQty_Val = false;
+
+    if (ShowReOrdQty != null && ShowReOrdQty.Value.ToString() == "1")
+    {
+        ShowReOrdQty_Val = true;
+    }
+
+    if (ShowBlckQty != null && ShowBlckQty.Value.ToString() == "1")
+    {
+        ShowBlckQty_Val = true;
+    }
+
+    DataSet ds = LookUps.GetDocumentAlerts(ShowReOrdQty_Val, ShowBlckQty_Val);
+    int Count1 = 0, Count2 = 0;
+    int RoleID = (int)LookUps.GetSessionObject("RoleID");
+}
+
+@if (RoleID == 1)
+{
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="heading clearfix">
+                <h3 class="pull-left">Re order Quantity Stats</h3>
+                <span class="pull-right">
+                    @if (ShowReOrdQty_Val)
+                    {
+                    <label class="checkbox"><input type="checkbox" id="ReOrdQtyCheck" checked="checked" class="showAllData" data-type="1" /> Show All</label>
+
+                    }
+                    else
+                    {
+                    <label class="checkbox"><input type="checkbox" id="ReOrdQtyCheck" class="showAllData" data-type="1" /> Show All</label> 
+                    }
+                </span>
+            </div>
+            <div>
+                @if (ds != null && ds.Tables.Count > 1)
+                {  <table id="grid1">
+
+                    <thead>
+                        <tr>
+                            <th data-field="DocName">DocName</th>
+                            <th data-field="ProductCode">ProductCode</th>
+                            <th data-field="Vendor">Vendor</th>
+                            <th data-field="ExpectedDate">ExpectedDate</th>
+                            <th data-field="WarehouseName">Warehouse Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                            {
+                                Count1++;
+                        <tr>
+                            <td><a href="/GridStock/UpdateInStock?DocID=@ds.Tables[0].Rows[i]["DocNo"].ToString()">@ds.Tables[0].Rows[i]["DocName"].ToString()</a> </td>
+                            <td>@ds.Tables[0].Rows[i]["ProductCode"].ToString()</td>
+                            <td>@ds.Tables[0].Rows[i]["Vendor"].ToString()</td>
+                            <td>@ds.Tables[0].Rows[i]["ExpectedDate"].ToString()</td>
+                            <td>@ds.Tables[0].Rows[i]["WarehouseName"].ToString()</td>
+                        </tr>
+                            }
+
+                        }
+
+
+                    </tbody>
+                </table>
+
+                }
+            </div>
+        </div>
+
+        <div class="span6">
+            <div class="heading clearfix">
+                <h3 class="pull-left">Blocked Quantity Stats</h3>
+                <span class="pull-right">
+                    @if (ShowBlckQty_Val)
+                    {
+                        <label class="checkbox"><input type="checkbox" id="BlckQtyCheck" checked="checked" class="showAllData" data-type="2" /> Show All</label>
+
+                    }
+                    else
+                    {
+                        <label class="checkbox"><input type="checkbox" id="BlckQtyCheck" class="showAllData" data-type="2" /> Show All</label>
+                    }
+                </span>
+            </div>
+            <div>
+                @if (ds != null && ds.Tables.Count > 1)
+                {
+
+                <table id="grid2">
+
+                    <thead>
+                        <tr>
+                            <th data-field="DocName">DocName</th>
+                            <th data-field="ProductCode">ProductCode</th>
+                            <th data-field="Customer">Customer</th>
+                            <th data-field="ExpectedDate">ExpectedDate</th>
+                            <th data-field="WarehouseName">Warehouse Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ds.Tables[1].Rows.Count > 0)
+                            {
+                                for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                                {
+                                    Count2++;
+                            <tr>
+                                <td><a href="/GridStock/UpdateOutStock?DocID=@ds.Tables[1].Rows[i]["DocNo"].ToString()">@ds.Tables[1].Rows[i]["DocName"].ToString()</a> </td>
+                                <td>@ds.Tables[1].Rows[i]["ProductCode"].ToString()</td>
+                                <td>@ds.Tables[1].Rows[i]["Customer"].ToString()</td>
+                                <td>@ds.Tables[1].Rows[i]["ExpectedDate"].ToString()</td>
+                                <td>@ds.Tables[1].Rows[i]["WarehouseName"].ToString()</td>
+                            </tr>
+                                }
+
+                            }
+
+
+                    </tbody>
+                </table>
+                }
+
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#grid1").kendoGrid({
+            height: 500,
+            filterable: true,
+            sortable: true
+        });
+        $("#grid2").kendoGrid({
+            height: 500,
+            filterable: true,
+            sortable: true
+        });
+
+        var grid1 = $("#grid1").data("kendoGrid");
+
+        if (grid1) {
+            grid1.thead.kendoTooltip({
+                filter: "th",
+                content: function (e) {
+                    var target = e.target; // element for which the tooltip is shown
+                    return $(target).text();
+                }
+            });
+        }
+        var grid2 = $("#grid2").data("kendoGrid");
+
+        if (grid2) {
+            grid2.thead.kendoTooltip({
+                filter: "th",
+                content: function (e) {
+                    var target = e.target; // element for which the tooltip is shown
+                    return $(target).text();
+                }
+            });
+        }
+
+        $("input.showAllData").on("click", function (e) {
+            e.preventDefault();
+
+            var _type = $(this).attr("data-type");
+            var _val = 0;
+            if ($(this).is(":checked"))
+                _val = 1;
+
+            $.ajax({
+                url: '/Home/SetPrefCookies',
+                type: 'Get',
+                async: false,
+                beforeSend: function () {
+                    $("#ajaxLoadingImg").show();
+                },
+                data: { Type: _type, Status: _val },
+                complete: function () { $("#ajaxLoadingImg").hide(); },
+                success: function (res) {
+                    window.location.href = "/Home/Index";
+                },
+                error: function (e) { alert("error"); }
+            });
+        });
+
+    });
+
+
+</script>

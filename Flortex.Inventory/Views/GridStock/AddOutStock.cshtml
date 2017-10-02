@@ -1,0 +1,634 @@
+﻿@model Flortex.Inventory.Models.OutwardDocument
+@using System.Data;
+@using Flortex.Inventory.Models;
+@{
+ 
+   
+}
+
+
+<form class="cmxform" role="search" id="frmInwardStock">
+    @Html.HiddenFor(m => m.DocID)
+    <div class="row-fluid heading">
+        <div class="span12">
+            @if (Model.DocID == 0)
+            {
+                <h2 class="pull-left">Add Outward Stocks  </h2>
+            }
+            else if (Model.DocID > 0)
+            {
+                <h2 class="pull-left">Update Outward Stocks  </h2>
+            }
+
+            <div class="pull-right">
+                <a id="btnSave" class="btn btn-default">Save</a>
+                <a id="btnNew" class="btn btn-default">New</a>
+                <a id="btnPrev" class="btn btn-default">Previous</a>
+                <a id="btnNext" class="btn btn-default">Next</a>
+                <a id="btnBack" class="btn btn-default">Back to Documents</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span4">
+            <div class="row-fluid">
+                <div class="span3">
+                    <label for="txtDocName" class="label">Doc Name</label>
+                </div>
+                <div class="span9">
+                    <input type="text" style="width:250px;" class="form-control mousetrap" readonly="readonly" name="txtDocName"  id="txtDocName" placeholder="Doc Name.." value="@Model.DocName">
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="row-fluid">
+                <div class="span3">
+                    <label for="dtDate" class="label">Doc Date</label>
+                </div>
+                <div class="span9">
+                    @if (Model.DocID == 0)
+                    {
+                        <input id="dtDate" placeholder="Date"  class="mousetrap" >
+                    }
+                    else if (Model.DocID > 0)
+                    {
+                        <input id="dtDate" placeholder="Date"  value="@Model.DocDate"  class="mousetrap" >
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="row-fluid">
+                <div class="span3">
+                    <label for="drpWarehouse" class="label">Warehouse</label>
+                </div>
+                <div class="span9">
+                    <input id="drpWarehouse" name="drpWarehouse" class="mousetrap" style="width: 250px;" value="@Model.WareHouseName"/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span4">
+            <div class="row-fluid">
+                <div class="span3">
+                    <label for="txtCustomer" class="label">Customer</label>
+                </div>
+                <div class="span9">
+                    <input type="text" style="width:250px;" class="form-control mousetrap" name="txtCustomer"  id="txtCustomer" placeholder="Customer Name.." value="@Model.Customer">
+                </div>
+            </div>
+        </div>
+
+        <div class="span4">
+            <div class="row-fluid">
+                <div class="span3">
+                    <label for="txtComments" class="label">Block Until</label>
+                </div>
+                <div class="span9">
+                    <div class="row-fluid">
+                        <div class="span6">
+                            @if (Model.DocID > 0 && Model.IsExpected)
+                            {
+                                <input type="checkbox" style="padding: 10px; height: 10px;" name="chkShedule" id="chkShedule" checked="checked"  class="mousetrap">  
+                            }
+                            else
+                            {
+                                <input type="checkbox" style="padding: 20px; height: 30px; margin: 0px;" name="chkShedule" id="chkShedule"  class="mousetrap"> 
+                            }
+                        </div>
+                        @if (Model.DocID > 0 && Model.IsExpected)
+                        {
+                            <div class="span6">
+                                <div id="divSheduled">
+                                    <input id="dtExpDate" type="text" value="@Model.EffectiveDate" placeholder="Date" class="pull-right mousetrap">
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="span6">
+                                <div id="divSheduled">
+                                    <input id="dtExpDate" type="text" placeholder="Date" class="pull-right mousetrap">
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="span4">
+            <div class="row-fluid">
+                <div class="span3">
+                    <label for="txtComments" class="label">Remarks</label>
+                </div>
+                <div class="span9">
+                    <input type="text" style="width:250px;" class="form-control mousetrap" name="txtComments"  id="txtComments" placeholder="Comments.." value="@Model.Comments">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12 ">
+            <div class="row-fluid">
+                <div class="span12 ">
+                    <div id="grid"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</form>
+
+<style>
+    .drp-header {
+        font-size: 1.2em;
+    }
+
+        .drp-header > span {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            text-align: left;
+            display: inline-block;
+            border-style: solid;
+            border-width: 0 0 1px 1px;
+            padding: .3em .6em;
+            width: 170px;
+        }
+
+            .drp-header > span:first-child {
+                width: 70px;
+                border-left-width: 0;
+            }
+</style>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        var EndDate = '';
+
+        $("#dtDate").kendoDatePicker({ format: "dd-MM-yyyy" });
+        // $("#dtDate").val(getDate());
+
+        $("#dtExpDate").kendoDatePicker({ format: "dd-MM-yyyy" });
+        // $("#dtExpDate").val(getDate());
+
+        $(".k-datepicker").css("width", "196px");
+
+        function getDate() {
+            var date = new Date();
+            return date.getDate() + "-" + parseInt(date.getMonth() + 1) + "-" + date.getFullYear()
+        }
+
+        var data = [];
+
+        var WarehouseData = [];
+
+        WarehouseData = getWarehouseData();
+
+        function getWarehouseData() {
+            $.ajax({
+                url:  '/GridStock/WarehouseData',
+                type: 'Get',
+                async: false,
+                beforeSend: function () {
+                    $("#ajaxLoadingImg").show();
+                },
+                complete: function () { $("#ajaxLoadingImg").hide(); },
+                success: function (res) {
+                    WarehouseData = JSON.parse(res);
+                    $("#drpWarehouse").kendoComboBox({
+                        dataSource: WarehouseData,
+                        filter: "startswith",
+                        placeholder: "Select Warehouse...",
+
+                        headerTemplate: '<div class="drp-header">' +
+                                '<span class="k-widget k-header">Code</span>' +
+                                '<span class="k-widget k-header">Name</span>' +
+                            '</div>',
+                        template: '<span class="k-state-default"><span>#: data.code #</span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                  '<span class="k-state-default"><span  class="drpVal" data-selId="#: data.id #">#: data.name #</span></span>',
+                        dataTextField: "name",
+                        dataValueField: "id"
+
+                    });
+                },
+                error: function (e) { alert("error"); }
+            });
+            return WarehouseData;
+        }
+
+        if ($('#chkShedule').is(":checked")) {
+            $("#divSheduled").show();
+        }
+        else {
+            $("#divSheduled").hide();
+        }
+
+        $('#chkShedule').on("click", function (e) {
+            $('#chkShedule').is(":checked") ? $("#divSheduled").show() : $("#divSheduled").hide();
+        });
+
+         
+        var combobox = $("#drpWarehouse").data("kendoComboBox");
+
+        if ('@Model.DocID' > 0) {
+
+            combobox.text('@Model.WareHouseName');
+            combobox.value('@Model.WareHouseId');
+
+            var jsonData = '@Html.Raw(Model.GridData)';
+
+            if (jsonData != null && jsonData.length > 0) {
+                var tempData = JSON.parse(jsonData);
+                for (var i = 0; i < tempData.length; i++) {
+                    var obj = {};
+                    obj.id = i + 1;
+                    obj.productID = tempData[i].productID;
+                    obj.Qty = tempData[i].Qty;
+                    data.push(obj);
+                }
+                for (var i = tempData.length; i < 30; i++) {
+                    var obj = {};
+                    obj.id = i + 1;
+                    obj.productID = "";
+                    obj.Qty = "";
+                    data.push(obj);
+                }
+            }
+        }
+        else {
+            $("#dtDate").val(getDate());
+            $("#dtExpDate").val(getDate());
+            for (var i = 0; i < 30; i++) {
+                var obj = {};
+                obj.id = i + 1;
+                obj.productID = "";
+                obj.Qty = "";
+                data.push(obj);
+            }
+        }
+
+        var GetEmptyRows = function () {
+            var _data = [];
+            for (var i = 0; i < 30; i++) {
+                var obj = {};
+                obj.id = i + 1;
+                obj.productID = "";
+                obj.Qty = "";
+                _data.push(obj);
+            }
+
+            return _data;
+        }
+
+
+        var productCodes = [];
+        productCodes = getProductsByCode();
+        function getProductsByCode() {
+            $.ajax({
+                url:  '/GridStock/ProductsByCode',
+                type: 'Get',
+                async: false,
+                beforeSend: function () {
+                    $("#ajaxLoadingImg").show();
+                },
+                complete: function () { $("#ajaxLoadingImg").hide(); },
+                success: function (res) {
+                    productCodes = JSON.parse(res);
+                },
+                error: function (e) { alert("error"); }
+            });
+            return productCodes;
+        }
+
+        var productNames = [];
+        productNames = getProductsByName();
+        function getProductsByName() {
+            $.ajax({
+                url:  '/GridStock/ProductsByName',
+                type: 'Get',
+                async: false,
+                beforeSend: function () {
+                    $("#ajaxLoadingImg").show();
+                },
+                complete: function () { $("#ajaxLoadingImg").hide(); },
+                success: function (res) {
+                    productNames = JSON.parse(res);
+                },
+                error: function (e) { alert("error"); }
+            });
+            return productNames;
+        }
+
+        var initGrid = function (_inputData) {
+            //var dataSource = new kendo.data.DataSource({
+            //    data: _inputData,
+            //    autoSync: true,
+            //    schema: {
+            //        model: {
+            //            fields: {
+            //                id: { editable: false },
+            //                productID: { editable: true },
+            //                Qty: { editable: true }
+            //            }
+            //        }
+            //    }
+            //});
+            $("#grid").kendoGrid({
+                dataSource: _inputData,
+                height: 335,
+                editable: true,
+                navigatable: true,
+                columns: [
+                    //{
+                    //field: "id",
+                    //title: "S.No",
+                    //width: "5%",
+                    //type: "string",
+                    //template: function (dataItem) { return '<span>' + dataItem.id + '</span>'; }
+                    //},
+                {
+                    field: "productID",
+                    title: "Item Code",
+                    width: "25%",
+                    template: function (dataItem) {
+                        var code = "";
+                        $.each(productCodes, function () {
+                            if (this.id == dataItem.productID) {
+                                code = this.code;
+                                return false;
+                            }
+                        });
+                        return code;
+                    },
+                    editor: function (container, options) {
+                        $("<input class='mousetrap'/>")
+                            .attr("data-bind", "value:productID")
+                            .appendTo(container)
+                            .kendoComboBox({
+                                placeholder: "Select Code...",
+                                dataSource: productCodes,
+                                dataTextField: "code",
+                                dataValueField: "id",
+                                filter: "contains",
+                                autobind: false,
+                                minLength: 1
+                            });
+                    }
+                }, {
+                    field: "productID",
+                    title: "Item Name",
+                    width: "25%",
+                    template: function (dataItem) {
+                        var name = "";
+                        $.each(productNames, function () {
+                            if (this.id == dataItem.productID) {
+                                name = this.name;
+                                return false;
+                            }
+                        });
+                        return name;
+                    },
+                    editor: function (container, options) {
+                        $("<input class='mousetrap'/>")
+                            .attr("data-bind", "value:productID")
+                            .appendTo(container)
+                            .kendoComboBox({
+                                placeholder: "Select Product...",
+                                dataSource: productNames,
+                                dataTextField: "name",
+                                dataValueField: "id",
+                                filter: "contains",
+                                autobind: false,
+                                minLength: 1
+                            });
+                    }
+                }, {
+                    field: "Qty",
+                    title: "Quantity",
+                    type: "number",
+                    width: "20%",
+                }]
+            });
+        }
+
+        initGrid(data);
+
+        var refreshAsNewDoc = function () {
+            $("#DocID").val(0);
+            $("#drpWarehouse").val("");
+            if (combobox && combobox.text && combobox.value) {
+                combobox.text('');
+                combobox.value('');
+            }
+            $("#dtDate").val(getDate());
+            $("#dtExpDate").val(getDate());
+            $("#chkShedule").removeAttr("checked");
+            $("#divSheduled").hide();
+            $("#txtComments").val("");
+            $("#txtCustomer").val("");
+            initGrid(GetEmptyRows());
+            getLatestDocNum();
+            $("#txtDocName").focus();
+        };
+
+        var getLatestDocNum = function () {
+            $.ajax({
+                url:  '/GridStock/GetLatestDocName',
+                type: 'GET',
+                data: { Type: 3 },
+                success: function (res) {
+                    if (res) {
+                        $("#txtDocName").val(res);
+                    }
+                },
+                beforeSend: function () {
+                    $("#ajaxLoadingImg").show();
+                },
+                complete: function () { $("#ajaxLoadingImg").hide(); },
+                error: function (e) {
+
+                }
+            });
+        }
+
+
+        var getDataObject = function () {
+            //var selwarehouseID = _.pluck(_.where(WarehouseData, { name: $("#drpWarehouse").val() }), 'id')[0];
+
+            var combobox1 = $("#drpWarehouse").data("kendoComboBox");
+            var xmlString = "<Root>";
+            if ($("#dtDate").val() == "") {
+                customAlert('Please select Date', 'alert', function () { $("#dtDate").focus(); });
+                $("#dtDate").focus();
+                return false;
+            }
+            else if (combobox1.value() == "" || combobox1.text() == "") {
+                customAlert('Please select Warehouse', 'alert', function () { $("#drpWarehouse").focus(); });
+                $("#drpWarehouse").focus();
+                return false;
+            }
+            else if ($("#txtCustomer").val() == "") {
+                customAlert('Please enter Customer.', 'alert', function () { $("#txtCustomer").focus(); });
+
+                return false;
+            }
+            else if ($('#chkShedule').is(":checked") && $("#dtExpDate").val() == '') {
+                customAlert('Please select Sheduled date.', 'alert');
+                $("#dtExpDate").focus();
+                return false;
+            }
+            else {
+                var gridData = $("#grid").data("kendoGrid")._data;
+                for (var i = 0; i < gridData.length; i++) {
+                    if (gridData[0].productID == "" || gridData[0].Qty == null) {
+                        customAlert('Please select atleast one Product at Row 1', 'alert');
+                        return false;
+                    }
+                    else {
+                        if (gridData[i].productID == "" && gridData[i].Qty == null) {
+                            continue;
+                        }
+                        else if (gridData[i].productID != "" && gridData[i].Qty == null) {
+                            customAlert("Please enter Qty at Row" + (i + 1), 'alert');
+                            return false;
+                            break;
+                        }
+                        else if (gridData[i].productID == "" && gridData[i].Qty != null) {
+                            customAlert("Please Select Product at Row" + (i + 1), 'alert');
+                            return false;
+                        }
+                        else {
+                            xmlString += "<Child PID=\"" + gridData[i].productID + "\" QTY=\"" + gridData[i].Qty + "\" />";
+                        }
+                    }
+                }
+                xmlString += "</Root>";
+            }
+
+            return {
+                DocID: $("#DocID").val(),
+                DocName: $("#txtDocName").val(),
+                DocDate: $("#dtDate").val(),
+                WareHouseId: combobox1.value(),
+                WareHouseName: combobox1.text(),
+                Customer: $("#txtCustomer").val(),
+                IsExpected: $('#chkShedule').is(":checked"),
+                EffectiveDate: $("#dtExpDate").val(),
+                Comments: $("#txtComments").val(),
+                GridData: xmlString
+            }
+
+        };
+
+        var _Save = function () {
+            var obj = getDataObject();
+            if (typeof (obj) != 'boolean' && typeof (obj) == 'object') {
+                $.ajax({
+                    url:  '/GridStock/SaveDocumentOUT',
+                    type: 'POST',
+                    data: { Data: JSON.stringify(obj) },
+                    success: function (res) {
+                        if (res != "-494") {
+                            customAlert('Document saved as ' + res, 'alert', function () { $("#txtDocName").focus(); });
+                            refreshAsNewDoc();
+                        }
+                        else
+                            customAlert('Error occured while saving. Please contact administrator.');
+                        //customAlert('Document saved as ' + res, 'alert', function () { $("#txtDocName").focus(); }); 
+                        //refreshAsNewDoc();
+                    },
+                    beforeSend: function () {
+                        $("#ajaxLoadingImg").show();
+                    },
+                    complete: function () { $("#ajaxLoadingImg").hide(); },
+                    error: function (e) {
+                        customAlert('Error in Saving..', 'alert');
+                    }
+                });
+            }
+        }
+
+        $("a#btnSave").on("click", function (e) {
+            e.preventDefault();
+             
+            _Save();
+        });
+
+        //btnBack 
+        $("#btnBack").on("click", function (e) {
+            e.preventDefault();
+            _back();
+        });
+
+        //btnPrev 
+        $("#btnPrev").on("click", function (e) {
+            e.preventDefault();
+            _previousDoc();
+        });
+        //btnNext 
+        $("#btnNext").on("click", function (e) {
+            e.preventDefault();
+            _nextDoc();
+        });
+        //btnBack 
+        $("#btnNew").on("click", function (e) {
+            e.preventDefault();
+            _newDoc();
+        });
+
+        var _back = function () {
+            window.location.href = "/GridStock/OutwardStock";
+        }
+
+        var _previousDoc = function () {
+            var url = '@Url.Action("GetNextPrevDoc", "GridStock", new { _Action = "prev", DocType = 3, DocNo = Model.DocID })';
+            window.location.href = url.replace(/&amp;/gi, '&');
+        }
+        var _nextDoc = function () {
+            var url = '@Url.Action("GetNextPrevDoc", "GridStock", new { _Action = "next", DocType = 3, DocNo = Model.DocID })';
+            window.location.href = url.replace(/&amp;/gi, '&');
+        }
+        var _newDoc = function () {
+            window.location.href = '@Url.Action("AddOutStock", "GridStock")';
+        }
+
+        Mousetrap.bind(['ctrl+s', 'command+s'], function (e) {
+            e.preventDefault();
+            _Save();
+        });
+
+        Mousetrap.bind(['ctrl+backspace'], function (e) {
+            e.preventDefault();
+            _back();
+        });
+
+        Mousetrap.bind(['ctrl+up'], function (e) {
+
+            e.preventDefault();
+            _newDoc();
+        });
+        Mousetrap.bind(['ctrl+left'], function (e) {
+
+            e.preventDefault();
+            _previousDoc();
+        });
+        Mousetrap.bind(['ctrl+right'], function (e) {
+            e.preventDefault();
+            _nextDoc();
+        });
+        $("#txtDocName").focus();
+    });
+</script>

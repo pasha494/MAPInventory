@@ -1,0 +1,12 @@
+﻿
+update AutoGenerate set Counter=1
+
+truncate table InwardMasterData
+truncate table InwardStockMaster
+truncate table OpeningMasterData
+truncate table OpeningStockMaster
+truncate table OutwardMasterData
+truncate table OutwardStockMaster
+truncate table StockTransferMaster
+truncate table StockTransferMasterData
+truncate table Warehouses

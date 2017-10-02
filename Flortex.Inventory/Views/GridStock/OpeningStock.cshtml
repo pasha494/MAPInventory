@@ -1,0 +1,161 @@
+﻿@{
+    ViewBag.Title = "OpeningStock";
+}
+<script src="http://cdn.kendostatic.com/2014.3.1029/js/jszip.min.js"></script>
+<form class="cmxform" role="search">
+    <div class="row-fluid">
+        <div class="span12">
+            <h2 class="subtitle">OpeningStock</h2>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="col-lg-12 span12">
+            <div id="grid"></div>
+        </div>
+    </div>
+</form>
+<script id="template" type="text/x-kendo-template">
+    <a class="k-button" onclick="return toolbar_click()">ADD NEW ENTRY</a>
+</script>
+<script id="template1" type="text/x-kendo-template">
+   <a class="k-button k-button-icontext k-grid-excel"  id="btnExcelExport"><span class="k-icon k-i-excel"></span>Export to Excel</a>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var Documents = [];
+        Documents = getDocs();
+        function getDocs() {
+            $.ajax({
+                url: '/GridStock/LoadOpeningStockDocuments',
+                type: 'Get',
+                async: false,
+                success: function (res) {
+                    Documents = JSON.parse(res);
+                },
+                error: function (e) { customAlert('error occured.', 'alert'); }
+            });
+             
+            return Documents;
+        }
+
+        var dataSource = new kendo.data.DataSource({ 
+            data: Documents,
+            autoSync: true,
+            schema: {
+                model: {
+                    fields: {
+                        SNo: { editable: false },
+                        DocName: { type: "string", editable: false },
+                        Warehouse: { type: "string", editable: false },
+                        Date: { type: "date", editable: false },
+                    }
+                }
+            }
+        });
+
+        function gridDataBound(e) {
+            var grid = e.sender;
+            if (grid.dataSource.total() == 0) {
+                var colCount = grid.columns.length;
+                $(e.sender.wrapper)
+                    .find('tbody')
+                    .append('<tr class="kendo-data-row"><td colspan="' + colCount + '" class="no-data">No Data :( <br/>Add new <b>Opening Stock<b></td></tr>');
+            }
+        };
+
+        $("#grid").kendoGrid({
+            dataSource: dataSource,
+            height: 700,
+            sortable: true,
+            editable: false,
+            filterable: true,
+            pageable: false,
+            toolbar: [
+     { template: kendo.template($("#template").html()) }
+     , { template: kendo.template($("#template1").html()) }
+            ],
+            columns: [
+                 { field: "SNo", title: "SNo", width: "100px" },
+                { field: "DocName", title: "Document Name", width: "160px" },
+                { field: "Warehouse", title: "Warehouse", width: "130px" },
+                {
+                    field: "Date", title: "Date", width: "120px",
+                    template: "#=kendo.toString(kendo.parseDate(Date,'yyyy-MM-dd'),'dd-MM-yyyy')#"
+                },
+               { command: { text: "Edit", name: "edit", click: onEdit }, title: " ", width: "100px" },
+               {
+                   command: {
+                       name: "Delete ", click: function (e) {
+                           e.preventDefault();
+                           var self = this;
+                           smoke.confirm("Are you sure, Do you want to delete.?", function (ev) {
+                               if (ev) {
+                                   var tr = $(e.target).closest("tr");
+                                   var data = self.dataItem(tr);
+                                   $.ajax({
+                                       url: '/GridStock/DeleteOpStock',
+                                       type: 'POST',
+                                       data: { "DocID": data.DocNo },
+                                       beforeSend: function () {
+                                           $("#ajaxLoadingImg").show();
+                                       },
+                                       complete: function () { $("#ajaxLoadingImg").hide(); },
+                                       success: function (res) {
+                                           if (res == 1 || res == "1") {
+                                               customAlert('Deleted Successfully.', 'alert'); 
+                                               Documents = getDocs();
+                                               var dataSource = new kendo.data.DataSource({ data: Documents });
+                                               var grid = $('#grid').data("kendoGrid");
+                                               dataSource.read();
+                                               grid.setDataSource(dataSource);
+                                           }
+                                       },
+                                       error: function (e) { customAlert('error occured.', 'alert'); }
+                                   });
+
+                               }
+                           }, {
+                               ok: "Yep",
+                               cancel: "Nope",
+                               classname: "custom-class",
+                               reverseButtons: true
+                           });
+                       }
+                   }, title: " ", width: "100px"
+               }
+            ],
+            editable: true,
+            filterable: {
+                extra: false, //do not show extra filters
+                operators: { // redefine the string operators
+                    string: {
+                        contains: "Contains",
+                        startswith: "Starts With",
+                        eq: "Is Equal To"
+                    }
+                }
+            },
+            dataBound: gridDataBound
+        });
+    });
+
+    Mousetrap.bind(['ctrl+a'], function (e) {
+        e.preventDefault();
+        toolbar_click();
+    });
+
+    function toolbar_click() {
+        window.location.href = '/GridStock/AddOpStock';
+    }
+
+    function onEdit(e) {
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); // get the current table row (tr)
+        // get the data bound to the current table row
+        var data = this.dataItem(tr);
+        window.location.href = "/GridStock/UpDateOpStock?DocID=" + data.DocNo;
+    }
+
+ 
+</script>

@@ -1,0 +1,129 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="http://demos.telerik.com/kendo-ui/menu/index">
+    <style>
+        html {
+            font-size: 12px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+    <title></title>
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common-material.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.material.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.material.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+</head>
+<body>
+
+    <div id="example">
+        <div id="megaStore">
+            <ul id="menu">
+                <li>
+                    Masters
+                    <ul>
+                        <!-- moving the UL to the next line will cause an IE7 problem -->
+                        <li>Login
+                            <ul>
+                                <!-- moving the UL to the next line will cause an IE7 problem -->
+                                <li><a class="mnu-item" data-name="UserCreation">User Creation</a></li>
+                                <li>Password</li>                                 
+                            </ul>
+                        
+                        </li>
+
+                        <li>Products</li>
+                        <li>Warehouse</li>
+                    </ul>
+                </li>
+                <li>
+                    Stocks
+                    <ul>
+                        <li>Opening Stock</li>
+                        <li>Inward Stock</li>
+                        <li>Outward Stock</li>
+                    </ul>
+                </li>
+                <li>
+                    Transfer
+                    <ul>
+                        <li>Stock Transfer</li>                         
+                    </ul>
+                </li>
+                <li>
+                    Item 1
+                </li>            
+                <li disabled="disabled">
+                    Role have no Access
+                </li>
+            </ul>
+        </div>
+        <style>
+            #megaStore {
+                width: 600px;
+                margin: 30px auto;
+                padding-top: 120px;
+                background: url('../content/web/menu/header.jpg') no-repeat 0 0;
+            }
+
+            #menu h2 {
+                font-size: 1em;
+                text-transform: uppercase;
+                padding: 5px 10px;
+            }
+
+            #template img {
+                margin: 5px 20px 0 0;
+                float: left;
+            }
+
+            #template {
+                width: 380px;
+            }
+
+                #template ol {
+                    float: left;
+                    margin: 0 0 0 30px;
+                    padding: 10px 10px 0 10px;
+                }
+
+                #template:after {
+                    content: ".";
+                    display: block;
+                    height: 0;
+                    clear: both;
+                    visibility: hidden;
+                }
+
+                #template .k-button {
+                    float: left;
+                    clear: left;
+                    margin: 5px 0 5px 12px;
+                }
+        </style>
+        <script>
+            $(document).ready(function () {
+                $("#menu").kendoMenu();
+                $("li k-item").pn("click", function (e) {
+                    debugger;
+                    e.preventDefault();
+                    var itemName = $(this).attr("data-name");
+                    if (itemName == "UserCreation") {
+                        window.location.href = '/Home/UserCreation';
+                    }
+                });
+
+            });
+        </script>
+    </div>
+
+
+</body>
+</html>

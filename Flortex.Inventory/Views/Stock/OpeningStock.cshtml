@@ -1,0 +1,379 @@
+﻿@{
+    ViewBag.Title = "OpeningStock";
+}
+<style>
+    .button {
+        /*display: inline-block;*/
+        white-space: nowrap;
+        background-color: #ddd;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
+        background-image: -webkit-linear-gradient(top, #eee, #ccc);
+        background-image: -moz-linear-gradient(top, #eee, #ccc);
+        background-image: -ms-linear-gradient(top, #eee, #ccc);
+        background-image: -o-linear-gradient(top, #eee, #ccc);
+        background-image: linear-gradient(top, #eee, #ccc);
+        border: 1px solid #777;
+        padding: 0 1.5em;
+        /*margin: 0.5em;*/
+        font-size: 20px;
+        font-family: serif;
+        text-decoration: none;
+        color: #333;
+        text-shadow: 0 1px 0 rgba(255,255,255,.8);
+        -moz-border-radius: .2em;
+        -webkit-border-radius: .2em;
+        border-radius: .2em;
+        -moz-box-shadow: 0 0 1px 1px rgba(255,255,255,.8) inset, 0 1px 0 rgba(0,0,0,.3);
+        -webkit-box-shadow: 0 0 1px 1px rgba(255,255,255,.8) inset, 0 1px 0 rgba(0,0,0,.3);
+        box-shadow: 0 0 1px 1px rgba(255,255,255,.8) inset, 0 1px 0 rgba(0,0,0,.3);
+        width: 50px;
+        height: 50px;
+    }
+
+        .button:hover {
+            background-color: #eee;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#ddd));
+            background-image: -webkit-linear-gradient(top, #fafafa, #ddd);
+            background-image: -moz-linear-gradient(top, #fafafa, #ddd);
+            background-image: -ms-linear-gradient(top, #fafafa, #ddd);
+            background-image: -o-linear-gradient(top, #fafafa, #ddd);
+            background-image: linear-gradient(top, #fafafa, #ddd);
+        }
+
+        .button:active {
+            -moz-box-shadow: 0 0 4px 2px rgba(0,0,0,.3) inset;
+            -webkit-box-shadow: 0 0 4px 2px rgba(0,0,0,.3) inset;
+            box-shadow: 0 0 4px 2px rgba(0,0,0,.3) inset;
+            position: relative;
+            top: 1px;
+        }
+
+    a.button {
+        text-decoration: none !important;
+    }
+
+    .button:focus {
+        outline: 0;
+        background: #fafafa;
+    }
+
+    button.button, input.button {
+        cursor: pointer;
+        overflow: visible; /* removes extra side spacing in IE */
+    }
+
+    /* removes extra inner spacing in Firefox */
+    button::-moz-focus-inner {
+        border: 0;
+        padding: 0;
+    }
+
+    /* If line-height can't be modified, then fix Firefox spacing with padding */
+    input::-moz-focus-inner {
+        padding: .4em;
+    }
+
+    /* The disabled styles */
+    .button[disabled], .button[disabled]:hover, .button.disabled, .button.disabled:hover {
+        background: #eee;
+        color: #aaa;
+        border-color: #aaa;
+        cursor: default;
+        text-shadow: none;
+        position: static;
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+</style>
+
+<h2 style="color:white">
+    Opening Stock
+    <span id="screen_buttons" style="margin-left:41%;">
+        <a id="btnSave" class="button">Save</a>
+        <a id="btnEdit" class="button">Edit</a>
+        <a id="btnDelete" class="button">Delete</a>
+        <a id="btnPrev" class="button">Previous</a>
+        <a id="btnNext" class="button">Next</a>
+    </span>
+</h2>
+
+<form class="navbar-form navbar-left" role="search" id="frmUsr">
+    <div class=" col-lg-12">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <span class="label">Doc No</span><input type="text" class="form-control" id="txtDocNo" placeholder="Doc No" style="height: 36px;">
+            </div>
+        </div>
+        <div class="col-lg-6" style="margin-left: -29%;">
+            <div class="form-group">
+                <span class="label">Date</span><input id="dtDate" placeholder="Date">
+            </div>
+        </div>
+    </div>
+    <br /><br /><br />
+    <div class=" col-lg-12">
+        <div class="col-lg-6">
+            <div class="form-group" style="margin-left:-17px;">
+                <span class="label">Warehouse</span><input id="drpWarehouse" style="width:450px;" />
+            </div>
+        </div>
+    </div><br /><br />
+    <div class=" col-lg-12">
+        <div id="grid" style="margin-top:45px;"></div>
+    </div>
+    @*<input type="button" id="btnCreateUser" class="btn btn-default" style="margin-left:25%;" value="Submit" />
+        &nbsp;&nbsp;<button type="reset" class="btn btn-default">Reset</button>*@
+</form>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script src="~/Scripts/kendo.all.min.js"></script>
+<script src="~/Scripts/underscore-min.js"></script>
+<script type="text/javascript">
+
+    var EndDate;
+    $("#dtDate").kendoDatePicker({ format: "dd-MM-yyyy" });
+    $("#dtDate").val(getDate());
+    function getDate() {
+        var date = new Date();
+        return date.getDate() + "-" + parseInt(date.getMonth() + 1) + "-" + date.getFullYear()
+    }
+    $(".k-datepicker").css("width", "196px");
+</script>
+<style>
+    .drp-header {
+        font-size: 1.2em;
+    }
+
+        .drp-header > span {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            text-align: left;
+            display: inline-block;
+            border-style: solid;
+            border-width: 0 0 1px 1px;
+            padding: .3em .6em;
+            width: 390px;
+        }
+
+            .drp-header > span:first-child {
+                width: 57px;
+                border-left-width: 0;
+            }
+</style>
+<script>
+    $(document).ready(function () {
+        var WarehouseData = [];
+        WarehouseData = getWarehouseData();
+        function getWarehouseData() {
+            $.ajax({
+                url: '/Stock/WarehouseData',
+                type: 'Get',
+                success: function (res) {
+                    WarehouseData = JSON.parse(res);
+                    //create AutoComplete UI component
+                    $("#drpWarehouse").kendoAutoComplete({
+                        dataSource: WarehouseData,
+                        filter: "startswith",
+                        placeholder: "Select Warehouse...",
+
+                        headerTemplate: '<div class="drp-header">' +
+                                '<span class="k-widget k-header">Code</span>' +
+                                '<span class="k-widget k-header">Name</span>' +
+                            '</div>',
+                        template: '<span class="k-state-default"><span>#: data.code #</span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                  '<span class="k-state-default"><span  class="drpVal" data-selId="#: data.id #">#: data.name #</span></span>',
+                        dataTextField: "name"
+
+                    });
+                },
+                error: function (e) { alert("error"); }
+            });
+            return WarehouseData;
+        }
+
+        var productCodes = [];
+        productCodes = getProductsByCode();
+        function getProductsByCode() {
+            $.ajax({
+                url: '/Stock/ProductsByCode',
+                type: 'Get',
+                async: false,
+                success: function (res) {
+                    productCodes = JSON.parse(res);
+                },
+                error: function (e) { alert("error"); }
+            });
+            return productCodes;
+        }
+
+        var productNames = [];
+        productNames = getProductsByName();
+        function getProductsByName() {
+            $.ajax({
+                url: '/Stock/ProductsByName',
+                type: 'Get',
+                async: false,
+                success: function (res) {
+                    productNames = JSON.parse(res);
+                },
+                error: function (e) { alert("error"); }
+            });
+            return productNames;
+        }
+
+
+
+        var data = [];
+        for (var i = 0; i < 30; i++) {
+            var obj = {};
+            obj.id = i + 1;
+            obj.productID = "";
+            obj.Qty = "";
+            data.push(obj);
+        }
+        $("#grid").kendoGrid({
+            dataSource: data,
+            height: 350,
+            editable: true,
+            columns: [{
+                field: "id",
+                title: "S.No",
+                width: "5%",
+                type: "string",
+                template: function (dataItem) { return '<span>' + dataItem.id + '</span>'; },
+            }, {
+                field: "productID",
+                title: "Item Code",
+                width: 200,
+                template: function (dataItem) {
+                    var code = "";
+                    $.each(productCodes, function () {
+                        if (this.id == dataItem.productID) {
+                            code = this.code;
+                            return false;
+                        }
+                    });
+                    return code;
+                },
+                editor: function (container, options) {
+                    $("<input />")
+                        .attr("data-bind", "value:productID")
+                        .appendTo(container)
+                        .kendoComboBox({
+                        placeholder:"Select Code...",
+                            dataSource: productCodes,
+                            dataTextField: "code",
+                            dataValueField: "id",
+                            filter: "contains",
+                            autobind: false,
+                            minLength:1
+                        });
+                }
+            }, {
+                field: "productID",
+                title: "Item Name",
+                template: function (dataItem) {
+                    var name = "";
+                    $.each(productNames, function () {
+                        if (this.id == dataItem.productID) {
+                            name = this.name;
+                            return false;
+                        }
+                    });
+                    return name;
+                },
+                editor: function (container, options) {
+                    $("<input />")
+                        .attr("data-bind", "value:productID")
+                        .appendTo(container)
+                        .kendoComboBox({ 
+                            placeholder: "Select Product...",
+                            dataSource: productNames,
+                            dataTextField: "name",
+                            dataValueField: "id",
+                            filter: "contains",
+                            autobind: false,
+                            minLength:1
+                        });
+                }
+            }, {
+                field: "Qty",
+                title: "Quantity",
+                type: "number"
+            }]
+        });
+        $("a#btnSave").on("click", function (e) {
+            e.preventDefault();
+            if ($("#txtDocNo").val() == "") {
+                alert("Please enter Doc No");
+                $("#txtDocNo").focus();
+            }
+            else if ($("#dtDate").val() == "") {
+                alert("Please select Date");
+                $("#dtDate").focus();
+            }
+            else if ($("#drpWarehouse").val() == "") {
+                alert("Please select Warehouse");
+                $("#drpWarehouse").focus();
+            }
+            else {
+                var selwarehouseID = _.pluck(_.where(WarehouseData, { name: $("#drpWarehouse").val() }), 'id')[0];
+                var gridData = $("#grid").data("kendoGrid")._data;
+                var xmlString = "<Root>";
+                for (var i = 0; i < gridData.length; i++) {
+                    if (gridData[0].productID == "" || gridData[0].Qty == null) {
+                        alert("Please select atleast one Product at Row 1"); break;
+                    }
+                    else {  
+                        if (gridData[i].productID == "" && gridData[i].Qty == null) {
+                            continue;
+                        }
+                        else if (gridData[i].productID != "" && gridData[i].Qty == null) {
+                            alert("Please enter Qty at Row" + (i + 1)); break;
+                        }
+                        else if (gridData[i].productID == "" && gridData[i].Qty != null) {
+                            alert("Please Select Product at Row" + (i + 1)); break;
+                        }
+                        else {
+                            xmlString += "<Child PID=\"" + gridData[i].productID + "\" QTY=\"" + gridData[i].Qty + "\" />";
+                        }
+                    }
+                }
+                xmlString += "</Root>";
+                $.ajax({
+                    url: '/Stock/SaveDocumentOP',
+                    type: 'POST',
+                    data: {
+                        "DOCID": $("#txtDocNo").val(),
+                        "Date":$("#dtDate").val(),
+                        "WarehouseID": selwarehouseID,
+                        "Data":xmlString,
+                        "isEdit":"n"
+                    },
+                    success: function (res) {
+                        alert("Success");
+                    },
+                    error: function (e) { alert("error"); }
+                });
+
+            }
+        });
+        $("a#btnEdit").on("click", function (e) {
+            e.preventDefault();
+            alert("Edit");
+        });
+        $("a#btnDelete").on("click", function (e) {
+            e.preventDefault();
+            alert("Delete");
+        });
+        $("a#btnPrev").on("click", function (e) {
+            e.preventDefault();
+            alert("Prev");
+        });
+        $("a#btnNext").on("click", function (e) {
+            e.preventDefault();
+            alert("Next");
+        });
+    });
+</script>

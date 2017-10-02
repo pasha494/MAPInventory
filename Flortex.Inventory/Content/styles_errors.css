@@ -1,0 +1,35 @@
+/**********************************
+
+Use: cmxform template
+
+***********************************/
+
+form.cmxform {
+padding:10px;
+} 
+
+/*form.cmxform label {
+	display: inline-block;
+	line-height: 1.8;
+	vertical-align: top;
+
+}*/
+  
+ 
+form.cmxform fieldset fieldset label { } /* Width plus 3 (html space) */
+form.cmxform label.error {
+        color:red;
+	margin-left: 10px;
+    font-size:12px;
+    font-style:italic;
+    font-weight:bold;
+	 
+}
+
+form.cmxform input.submit { 
+}
+ 
+form.cmxform input.error { border: 1px solid red; }
+form.cmxform select.error { border: 1px solid red; }
+/*\*//*/ form.cmxform legend { display: inline-block; } /* IE Mac legend fix */
+

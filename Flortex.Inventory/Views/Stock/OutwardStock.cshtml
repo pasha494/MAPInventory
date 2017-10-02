@@ -1,0 +1,501 @@
+﻿@{
+    ViewBag.Title = "OutwardStock";
+}
+<style> 
+    .button {
+        display: inline-block;
+        white-space: nowrap;
+        background-color: #ddd;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
+        background-image: -webkit-linear-gradient(top, #eee, #ccc);
+        background-image: -moz-linear-gradient(top, #eee, #ccc);
+        background-image: -ms-linear-gradient(top, #eee, #ccc);
+        background-image: -o-linear-gradient(top, #eee, #ccc);
+        background-image: linear-gradient(top, #eee, #ccc);
+        border: 1px solid #777;
+        padding: 0 1.5em;
+        margin: 0.5em;
+        font: bold 1em/2em Arial, Helvetica;
+        text-decoration: none;
+        color: #333;
+        text-shadow: 0 1px 0 rgba(255,255,255,.8);
+        -moz-border-radius: .2em;
+        -webkit-border-radius: .2em;
+        border-radius: .2em;
+        -moz-box-shadow: 0 0 1px 1px rgba(255,255,255,.8) inset, 0 1px 0 rgba(0,0,0,.3);
+        -webkit-box-shadow: 0 0 1px 1px rgba(255,255,255,.8) inset, 0 1px 0 rgba(0,0,0,.3);
+        box-shadow: 0 0 1px 1px rgba(255,255,255,.8) inset, 0 1px 0 rgba(0,0,0,.3);
+    }
+
+        .button:hover {
+            background-color: #eee;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#ddd));
+            background-image: -webkit-linear-gradient(top, #fafafa, #ddd);
+            background-image: -moz-linear-gradient(top, #fafafa, #ddd);
+            background-image: -ms-linear-gradient(top, #fafafa, #ddd);
+            background-image: -o-linear-gradient(top, #fafafa, #ddd);
+            background-image: linear-gradient(top, #fafafa, #ddd);
+        }
+
+        .button:active {
+            -moz-box-shadow: 0 0 4px 2px rgba(0,0,0,.3) inset;
+            -webkit-box-shadow: 0 0 4px 2px rgba(0,0,0,.3) inset;
+            box-shadow: 0 0 4px 2px rgba(0,0,0,.3) inset;
+            position: relative;
+            top: 1px;
+        }
+
+        .button:focus {
+            outline: 0;
+            background: #fafafa;
+        }
+
+        .button:before {
+            background: #ccc;
+            background: rgba(0,0,0,.1);
+            float: left;
+            width: 0px;
+            /*text-align: center;*/
+            /*font-size: 1.5em;*/
+            margin: 0 1em 0 -1em;
+            padding: 0 .2em;
+            -moz-box-shadow: 1px 0 0 rgba(0,0,0,.5), 2px 0 0 rgba(255,255,255,.5);
+            -webkit-box-shadow: 1px 0 0 rgba(0,0,0,.5), 2px 0 0 rgba(255,255,255,.5);
+            box-shadow: 1px 0 0 rgba(0,0,0,.5), 2px 0 0 rgba(255,255,255,.5);
+            -moz-border-radius: .15em 0 0 .15em;
+            -webkit-border-radius: .15em 0 0 .15em;
+            border-radius: .15em 0 0 .15em;
+            pointer-events: none;
+        }
+
+    /* Buttons and inputs */
+
+    button.button, input.button {
+        cursor: pointer;
+        overflow: visible; /* removes extra side spacing in IE */
+    }
+
+    /* removes extra inner spacing in Firefox */
+    button::-moz-focus-inner {
+        border: 0;
+        padding: 0;
+    }
+
+    /* If line-height can't be modified, then fix Firefox spacing with padding */
+    input::-moz-focus-inner {
+        padding: .4em;
+    }
+
+    /* The disabled styles */
+    .button[disabled], .button[disabled]:hover, .button.disabled, .button.disabled:hover {
+        background: #eee;
+        color: #aaa;
+        border-color: #aaa;
+        cursor: default;
+        text-shadow: none;
+        position: static;
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    /* Hexadecimal entities for the icons */
+
+    .add:before {
+        content: "\271A";
+    }
+
+    .edit:before {
+        content: "\270E";
+    }
+
+    .delete:before {
+        content: "\2718";
+    }
+
+    .save:before {
+        content: "\2714";
+    }
+
+    .email:before {
+        content: "\2709";
+    }
+
+    .like:before {
+        content: "\2764";
+    }
+
+    .next:before {
+        content: "\279C";
+    }
+
+    .star:before {
+        content: "\2605";
+    }
+
+    .spark:before {
+        content: "\2737";
+    }
+
+    .play:before {
+        content: "\25B6";
+    }
+
+
+    /* Social media buttons */
+    .tw, .fb,
+    .tw:hover, .fb:hover {
+        background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.5)), to(rgba(255,255,255,0)));
+        background-image: -webkit-linear-gradient(top, rgba(255,255,255,.5), rgba(255,255,255,0));
+        background-image: -moz-linear-gradient(top, rgba(255,255,255,.5), rgba(255,255,255,0));
+        background-image: -ms-linear-gradient(top, rgba(255,255,255,.5), rgba(255,255,255,0));
+        background-image: -o-linear-gradient(top, rgba(255,255,255,.5), rgba(255,255,255,0));
+        background-image: linear-gradient(top, rgba(255,255,255,.5), rgba(255,255,255,0));
+    }
+
+        .tw, .tw:focus {
+            background-color: #88E1E6;
+        }
+
+        .fb, .fb:focus {
+            background-color: #3C5A98;
+            color: #fff;
+            text-shadow: 0 1px 0 rgba(0,0,0,.4);
+        }
+
+        .tw:hover {
+            background-color: #b1f0f3;
+        }
+
+        .fb:hover {
+            background-color: #879bc3;
+        }
+
+        .tw:before {
+            content: "t";
+            background: #91cfd3;
+            background: rgba(0,0,0,.1);
+            color: #fff;
+            font-family: verdana;
+            text-shadow: 0 1px 0 rgba(0,0,0,.4);
+        }
+
+        .fb:before {
+            content: "f";
+            background: #4467ac;
+            background: rgba(0,0,0,.1);
+            color: #fff;
+            text-shadow: 0 1px 0 rgba(0,0,0,.4);
+        }
+</style>
+
+<h2 style="color:white">
+    Outward Stock
+    <span id="screen_buttons">
+        <a href="" class="button save">Save</a>
+        <a href="" class="button edit">Edit</a>
+        <a href="" class="button delete">Delete</a>
+        <a href="" class="button next">Prev</a>
+        <a href="" class="button next">Next</a>
+    </span>
+</h2>
+
+<form class="navbar-form navbar-left" role="search" id="frmUsr">
+    <div class=" col-lg-12">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <span class="label">Doc No</span><input type="text" class="form-control" id="txtDocNo" placeholder="Doc No" style="height: 36px;">
+            </div>
+        </div>
+        <div class="col-lg-6" style="margin-left: -29%;">
+            <div class="form-group">
+                <span class="label">Date</span><input id="dtDate" placeholder="Date">
+            </div>
+        </div>
+    </div>
+    <br /><br /><br />
+    <div class=" col-lg-12">
+        <div class="col-lg-6">
+            <div class="form-group" style="margin-left:-17px;">
+                <span class="label">Warehouse</span><input id="drpWarehouse" style="width:450px;" />
+            </div>
+        </div>
+    </div><br /><br /><br />
+    <div class=" col-lg-12">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <span class="label">Block For Customer</span><input type="text" class="form-control" id="txtDocNo1" placeholder="Block For Customer" style="height: 36px;">
+            </div>
+        </div>
+        <div class="col-lg-6" style="margin-left: -29%;">
+            <div class="form-group">
+                <span class="label">Till Date</span><input id="dtDate1" placeholder="Till Date">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div id="grid" style="margin-top:45px;"></div>
+    </div>
+    @*<input type="button" id="btnCreateUser" class="btn btn-default" style="margin-left:25%;" value="Submit" />
+        &nbsp;&nbsp;<button type="reset" class="btn btn-default">Reset</button>*@
+</form>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script src="~/Scripts/kendo.all.min.js"></script>
+<script type="text/javascript">
+
+    var EndDate;
+    $("#dtDate").kendoDatePicker({ format: "dd-MM-yyyy" });
+    $("#dtDate").val(getDate());
+    function getDate() {
+        var date = new Date();
+        return date.getDate() + "-" + parseInt(date.getMonth() + 1) + "-" + date.getFullYear()
+    }
+    $(".k-datepicker").css("width", "196px");
+
+    $("#dtDate1").kendoDatePicker({ format: "dd-MM-yyyy" });
+    $("#dtDate1").val(getDate());
+    
+</script>
+<style>
+    .drp-header {
+        font-size: 1.2em;
+    }
+
+        .drp-header > span {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            text-align: left;
+            display: inline-block;
+            border-style: solid;
+            border-width: 0 0 1px 1px;
+            padding: .3em .6em;
+            width: 390px;
+        }
+
+            .drp-header > span:first-child {
+                width: 57px;
+                border-left-width: 0;
+            }
+</style>
+<script>
+    $(document).ready(function () {
+        getWarehouseData();
+        function getWarehouseData() {
+            var data = [];
+            $.ajax({
+                url: '/Stock/WarehouseData',
+                type: 'Get',
+                success: function (res) {
+                    data = JSON.parse(res);
+                    //create AutoComplete UI component
+                    $("#drpWarehouse").kendoAutoComplete({
+                        dataSource: data,
+                        filter: "startswith",
+                        placeholder: "Select Warehouse...",
+
+                        headerTemplate: '<div class="drp-header">' +
+                                '<span class="k-widget k-header">Code</span>' +
+                                '<span class="k-widget k-header">Name</span>' +
+                            '</div>',
+                        template: '<span class="k-state-default"><span>#: data.code #</span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                  '<span class="k-state-default"><span class="drpWarehouseVal" data-id="' + data.id + '">#: data.name #</span></span>',
+                        dataTextField: "name"
+
+                    });
+                },
+                error: function (e) { alert("error"); }
+            });
+        }
+
+
+        var productCodes = [];
+        productCodes = getProductsByCode();
+        function getProductsByCode() {
+            $.ajax({
+                url: '/Stock/ProductsByCode',
+                type: 'Get',
+                async: false,
+                success: function (res) {
+                    productCodes = JSON.parse(res);
+                },
+                error: function (e) { alert("error"); }
+            });
+            return productCodes;
+        }
+
+        var productNames = [];
+        productNames = getProductsByName();
+        function getProductsByName() {
+            $.ajax({
+                url: '/Stock/ProductsByName',
+                type: 'Get',
+                async: false,
+                success: function (res) {
+                    productNames = JSON.parse(res);
+                },
+                error: function (e) { alert("error"); }
+            });
+            return productNames;
+        }
+
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: function (op) {
+                    op.success([
+          { id: 1, code: "", name: "", Qty: "" },
+          { id: 2, code: "", name: "", Qty: "" },
+          { id: 3, code: "", name: "", Qty: "" },
+          { id: 4, code: "", name: "", Qty: "" },
+          { id: 5, code: "", name: "", Qty: "" },
+          { id: 6, code: "", name: "", Qty: "" },
+          { id: 7, code: "", name: "", Qty: "" },
+          { id: 8, code: "", name: "", Qty: "" },
+          { id: 9, code: "", name: "", Qty: "" },
+          { id: 10, code: "", name: "", Qty: "" },
+          { id: 11, code: "", name: "", Qty: "" },
+          { id: 12, code: "", name: "", Qty: "" },
+          { id: 13, code: "", name: "", Qty: "" },
+          { id: 14, code: "", name: "", Qty: "" },
+          { id: 15, code: "", name: "", Qty: "" },
+          { id: 16, code: "", name: "", Qty: "" },
+          { id: 17, code: "", name: "", Qty: "" },
+          { id: 18, code: "", name: "", Qty: "" },
+          { id: 19, code: "", name: "", Qty: "" },
+          { id: 20, code: "", name: "", Qty: "" },
+          { id: 21, code: "", name: "", Qty: "" },
+          { id: 22, code: "", name: "", Qty: "" },
+          { id: 23, code: "", name: "", Qty: "" },
+          { id: 24, code: "", name: "", Qty: "" },
+          { id: 25, code: "", name: "", Qty: "" },
+          { id: 26, code: "", name: "", Qty: "" },
+          { id: 27, code: "", name: "", Qty: "" },
+          { id: 28, code: "", name: "", Qty: "" },
+          { id: 29, code: "", name: "", Qty: "" },
+          { id: 30, code: "", name: "", Qty: "" }
+                    ]);
+                }
+            }
+        });
+
+        var data = [
+                      { id: 1, code: "", name: "", Qty: "" },
+          { id: 2, code: "", name: "", Qty: "" },
+          { id: 3, code: "", name: "", Qty: "" },
+          { id: 4, code: "", name: "", Qty: "" },
+          { id: 5, code: "", name: "", Qty: "" },
+          { id: 6, code: "", name: "", Qty: "" },
+          { id: 7, code: "", name: "", Qty: "" },
+          { id: 8, code: "", name: "", Qty: "" },
+          { id: 9, code: "", name: "", Qty: "" },
+          { id: 10, code: "", name: "", Qty: "" },
+          { id: 11, code: "", name: "", Qty: "" },
+          { id: 12, code: "", name: "", Qty: "" },
+          { id: 13, code: "", name: "", Qty: "" },
+          { id: 14, code: "", name: "", Qty: "" },
+          { id: 15, code: "", name: "", Qty: "" },
+          { id: 16, code: "", name: "", Qty: "" },
+          { id: 17, code: "", name: "", Qty: "" },
+          { id: 18, code: "", name: "", Qty: "" },
+          { id: 19, code: "", name: "", Qty: "" },
+          { id: 20, code: "", name: "", Qty: "" },
+          { id: 21, code: "", name: "", Qty: "" },
+          { id: 22, code: "", name: "", Qty: "" },
+          { id: 23, code: "", name: "", Qty: "" },
+          { id: 24, code: "", name: "", Qty: "" },
+          { id: 25, code: "", name: "", Qty: "" },
+          { id: 26, code: "", name: "", Qty: "" },
+          { id: 27, code: "", name: "", Qty: "" },
+          { id: 28, code: "", name: "", Qty: "" },
+          { id: 29, code: "", name: "", Qty: "" },
+          { id: 30, code: "", name: "", Qty: "" }
+        ];
+
+
+
+        $("#grid").kendoGrid({
+            dataSource: data,
+            //{
+            //    transport: {
+            //        read: function (op) {
+            //           dat
+            //        }
+            //    },
+            //    schema: {
+            //        model: {
+            //            fields: {
+            //                id: { type: 'number', editable: false },
+            //                code: { type: 'string' },
+            //                name: { type: 'string' },
+            //                Qty: { type: 'number' }
+            //            }
+            //        }
+            //    }
+            //},
+            height: 350,
+            // toolbar: ["create"],
+            editable: true,
+            columns: [{
+                field: "id",
+                title: "S.No",
+                width: "5%",
+                editable: false
+            }, {
+                field: "code",
+                title: "Item Code",
+                editor: productCodeAutoCompleteEditor,
+                width: 200
+            }, {
+                field: "name",
+                title: "Item Name",
+                editor: productNameAutoCompleteEditor
+            }, {
+                field: "Qty",
+                title: "Quantity",
+                type: "number"
+            }]
+        });
+
+
+        function productCodeAutoCompleteEditor(container, options) {
+            $('<input data-text-field="code" data-value-field="id" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoAutoComplete({
+                autoBind: false,
+                suggest: true,
+                placeholder: "Select Code",
+                filter: "contains",
+                index: 1,
+                minLength: 1,
+                dataSource: {
+                    data: productCodes
+                },
+                change: function (e) {
+                    var value = this.value();
+                    // Use the value of the widget
+                }
+            });
+        }
+
+
+        function productNameAutoCompleteEditor(container, options) {
+            $('<input data-text-field="name" data-value-field="id" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoAutoComplete({
+                autoBind: false,
+                suggest: true,
+                placeholder: "Select Name",
+                filter: "contains",
+                index: 1,
+                minLength: 1,
+                dataSource: {
+                    data: productNames
+                },
+                change: function (e) {
+                    var value = this.value();
+                    // Use the value of the widget
+                }
+            });
+        }
+    });
+</script>

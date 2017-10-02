@@ -1,0 +1,302 @@
+﻿@{
+    ViewBag.Title = "InwardStock";
+}
+<h2 style="color:white">
+    Inward Stock
+    <span id="screen_buttons">
+        <a href="" class="button save">Save</a>
+        <a href="" class="button edit">Edit</a>
+        <a href="" class="button delete">Delete</a>
+        <a href="" class="button next">Prev</a>
+        <a href="" class="button next">Next</a>
+    </span>
+</h2>
+
+<form class="navbar-form navbar-left" role="search" id="frmUsr">
+    <div class="col-lg-12">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <span class="label">Doc No</span><input type="text" class="form-control" id="txtDocNo" placeholder="Doc No" style="height: 36px;">
+            </div>
+        </div>
+        <div class="col-lg-6" style="margin-left: -29%;">
+            <div class="form-group">
+                <span class="label">Date</span><input id="dtDate" placeholder="Date">
+            </div>
+        </div>
+    </div>
+    <br /><br /><br />
+    <div class=" col-lg-12">
+        <div class="col-lg-6">
+            <div class="form-group" style="margin-left:-17px;">
+                <span class="label">Warehouse</span><input id="drpWarehouse" style="width:450px;" />
+            </div>
+        </div>
+    </div><br /><br />
+    <div class=" col-lg-12">
+        <div id="grid" style="margin-top:45px;"></div>
+    </div>
+    @*<input type="button" id="btnCreateUser" class="btn btn-default" style="margin-left:25%;" value="Submit" />
+        &nbsp;&nbsp;<button type="reset" class="btn btn-default">Reset</button>*@
+</form>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script src="~/Scripts/kendo.all.min.js"></script>
+<script type="text/javascript">
+
+    var EndDate;
+    $("#dtDate").kendoDatePicker({ format: "dd-MM-yyyy" });
+    $("#dtDate").val(getDate());
+    function getDate() {
+        var date = new Date();
+        return date.getDate() + "-" + parseInt(date.getMonth() + 1) + "-" + date.getFullYear()
+    }
+    $(".k-datepicker").css("width", "196px");
+</script>
+<style>
+    .drp-header {
+        font-size: 1.2em;
+    }
+
+        .drp-header > span {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            text-align: left;
+            display: inline-block;
+            border-style: solid;
+            border-width: 0 0 1px 1px;
+            padding: .3em .6em;
+            width: 390px;
+        }
+
+            .drp-header > span:first-child {
+                width: 57px;
+                border-left-width: 0;
+            }
+</style>
+<script>
+    $(document).ready(function () {
+        getWarehouseData();
+        function getWarehouseData() {
+            var data = [];
+            $.ajax({
+                url: '/Stock/WarehouseData',
+                type: 'Get',
+                success: function (res) {
+                    data = JSON.parse(res);
+                    //create AutoComplete UI component
+                    $("#drpWarehouse").kendoAutoComplete({
+                        dataSource: data,
+                        filter: "startswith",
+                        placeholder: "Select Warehouse...",
+
+                        headerTemplate: '<div class="drp-header">' +
+                                '<span class="k-widget k-header">Code</span>' +
+                                '<span class="k-widget k-header">Name</span>' +
+                            '</div>',
+                        template: '<span class="k-state-default"><span>#: data.code #</span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                  '<span class="k-state-default"><span class="drpWarehouseVal" data-id="' + data.id + '">#: data.name #</span></span>',
+                        dataTextField: "name"
+
+                    });
+                },
+                error: function (e) { alert("error"); }
+            });
+        }
+
+
+        var productCodes = [];
+        productCodes = getProductsByCode();
+        function getProductsByCode() {
+            $.ajax({
+                url: '/Stock/ProductsByCode',
+                type: 'Get',
+                async: false,
+                success: function (res) {
+                    productCodes = JSON.parse(res);
+                },
+                error: function (e) { alert("error"); }
+            });
+            return productCodes;
+        }
+
+        var productNames = [];
+        productNames = getProductsByName();
+        function getProductsByName() {
+            $.ajax({
+                url: '/Stock/ProductsByName',
+                type: 'Get',
+                async: false,
+                success: function (res) {
+                    productNames = JSON.parse(res);
+                },
+                error: function (e) { alert("error"); }
+            });
+            return productNames;
+        }
+
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: function (op) {
+                    op.success([
+          { id: 1, code: "", name: "", Qty: "" },
+          { id: 2, code: "", name: "", Qty: "" },
+          { id: 3, code: "", name: "", Qty: "" },
+          { id: 4, code: "", name: "", Qty: "" },
+          { id: 5, code: "", name: "", Qty: "" },
+          { id: 6, code: "", name: "", Qty: "" },
+          { id: 7, code: "", name: "", Qty: "" },
+          { id: 8, code: "", name: "", Qty: "" },
+          { id: 9, code: "", name: "", Qty: "" },
+          { id: 10, code: "", name: "", Qty: "" },
+          { id: 11, code: "", name: "", Qty: "" },
+          { id: 12, code: "", name: "", Qty: "" },
+          { id: 13, code: "", name: "", Qty: "" },
+          { id: 14, code: "", name: "", Qty: "" },
+          { id: 15, code: "", name: "", Qty: "" },
+          { id: 16, code: "", name: "", Qty: "" },
+          { id: 17, code: "", name: "", Qty: "" },
+          { id: 18, code: "", name: "", Qty: "" },
+          { id: 19, code: "", name: "", Qty: "" },
+          { id: 20, code: "", name: "", Qty: "" },
+          { id: 21, code: "", name: "", Qty: "" },
+          { id: 22, code: "", name: "", Qty: "" },
+          { id: 23, code: "", name: "", Qty: "" },
+          { id: 24, code: "", name: "", Qty: "" },
+          { id: 25, code: "", name: "", Qty: "" },
+          { id: 26, code: "", name: "", Qty: "" },
+          { id: 27, code: "", name: "", Qty: "" },
+          { id: 28, code: "", name: "", Qty: "" },
+          { id: 29, code: "", name: "", Qty: "" },
+          { id: 30, code: "", name: "", Qty: "" }
+                    ]);
+                }
+            }
+        });
+
+        var data = [
+                      { id: 1, code: "", name: "", Qty: "" },
+          { id: 2, code: "", name: "", Qty: "" },
+          { id: 3, code: "", name: "", Qty: "" },
+          { id: 4, code: "", name: "", Qty: "" },
+          { id: 5, code: "", name: "", Qty: "" },
+          { id: 6, code: "", name: "", Qty: "" },
+          { id: 7, code: "", name: "", Qty: "" },
+          { id: 8, code: "", name: "", Qty: "" },
+          { id: 9, code: "", name: "", Qty: "" },
+          { id: 10, code: "", name: "", Qty: "" },
+          { id: 11, code: "", name: "", Qty: "" },
+          { id: 12, code: "", name: "", Qty: "" },
+          { id: 13, code: "", name: "", Qty: "" },
+          { id: 14, code: "", name: "", Qty: "" },
+          { id: 15, code: "", name: "", Qty: "" },
+          { id: 16, code: "", name: "", Qty: "" },
+          { id: 17, code: "", name: "", Qty: "" },
+          { id: 18, code: "", name: "", Qty: "" },
+          { id: 19, code: "", name: "", Qty: "" },
+          { id: 20, code: "", name: "", Qty: "" },
+          { id: 21, code: "", name: "", Qty: "" },
+          { id: 22, code: "", name: "", Qty: "" },
+          { id: 23, code: "", name: "", Qty: "" },
+          { id: 24, code: "", name: "", Qty: "" },
+          { id: 25, code: "", name: "", Qty: "" },
+          { id: 26, code: "", name: "", Qty: "" },
+          { id: 27, code: "", name: "", Qty: "" },
+          { id: 28, code: "", name: "", Qty: "" },
+          { id: 29, code: "", name: "", Qty: "" },
+          { id: 30, code: "", name: "", Qty: "" }
+        ];
+
+
+
+        $("#grid").kendoGrid({
+            dataSource: data,
+            //{
+            //    transport: {
+            //        read: function (op) {
+            //           dat
+            //        }
+            //    },
+            //    schema: {
+            //        model: {
+            //            fields: {
+            //                id: { type: 'number', editable: false },
+            //                code: { type: 'string' },
+            //                name: { type: 'string' },
+            //                Qty: { type: 'number' }
+            //            }
+            //        }
+            //    }
+            //},
+            height: 350,
+            // toolbar: ["create"],
+            editable: true,
+            columns: [{
+                field: "id",
+                title: "S.No",
+                width: "5%",
+                editable: false
+            }, {
+                field: "code",
+                title: "Item Code",
+                editor: productCodeAutoCompleteEditor,
+                width: 200
+            }, {
+                field: "name",
+                title: "Item Name",
+                editor: productNameAutoCompleteEditor
+            }, {
+                field: "Qty",
+                title: "Quantity",
+                type: "number"
+            }]
+        });
+
+
+        function productCodeAutoCompleteEditor(container, options) {
+            $('<input data-text-field="code" data-value-field="id" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoAutoComplete({
+                autoBind: false,
+                suggest: true,
+                placeholder: "Select Code",
+                filter: "contains",
+                index: 1,
+                minLength: 1,
+
+                dataSource: {
+                    data: productCodes
+                },
+                change: function (e) {
+                    var value = this.value();
+                    // Use the value of the widget
+                }
+            });
+        }
+
+
+        function productNameAutoCompleteEditor(container, options) {
+            $('<input data-text-field="name" data-value-field="id" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoAutoComplete({
+                autoBind: false,
+                suggest: true,
+                placeholder: "Select Name",
+                filter: "contains",
+                index: 1,
+                minLength: 1,
+                dataSource: {
+                    data: productNames
+                },
+                change: function (e) {
+                    var value = this.value();
+                    // Use the value of the widget
+                },
+                headerTemplate: '<div class="drp-header">' +
+        '<span class="k-widget k-header">Code</span>' +
+        '<span class="k-widget k-header">Name</span>' +
+    '<span class="k-widget k-header">Price</span></div>',
+            });
+        }
+    });
+</script>
