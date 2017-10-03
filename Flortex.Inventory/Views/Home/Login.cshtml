@@ -188,6 +188,7 @@
             });
 
             $("#btnLogin").on("click", function (e) {
+                debugger
                 e.preventDefault();
                 var Rem = $("#chkRememberMe").is(":checked") ? 1 : 0;
                 if ($("#login_form").valid()) {

@@ -20,9 +20,9 @@
     <!-- gebo blue theme-->
     <link rel="stylesheet" href="~/Content/Gebo/css/blue.css" id="link_theme" />
 
-   @* check if you have any requirement of adding breadcrumbs then un comment this
-    <!-- breadcrumbs-->
-    <link rel="stylesheet" href="~/Content/Gebo/lib/jBreadcrumbs/css/BreadCrumb.css" />*@
+    @* check if you have any requirement of adding breadcrumbs then un comment this
+        <!-- breadcrumbs-->
+        <link rel="stylesheet" href="~/Content/Gebo/lib/jBreadcrumbs/css/BreadCrumb.css" />*@
 
     <!-- notifications -->
     <link rel="stylesheet" href="~/Content/Gebo/lib/sticky/sticky.css" />
@@ -87,10 +87,15 @@
     <script src="~/Content/Gebo/js/gebo_common.js"></script>
     @*<script src="@Url.Content("~/Scripts/smoke.js")" type="text/javascript"></script>*@
 
-     @*jBreadcrumbs 
-    <script src="~/Content/Gebo/lib/jBreadcrumbs/js/jquery.jBreadCrumb.1.1.min.js"></script>*@
+    @*jBreadcrumbs
+        <script src="~/Content/Gebo/lib/jBreadcrumbs/js/jquery.jBreadCrumb.1.1.min.js"></script>*@
+    <link href="~/Content/EasyUi/easyui.css" rel="stylesheet" />
+    <link href="~/Content/EasyUi/combo.css" rel="stylesheet" />
+    <link href="~/Content/EasyUi/combobox.css" rel="stylesheet" />
+    <link href="~/Content/EasyUi/datagrid.css" rel="stylesheet" />
+    <link href="~/Content/EasyUi/icon.css" rel="stylesheet" />
 
-
+    <script src="~/Content/EasyUi/jquery.easyui.min.js"></script>
 
 </head>
 <body class="menu_hover">
@@ -124,24 +129,24 @@
                             </a>
                             <nav>
                                 <div class="nav-collapse">
-                                    <ul class="nav"> 
-                                            <li><a href="@Url.Action("Index", "Home")"><i class="icon-home icon-white"></i> Home</a></li>
+                                    <ul class="nav">
+                                        <li><a href="@Url.Action("Index", "Home")"><i class="icon-home icon-white"></i> Home</a></li>
 
-                                            @if (objSession.RoleID == 1 || objSession.RoleID == 3)
-                                            {
-                                                <li class="dropdown">
-                                                    <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-book icon-white"> </i> Masters <b class="caret"></b></a>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a href="@Url.Action("ProductsList", "Home")">Products</a></li>
-                                                        <li><a href="@Url.Action("ProductsCategoryList", "Home")">Product Category</a></li>
-                                                        <li><a href="@Url.Action("Warehouses", "Home")">Warehouses</a></li>
-                                                        @if (objSession.RoleID == 1)
-                                                        {
-                                                            <li><a href="@Url.Action("Users", "Home")">Users</a></li>
-                                                        }
+                                        @if (objSession.RoleID == 1 || objSession.RoleID == 3)
+                                        {
+                                            <li class="dropdown">
+                                                <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-book icon-white"> </i> Masters <b class="caret"></b></a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="@Url.Action("ProductsList", "Home")">Products</a></li>
+                                                    <li><a href="@Url.Action("ProductsCategoryList", "Home")">Product Category</a></li>
+                                                    <li><a href="@Url.Action("Warehouses", "Home")">Warehouses</a></li>
+                                                    @if (objSession.RoleID == 1)
+                                                    {
+                                                        <li><a href="@Url.Action("Users", "Home")">Users</a></li>
+                                                    }
 
-                                                    </ul>
-                                                </li>
+                                                </ul>
+                                            </li>
 
                                                 <li class="dropdown">
                                                     <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-briefcase icon-white"></i> Stocks <b class="caret"></b></a>
@@ -189,16 +194,16 @@
                                                     </ul>
                                                 </li>
 
-                                            }
+                                        }
 
-                                            <li class="dropdown">
-                                                <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-th icon-white"></i> Reports <b class="caret"></b></a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="/GridStock/GetQuickStockReport">Quick Report</a></li>
-                                                    <li><a href="/GridStock/GetStockReport">Detailed Report</a></li>
-                                                    <li><a href="/GridStock/GetConsolidateStockReport">Consolidated Report</a></li>
-                                                </ul>
-                                            </li> 
+                                        <li class="dropdown">
+                                            <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-th icon-white"></i> Reports <b class="caret"></b></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="/GridStock/GetQuickStockReport">Quick Report</a></li>
+                                                <li><a href="/GridStock/GetStockReport">Detailed Report</a></li>
+                                                <li><a href="/GridStock/GetConsolidateStockReport">Consolidated Report</a></li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </div>
                             </nav>

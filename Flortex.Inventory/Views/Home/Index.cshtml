@@ -1,6 +1,6 @@
 ﻿@using Flortex.Inventory.Models
 @using System.Data
-@{ 
+@{
     var ShowReOrdQty = Request.Cookies["ShowReOrdQty"];
     var ShowBlckQty = Request.Cookies["ShowBlckQty"];
     bool ShowReOrdQty_Val = false;
@@ -23,6 +23,13 @@
 
 @if (RoleID == 1)
 {
+
+    <div class="row-fluid">
+        <div class="span12">
+            <input id="cg" style="width:150px">
+        </div>
+    </div>
+
     <div class="row-fluid">
         <div class="span6">
             <div class="heading clearfix">
@@ -35,7 +42,7 @@
                     }
                     else
                     {
-                    <label class="checkbox"><input type="checkbox" id="ReOrdQtyCheck" class="showAllData" data-type="1" /> Show All</label> 
+                    <label class="checkbox"><input type="checkbox" id="ReOrdQtyCheck" class="showAllData" data-type="1" /> Show All</label>
                     }
                 </span>
             </div>
@@ -83,12 +90,12 @@
                 <span class="pull-right">
                     @if (ShowBlckQty_Val)
                     {
-                        <label class="checkbox"><input type="checkbox" id="BlckQtyCheck" checked="checked" class="showAllData" data-type="2" /> Show All</label>
+                    <label class="checkbox"><input type="checkbox" id="BlckQtyCheck" checked="checked" class="showAllData" data-type="2" /> Show All</label>
 
                     }
                     else
                     {
-                        <label class="checkbox"><input type="checkbox" id="BlckQtyCheck" class="showAllData" data-type="2" /> Show All</label>
+                    <label class="checkbox"><input type="checkbox" id="BlckQtyCheck" class="showAllData" data-type="2" /> Show All</label>
                     }
                 </span>
             </div>
@@ -113,13 +120,13 @@
                                 for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
                                 {
                                     Count2++;
-                            <tr>
-                                <td><a href="/GridStock/UpdateOutStock?DocID=@ds.Tables[1].Rows[i]["DocNo"].ToString()">@ds.Tables[1].Rows[i]["DocName"].ToString()</a> </td>
-                                <td>@ds.Tables[1].Rows[i]["ProductCode"].ToString()</td>
-                                <td>@ds.Tables[1].Rows[i]["Customer"].ToString()</td>
-                                <td>@ds.Tables[1].Rows[i]["ExpectedDate"].ToString()</td>
-                                <td>@ds.Tables[1].Rows[i]["WarehouseName"].ToString()</td>
-                            </tr>
+                        <tr>
+                            <td><a href="/GridStock/UpdateOutStock?DocID=@ds.Tables[1].Rows[i]["DocNo"].ToString()">@ds.Tables[1].Rows[i]["DocName"].ToString()</a> </td>
+                            <td>@ds.Tables[1].Rows[i]["ProductCode"].ToString()</td>
+                            <td>@ds.Tables[1].Rows[i]["Customer"].ToString()</td>
+                            <td>@ds.Tables[1].Rows[i]["ExpectedDate"].ToString()</td>
+                            <td>@ds.Tables[1].Rows[i]["WarehouseName"].ToString()</td>
+                        </tr>
                                 }
 
                             }
@@ -136,6 +143,27 @@
 
 <script type="text/javascript">
     $(function () {
+
+        var _data = {
+            "rows": [
+        { "userid": "1", "userName": "Jcomey", "bb": { "aa": "00", "cc": "11" } }, { "userid": "2", "userName": "tcomey", "bb": { "aa": "00", "cc": "11" } }, { "userid": "3", "userName": "comey", "bb": { "aa": "00", "cc": "11" } }, { "userid": "4", "userName": "vcomey", "bb": { "aa": "00", "cc": "11" } }]
+        };
+     
+
+        $('#cg').combogrid({
+            panelWidth: 500, 
+            idField: 'userid',
+            textField: 'userName',
+            url: '/GridStock/ProductsByName',
+            mode: 'remote',
+            fitColumns: true,
+            columns: [[
+                { field: 'id', title: 'Product ID', width: 60 },
+                { field: 'name', title: 'Product Name', align: 'right', width: 80 },
+                { field: 'id', title: 'Price', align: 'right', width: 60 },
+            ]]
+        });
+
         $("#grid1").kendoGrid({
             height: 500,
             filterable: true,

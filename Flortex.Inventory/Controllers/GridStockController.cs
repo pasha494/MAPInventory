@@ -128,7 +128,7 @@ namespace Flortex.Inventory.Controllers
             return serializer.Serialize(rows);
         }
 
-        public string ProductsByName()
+        public string ProductsByName(string q)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method > ProductsByName");
             System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
