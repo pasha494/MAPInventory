@@ -8,6 +8,8 @@ using System.Data;
 using System.Configuration;
 using Flortex.Inventory.Models;
 using Newtonsoft.Json;
+using MAP.Logging;
+
 namespace Flortex.Inventory.Controllers
 {
     [SessionExpire]
