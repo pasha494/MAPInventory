@@ -7,7 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 
-namespace Flortex.Inventory.Models
+namespace MAP.Inventory.Models
 {
     public class InwardDocument : IDocument
     {

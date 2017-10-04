@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MAP.Logging;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
 
-namespace Flortex.Inventory.Models
+namespace MAP.Inventory.Models
 {
     public static class LookUps
     {

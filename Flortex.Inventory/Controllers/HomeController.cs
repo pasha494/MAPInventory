@@ -6,10 +6,11 @@ using System.Web.Mvc;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
-using Flortex.Inventory.Models;
+using MAP.Inventory.Models;
 using Newtonsoft.Json;
+using MAP.Logging;
 
-namespace Flortex.Inventory.Controllers
+namespace MAP.Inventory.Controllers
 {
 
     public class HomeController : Controller

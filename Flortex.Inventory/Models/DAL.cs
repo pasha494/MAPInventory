@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Flortex.Inventory.Models
+namespace MAP.Inventory.Models
 {
 
 

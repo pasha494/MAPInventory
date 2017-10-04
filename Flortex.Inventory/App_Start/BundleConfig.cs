@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace Flortex.Inventory
+namespace MAP.Inventory
 {
     public class BundleConfig
     {

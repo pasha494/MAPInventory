@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Flortex.Inventory.Models
+namespace MAP.Inventory.Models
 {
     public class Login
     {

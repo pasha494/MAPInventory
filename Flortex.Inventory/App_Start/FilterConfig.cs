@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace Flortex.Inventory
+namespace MAP.Inventory
 {
     public class FilterConfig
     {

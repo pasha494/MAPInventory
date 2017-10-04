@@ -1,4 +1,4 @@
-﻿@using Flortex.Inventory.Models;
+﻿@using MAP.Inventory.Models;
 @{
     Layout = null;
     string UserName = "", Password = "";
@@ -14,7 +14,7 @@
     }
     if (_Password != null)
     {
-        Password = Flortex.Inventory.Models.Crypto.Decrypt(_Password.Value.ToString(), true);
+        Password = MAP.Inventory.Models.Crypto.Decrypt(_Password.Value.ToString(), true);
     }
     if (_RememberMe != null)
     {

@@ -1,11 +1,11 @@
-﻿@model ICollection<Flortex.Inventory.Models.ExternalLogin>
+﻿@model ICollection<MAP.Inventory.Models.ExternalLogin>
 
 @if (Model.Count > 0)
 {
     <h3>Registered external logins</h3>
     <table>
         <tbody>
-        @foreach (Flortex.Inventory.Models.ExternalLogin externalLogin in Model)
+        @foreach (MAP.Inventory.Models.ExternalLogin externalLogin in Model)
         {
             <tr>
                 <td>@externalLogin.ProviderDisplayName</td>

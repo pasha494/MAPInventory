@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Flortex.Inventory.Models
+namespace MAP.Inventory.Models
 {
     public interface IDocument
     {

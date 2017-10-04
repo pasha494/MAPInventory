@@ -10,7 +10,12 @@ namespace MAP.Logging
     //-------------Creating a custom static class for storing logs------------------//
     public static class PLog
     {
-        readonly static log4net.ILog logger = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        static PLog()
+        {
+            // stuff
+        }
+
+        public readonly static log4net.ILog logger = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static void Info(string error, int userId = 0, string userName = "")
         {

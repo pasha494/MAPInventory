@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MAP.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Data.Entity;
 using System.Globalization;
 using System.Web.Security;
 
-namespace Flortex.Inventory.Models
+namespace MAP.Inventory.Models
 {
     public class Products
     {

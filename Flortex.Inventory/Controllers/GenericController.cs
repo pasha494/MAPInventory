@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Flortex.Inventory.Controllers
+namespace MAP.Inventory.Controllers
 {
     public class GenericController : Controller
     {
