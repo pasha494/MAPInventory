@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAP.Logging", "MAP.Logging\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAP.DALConnect", "MAP.DALConnect\MAP.DALConnect.csproj", "{6F51BF47-81A2-41C9-8FF0-1D13F58BA870}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAP.Model", "MAP.Models\MAP.Model.csproj", "{CA9E5CA9-49CF-46E1-A89A-B89E5A4FF607}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAP.ViewModel", "MAP.ViewModel\MAP.ViewModel.csproj", "{A5822C31-EA0E-4FB4-BD08-4C4947A21885}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{6F51BF47-81A2-41C9-8FF0-1D13F58BA870}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F51BF47-81A2-41C9-8FF0-1D13F58BA870}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F51BF47-81A2-41C9-8FF0-1D13F58BA870}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA9E5CA9-49CF-46E1-A89A-B89E5A4FF607}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA9E5CA9-49CF-46E1-A89A-B89E5A4FF607}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA9E5CA9-49CF-46E1-A89A-B89E5A4FF607}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA9E5CA9-49CF-46E1-A89A-B89E5A4FF607}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5822C31-EA0E-4FB4-BD08-4C4947A21885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5822C31-EA0E-4FB4-BD08-4C4947A21885}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5822C31-EA0E-4FB4-BD08-4C4947A21885}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5822C31-EA0E-4FB4-BD08-4C4947A21885}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

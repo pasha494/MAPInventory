@@ -11,7 +11,7 @@ namespace DALConnect
 {
     public class SQLAdapter
     {
-        private static string DBName = "";
+        private static string DBName = "FlortexProd";
         private static ReaderWriterLock m_ProcedureCacheLock = new ReaderWriterLock();
         private static Hashtable m_ProcedureCache = new Hashtable();
         private static Dictionary<int, string> ConnectionCache = new Dictionary<int, string>();

@@ -9,6 +9,7 @@ using System.Configuration;
 using MAP.Inventory.Models;
 using Newtonsoft.Json;
 using MAP.Logging;
+using MAP.ViewModel;
 
 namespace MAP.Inventory.Controllers
 {
@@ -76,7 +77,7 @@ namespace MAP.Inventory.Controllers
                 // str = Convert.ToInt32(str).ToString();
                 if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
                 {
-                    Login obj = new Login();
+                    LoginModelImple obj = new LoginModelImple();
                     Flg = obj.CheckLogin(email, password);
                 }
             }

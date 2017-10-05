@@ -1581,6 +1581,14 @@
       <Project>{8f31a987-2047-41ee-a5c0-e4bf7bd839df}</Project>
       <Name>MAP.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MAP.Models\MAP.Model.csproj">
+      <Project>{ca9e5ca9-49cf-46e1-a89a-b89e5a4ff607}</Project>
+      <Name>MAP.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MAP.ViewModel\MAP.ViewModel.csproj">
+      <Project>{a5822c31-ea0e-4fb4-bd08-4c4947a21885}</Project>
+      <Name>MAP.ViewModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

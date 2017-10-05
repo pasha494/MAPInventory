@@ -1,4 +1,5 @@
 ﻿using MAP.Logging;
+using MAP.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,69 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace MAP.Inventory.Models
-{
-    public class Login
-    {
-
-        public int CheckLogin(string UserEmail, string Password)
-        {
-            int flg = 0;
-
-            DataSet ds = new DataSet();
-            ds=DAL.GetDataSet(" Select * from Users Where Email='" + UserEmail + "'");
-            try
-            {
-                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                {
-                    if (Password == ds.Tables[0].Rows[0]["Password"].ToString())
-                    {
-                        flg = 1;
-                        CreateUserSession(ds.Tables[0]);
-                    }
-                    else
-                        flg = -2;// Wrong password..
-
-                }
-                else
-                    flg = -1;//Invalid user id..  
-            }
-            catch (Exception ex)
-            {
-                PLog.Error("Error::Class > Login, Method > CheckLogin(string UserEmail, string Password)", ex);
-            }
-
-            return flg;
-        }
-
-        public void CreateUserSession(DataTable dt)
-        {
-            if (dt != null && dt.Rows.Count > 0)
-            {
-                SessionManager objSession = new SessionManager();
-                objSession.UserID = Convert.ToInt32(dt.Rows[0]["id"].ToString());
-                objSession.UserName = dt.Rows[0]["USerName"].ToString();
-                objSession.Email = dt.Rows[0]["Email"].ToString();
-                objSession.IsAdmin = Convert.ToBoolean(dt.Rows[0]["IsAdmin"]);
-                if (dt.Rows[0]["RoleID"] != DBNull.Value)
-                    objSession.RoleID = Convert.ToInt32(dt.Rows[0]["RoleID"].ToString());
-                else
-                    objSession.RoleID = 0;
-                HttpContext.Current.Session.Add("SessionManager", objSession);
-            }
-        }
-
-    }
-
-    public class SessionManager
-    {
-        public int UserID { set; get; }
-        public string UserName { set; get; }
-        public string Email { set; get; }
-        public bool IsAdmin { get; set; }
-        public int RoleID { get; set; }
-    }
-
-
+{ 
     public class SessionExpireAttribute : ActionFilterAttribute
     {
         public string Page { get; set; }
