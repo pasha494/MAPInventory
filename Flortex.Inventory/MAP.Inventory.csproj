@@ -201,9 +201,8 @@
     <Compile Include="Models\OutwardDocument.cs" />
     <Compile Include="Models\IDocument.cs" />
     <Compile Include="Models\InwardDocument.cs" />
-    <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\SessionExpireAttribute.cs" />
     <Compile Include="Models\OpeningStock.cs" />
-    <Compile Include="Models\Users.cs" />
     <Compile Include="Models\WareHouse.cs" />
     <Compile Include="Models\DAL.cs" />
     <Compile Include="Models\LookUps.cs" />

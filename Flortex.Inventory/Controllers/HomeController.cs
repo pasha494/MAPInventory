@@ -10,6 +10,7 @@ using MAP.Inventory.Models;
 using Newtonsoft.Json;
 using MAP.Logging;
 using MAP.ViewModel;
+using MAP.Models;
 
 namespace MAP.Inventory.Controllers
 {
@@ -123,10 +124,9 @@ namespace MAP.Inventory.Controllers
             System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
             try
             {
+                UsersImple objUsersImple = new UsersImple(); 
 
-                Users objUsers = new Users();
-
-                DataTable dt = objUsers.GetGridData(0); //0 will gets all the users data 
+                DataTable dt = objUsersImple.GetGridData(0); //0 will gets all the users data 
 
 
                 Dictionary<string, object> row;
@@ -153,10 +153,10 @@ namespace MAP.Inventory.Controllers
         public ActionResult UserCreation()
         {
             PLog.Info("BEGIN::Controller > Home, Method > UserCreation()");
-            Users obj = null;
+            UsersModel obj = null;
             try
             {
-                obj = new Users();
+                obj = new UsersModel();
             }
             catch (Exception ex)
             {
@@ -171,12 +171,13 @@ namespace MAP.Inventory.Controllers
         public ActionResult SaveUser(string Data)
         {
             PLog.Info("BEGIN::Controller > Home, Method > SaveUser(string Data)");
-            int flg = 0;
+            long flg = 0;
             try
             {
-                Users obj = JsonConvert.DeserializeObject<Users>(Data);
+                UsersImple objUsersImple = new UsersImple();
+                UsersModel objUser = JsonConvert.DeserializeObject<UsersModel>(Data);
 
-                flg = obj.SaveUsers();
+                flg = objUsersImple.SaveUsers(objUser);
             }
             catch (Exception ex)
             {
@@ -188,16 +189,16 @@ namespace MAP.Inventory.Controllers
         }
 
         [SessionExpire]
-        public int DeleteUser(string ID)
+        public long DeleteUser(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > DeleteUser(string ID)");
-            int ret = 0;
+            long ret = 0;
             if (!string.IsNullOrEmpty(ID))
             {
                 try
                 {
-                    Users obj = new Users();
-                    ret = obj.DeleteUser(Convert.ToInt32(ID));
+                    UsersImple objUsersImple = new UsersImple();
+                    ret = objUsersImple.DeleteUser(Convert.ToInt32(ID));
                 }
                 catch (Exception ex)
                 {
@@ -213,13 +214,14 @@ namespace MAP.Inventory.Controllers
         public ActionResult UpDateUser(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > UpDateUser(string ID)");
-            Users objModel = new Users();
+            UsersImple objUsersImple = new UsersImple();
+            UsersModel objModel = null;
 
             try
             {
                 if (!string.IsNullOrEmpty(ID))
                 {
-                    objModel.EditUser(Convert.ToInt32(ID));
+                    objModel = objUsersImple.EditUser(Convert.ToInt32(ID));
                 }
             }
             catch (Exception ex)
@@ -244,13 +246,13 @@ namespace MAP.Inventory.Controllers
         public ActionResult ChangePassword(string CurrentPassword, string NewPassword)
         {
             PLog.Info("BEGIN::Controller > Home, Method > ChangePasswordView(string CurrentPassword, string NewPassword)");
-            int ret = 0;
+            long ret = 0;
             if (!string.IsNullOrEmpty(CurrentPassword) && !string.IsNullOrEmpty(NewPassword))
             {
                 try
                 {
-                    Users obj = new Users();
-                    ret = obj.ChangePassword(CurrentPassword, NewPassword);
+                    UsersImple objUsersImple = new UsersImple(); 
+                    ret = objUsersImple.ChangePassword(CurrentPassword, NewPassword,Convert.ToInt32( LookUps.GetSessionObject("UserID")));
                 }
                 catch (Exception ex)
                 {
