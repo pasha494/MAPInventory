@@ -3,7 +3,7 @@ using System.Collections;
 using System.Configuration;
 using System.Data;
 
-namespace DALConnect
+namespace MAP.Inventory.DAL
 {
 
     public class General

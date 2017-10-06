@@ -1,4 +1,4 @@
-﻿using MAP.Logging;
+﻿using MAP.Inventory.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;

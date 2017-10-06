@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MAP.Logging
+namespace MAP.Inventory.Logging
 {
     //-------------Creating a custom static class for storing logs------------------//
     public static class PLog

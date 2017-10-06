@@ -7,7 +7,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading;
 
-namespace DALConnect
+namespace MAP.Inventory.DAL
 {
     public class SQLAdapter
     {

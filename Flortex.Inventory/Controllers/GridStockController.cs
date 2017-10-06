@@ -8,7 +8,7 @@ using System.Data;
 using System.Configuration;
 using MAP.Inventory.Models;
 using Newtonsoft.Json;
-using MAP.Logging;
+using MAP.Inventory.Logging;
 
 namespace MAP.Inventory.Controllers
 {

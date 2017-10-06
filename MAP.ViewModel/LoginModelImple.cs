@@ -1,16 +1,12 @@
-﻿using DALConnect;
-using MAP.Logging;
-using MAP.Models;
+﻿using MAP.Inventory.DAL;
+using MAP.Inventory.Logging;
+using MAP.Inventory.Model;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
-namespace MAP.ViewModel
+namespace MAP.Inventory.ModelImple
 {
     public class LoginModelImple
     {

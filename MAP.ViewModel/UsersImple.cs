@@ -1,6 +1,7 @@
-﻿using DALConnect;
-using MAP.Logging;
-using MAP.Models;
+﻿using MAP.Inventory.DAL;
+using MAP.Inventory.Interfaces;
+using MAP.Inventory.Logging;
+using MAP.Inventory.Model;
 using System;
 using System.Collections;
 using System.Data;
@@ -8,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MAP.ViewModel
+namespace MAP.Inventory.ModelImple
 {
-    public class UsersImple
+    public class UsersImple: IUsersImple
     {
 
         General _General = new General();

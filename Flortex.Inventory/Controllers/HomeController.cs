@@ -8,9 +8,9 @@ using System.Data;
 using System.Configuration;
 using MAP.Inventory.Models;
 using Newtonsoft.Json;
-using MAP.Logging;
-using MAP.ViewModel;
-using MAP.Models;
+using MAP.Inventory.Logging;
+using MAP.Inventory.ModelImple;
+using MAP.Inventory.Model;
 
 namespace MAP.Inventory.Controllers
 {

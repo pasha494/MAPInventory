@@ -1,4 +1,4 @@
-﻿using MAP.Logging;
+﻿using MAP.Inventory.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections;

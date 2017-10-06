@@ -1,5 +1,5 @@
-﻿using MAP.Logging;
-using MAP.Models;
+﻿using MAP.Inventory.Logging;
+using MAP.Inventory.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;

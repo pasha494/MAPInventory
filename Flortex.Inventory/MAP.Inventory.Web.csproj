@@ -1576,17 +1576,17 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MAP.Logging\MAP.Logging.csproj">
+    <ProjectReference Include="..\MAP.Logging\MAP.Inventory.Logging.csproj">
       <Project>{8f31a987-2047-41ee-a5c0-e4bf7bd839df}</Project>
-      <Name>MAP.Logging</Name>
+      <Name>MAP.Inventory.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MAP.Models\MAP.Model.csproj">
+    <ProjectReference Include="..\MAP.Models\MAP.Inventory.Model.csproj">
       <Project>{ca9e5ca9-49cf-46e1-a89a-b89e5a4ff607}</Project>
-      <Name>MAP.Model</Name>
+      <Name>MAP.Inventory.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MAP.ViewModel\MAP.ViewModel.csproj">
+    <ProjectReference Include="..\MAP.ViewModel\MAP.Inventory.ModelImple.csproj">
       <Project>{a5822c31-ea0e-4fb4-bd08-4c4947a21885}</Project>
-      <Name>MAP.ViewModel</Name>
+      <Name>MAP.Inventory.ModelImple</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
