@@ -117,7 +117,7 @@
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" style="text-transform: capitalize;" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> @objSession.UserName <b class="caret"></b></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="/Home/ChangePasswordView">Password</a></li>
+                                        <li><a href="/Users/ChangePasswordView">Password</a></li>
                                         <li class="divider"></li>
                                         <li><a href="/Home/SignOut"><i class="icon-off"></i> Sign Out</a></li>
                                     </ul>
@@ -142,7 +142,7 @@
                                                     <li><a href="@Url.Action("Warehouses", "Home")">Warehouses</a></li>
                                                     @if (objSession.RoleID == 1)
                                                     {
-                                                        <li><a href="@Url.Action("Users", "Home")">Users</a></li>
+                                                        <li><a href="@Url.Action("Index", "Users")">Users</a></li>
                                                     }
 
                                                 </ul>

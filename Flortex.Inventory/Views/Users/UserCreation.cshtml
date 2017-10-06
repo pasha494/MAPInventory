@@ -121,7 +121,7 @@
         var _saveUsers = function () {
             if ($("#frmUsers").valid()) {
                 $.ajax({
-                    url: '/Home/SaveUser',
+                    url: '/Users/SaveUser',
                     type: 'post',
                     data: { "Data": createUser() },
                     beforeSend: function () {
@@ -206,7 +206,7 @@
 
         Mousetrap.bind(['ctrl+backspace', 'command+backspace'], function (e) {
             e.preventDefault();
-            window.location.href = '@Url.Action("Users", "Home")';
+            window.location.href = '@Url.Action("Index", "Users")';
         });
 
 

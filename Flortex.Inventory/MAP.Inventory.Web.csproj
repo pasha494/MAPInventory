@@ -189,6 +189,7 @@
     <Compile Include="Controllers\GenericController.cs" />
     <Compile Include="Controllers\GridStockController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1539,7 +1540,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Shared\_LayoutMenuHeader.cshtml" />
-    <Content Include="Views\Home\UserCreation.cshtml" />
+    <Content Include="Views\Users\UserCreation.cshtml" />
     <Content Include="Views\Home\Products.cshtml" />
     <Content Include="Views\Home\Warehouse.cshtml" />
     <Content Include="Views\Stock\OpeningStock.cshtml" />
@@ -1555,16 +1556,16 @@
     <Content Include="Views\GridStock\OutwardStock.cshtml" />
     <Content Include="Views\Home\Warehouses.cshtml" />
     <Content Include="Views\Home\ProductsList.cshtml" />
-    <Content Include="Views\Home\Users.cshtml" />
     <Content Include="Views\GridStock\StockTransfer.cshtml" />
     <Content Include="Views\GridStock\AddStockTransfer.cshtml" />
-    <Content Include="Views\Home\ChangePasswordView.cshtml" />
+    <Content Include="Views\Users\ChangePasswordView.cshtml" />
     <Content Include="Views\GridStock\GetStockReport.cshtml" />
     <Content Include="Views\Home\UnAuthorizedAction.cshtml" />
     <Content Include="Views\Home\ProductsCategoryList.cshtml" />
     <Content Include="Views\Home\ProductsCategory.cshtml" />
     <Content Include="Views\GridStock\GetQuickStockReport.cshtml" />
     <Content Include="Views\GridStock\GetConsolidateStockReport.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

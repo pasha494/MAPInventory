@@ -33,7 +33,7 @@
         function getDocs() {
             Documents = [];
             $.ajax({
-                url: '/Home/LoadUsers',
+                url: '/Users/LoadUsers',
                 type: 'Get',
                 async: false,
                 success: function (res) {
@@ -105,7 +105,7 @@
                                    var tr = $(e.target).closest("tr");
                                    var data = self.dataItem(tr);
                                    $.ajax({
-                                       url: '/Home/DeleteUser',
+                                       url: '/Users/DeleteUser',
                                        type: 'POST',
                                        data: { "ID": data.id },
                                        beforeSend: function () {
@@ -159,14 +159,14 @@
     });
 
     function toolbar_click() {
-        window.location.href = '/Home/UserCreation';
+        window.location.href = '/Users/UserCreation';
     }
 
     function onEdit(e) {
         e.preventDefault();
         var tr = $(e.target).closest("tr");
         var data = this.dataItem(tr);
-        window.location.href = "/Home/UpDateUser?ID=" + data.id;
+        window.location.href = "/Users/UpDateUser?ID=" + data.id;
     }
 
     $(".close").on("click", function (e) {
