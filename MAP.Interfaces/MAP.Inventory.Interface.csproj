@@ -40,8 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ILoginImple.cs" />
     <Compile Include="IUsersImple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MAP.Models\MAP.Inventory.Model.csproj">
+      <Project>{ca9e5ca9-49cf-46e1-a89a-b89e5a4ff607}</Project>
+      <Name>MAP.Inventory.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

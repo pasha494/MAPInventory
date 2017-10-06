@@ -8,7 +8,7 @@ using System.Web;
 
 namespace MAP.Inventory.ModelImple
 {
-    public class LoginModelImple
+    public class LoginImple
     {
 
         General _General = new General();

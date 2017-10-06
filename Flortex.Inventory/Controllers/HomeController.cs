@@ -78,7 +78,7 @@ namespace MAP.Inventory.Controllers
                 // str = Convert.ToInt32(str).ToString();
                 if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
                 {
-                    LoginModelImple obj = new LoginModelImple();
+                    LoginImple obj = new LoginImple();
                     Flg = obj.CheckLogin(email, password);
                 }
             }
