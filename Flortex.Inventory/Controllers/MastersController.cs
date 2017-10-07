@@ -1,4 +1,7 @@
-﻿using MAP.Inventory.Logging;
+﻿using MAP.Inventory.Interface;
+using MAP.Inventory.Logging;
+using MAP.Inventory.Model;
+using MAP.Inventory.ModelImple;
 using MAP.Inventory.Models;
 using Newtonsoft.Json;
 using System;
@@ -42,7 +45,7 @@ namespace MAPInventory.Controllers
             try
             {
 
-                ProductsCategory oProducts = new ProductsCategory();
+                IProductsCategoryImple oProducts = new ProductsCategoryImple();
 
                 DataTable dt = oProducts.GetGridData(0); //0 will gets all the products data
 
@@ -71,18 +74,19 @@ namespace MAPInventory.Controllers
         {
             PLog.Info("BEGIN::Controller > Home, Method > ProductsCategory");
             PLog.Info("END::Controller > Home, Method >ProductsCategory");
-            return View(new ProductsCategory());
+            return View(new ProductsCategoryModel());
         }
          
 
         public ActionResult SaveProductsCategory(string Data)
         {
             PLog.Info("BEGIN::Controller > Home, Method > SaveProductsCategory(string Data)");
-            int flg = 0;
+            long flg = 0;
             try
             {
-                ProductsCategory obj = JsonConvert.DeserializeObject<ProductsCategory>(Data);
-                flg = obj.SaveProductCategory();
+                ProductsCategoryModel obj = JsonConvert.DeserializeObject<ProductsCategoryModel>(Data);
+                IProductsCategoryImple oProducts = new ProductsCategoryImple();
+                flg = oProducts.SaveProductCategory(obj);
             }
             catch (Exception ex)
             {
@@ -96,13 +100,14 @@ namespace MAPInventory.Controllers
         public ActionResult UpdateProductsCategory(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > UpdateProductsCategory(string ID");
-            ProductsCategory objModel = new ProductsCategory();
+            ProductsCategoryModel objModel = null;
+            IProductsCategoryImple oProducts = new ProductsCategoryImple();
             try
             {
 
                 if (!string.IsNullOrEmpty(ID))
                 {
-                    objModel.EditProdcutCategory(Convert.ToInt32(ID));
+                    objModel= oProducts.EditProdcutCategory(Convert.ToInt32(ID));
                 }
             }
             catch (Exception ex)
@@ -114,16 +119,16 @@ namespace MAPInventory.Controllers
         }
          
 
-        public int DeleteProductsCategory(string ID)
+        public long DeleteProductsCategory(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > DeleteProductsCategory(string ID)");
-            int ret = 0;
+            long ret = 0;
             if (!string.IsNullOrEmpty(ID))
             {
                 try
                 {
-                    ProductsCategory obj = new ProductsCategory();
-                    ret = obj.DeleteProductsCategory(Convert.ToInt32(ID));
+                    IProductsCategoryImple oProducts = new ProductsCategoryImple();
+                    ret = oProducts.DeleteProductsCategory(Convert.ToInt32(ID));
                 }
                 catch (Exception ex)
                 {
@@ -164,9 +169,9 @@ namespace MAPInventory.Controllers
             try
             {
 
-                Products oProducts = new Products();
+                IProductsImple oProductsImple = new ProductsImple();
 
-                DataTable dt = oProducts.GetGridData(0); //0 will gets all the products data
+                DataTable dt = oProductsImple.GetGridData(0); //0 will gets all the products data
 
 
                 Dictionary<string, object> row;
@@ -193,20 +198,21 @@ namespace MAPInventory.Controllers
         {
             PLog.Info("BEGIN::Controller > Home, Method > ChangePasswordView");
             PLog.Info("END::Controller > Home, Method >ChangePasswordView");
-            return View(new Products());
+            return View(new ProductsModel());
         }
          
 
         public ActionResult SaveProduct(string Data)
         {
             PLog.Info("BEGIN::Controller > Home, Method > SaveProduct(string Data)");
-            int flg = 0;
+            long flg = 0;
+            IProductsImple oProductsImple = new ProductsImple();
             try
             {
-                Products obj = JsonConvert.DeserializeObject<Products>(Data);
+                ProductsModel obj = JsonConvert.DeserializeObject<ProductsModel>(Data);
                 string[] date = obj.efDate.Split('-');
                 obj.efDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0])).ToString();
-                flg = obj.SaveProducts();
+                flg = oProductsImple.SaveProducts(obj);
             }
             catch (Exception ex)
             {
@@ -220,13 +226,14 @@ namespace MAPInventory.Controllers
         public ActionResult UpdateProduct(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > UpdateProduct(string ID");
-            Products objModel = new Products();
+            IProductsImple oProductsImple = new ProductsImple();
+            ProductsModel objModel = null;
             try
             {
 
                 if (!string.IsNullOrEmpty(ID))
                 {
-                    objModel.EditProdcut(Convert.ToInt32(ID));
+                    objModel=oProductsImple.EditProdcut(Convert.ToInt32(ID));
                 }
             }
             catch (Exception ex)
@@ -238,16 +245,16 @@ namespace MAPInventory.Controllers
         }
 
 
-        public int DeleteProduct(string ID)
+        public long DeleteProduct(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > DeleteProduct(string ID)");
-            int ret = 0;
+            long ret = 0;
             if (!string.IsNullOrEmpty(ID))
             {
                 try
                 {
-                    Products obj = new Products();
-                    ret = obj.DeleteProduct(Convert.ToInt32(ID));
+                    IProductsImple oProductsImple = new ProductsImple(); 
+                    ret = oProductsImple.DeleteProduct(Convert.ToInt32(ID));
                 }
                 catch (Exception ex)
                 {

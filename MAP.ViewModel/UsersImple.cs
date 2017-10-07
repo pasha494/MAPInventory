@@ -1,5 +1,5 @@
 ﻿using MAP.Inventory.DAL;
-using MAP.Inventory.Interfaces;
+using MAP.Inventory.Interface;
 using MAP.Inventory.Logging;
 using MAP.Inventory.Model;
 using System;

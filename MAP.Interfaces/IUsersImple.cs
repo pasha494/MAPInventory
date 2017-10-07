@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MAP.Inventory.Interfaces
+namespace MAP.Inventory.Interface
 {
     public interface IUsersImple
     {

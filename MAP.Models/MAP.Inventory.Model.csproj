@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoginModel.cs" />
+    <Compile Include="ProductsCategoryModel.cs" />
+    <Compile Include="ProductsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionManager.cs" />
     <Compile Include="UsersModel.cs" />

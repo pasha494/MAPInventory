@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoginImple.cs" />
+    <Compile Include="ProductsCategoryImple.cs" />
+    <Compile Include="ProductsImple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsersImple.cs" />
   </ItemGroup>

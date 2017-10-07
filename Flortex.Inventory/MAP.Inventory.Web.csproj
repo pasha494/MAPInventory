@@ -196,7 +196,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Models\ProductsCategory.cs" />
     <Compile Include="Models\StockReport.cs" />
     <Compile Include="Models\StockTransfer.cs" />
     <Compile Include="Models\OutwardDocument.cs" />
@@ -207,7 +206,6 @@
     <Compile Include="Models\WareHouse.cs" />
     <Compile Include="Models\DAL.cs" />
     <Compile Include="Models\LookUps.cs" />
-    <Compile Include="Models\Products.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1577,6 +1575,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MAP.Interfaces\MAP.Inventory.Interface.csproj">
+      <Project>{db0468ee-e7eb-473c-9aeb-5471190bc9bd}</Project>
+      <Name>MAP.Inventory.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MAP.Inventory.Common\MAP.Inventory.Common.csproj">
       <Project>{30e3cd84-9f1a-4d44-b7cb-c7c03630b05a}</Project>
       <Name>MAP.Inventory.Common</Name>
