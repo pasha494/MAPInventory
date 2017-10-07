@@ -65,7 +65,7 @@ namespace MAP.Inventory.Models
                 oCon.Close();
             }
             catch
-            {
+            { 
             }
             return iResult;
         }

@@ -37,7 +37,7 @@
         function getDocs() {
             Documents = [];
             $.ajax({
-                url: '/Home/LoadProductsCategory',
+                url: '/Masters/LoadProductsCategory',
                 type: 'Get',
                 async: false,
                 success: function (res) {
@@ -97,7 +97,7 @@
                                    var tr = $(eve.target).closest("tr");
                                    var data = self.dataItem(tr);
                                    $.ajax({
-                                       url: '/Home/DeleteProductsCategory',
+                                       url: '/Masters/DeleteProductsCategory',
                                        type: 'POST',
                                        data: { "ID": data.id },
                                        beforeSend: function () {
@@ -154,14 +154,14 @@
     });
 
     function toolbar_click() {
-        window.location.href = '/Home/ProductsCategory';
+        window.location.href = '/Masters/ProductsCategory';
     }
 
     function onEdit(e) {
         e.preventDefault();
         var tr = $(e.target).closest("tr");
         var data = this.dataItem(tr);
-        window.location.href = "/Home/UpdateProductsCategory?ID=" + data.id;
+        window.location.href = "/Masters/UpdateProductsCategory?ID=" + data.id;
     }
  
 

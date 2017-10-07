@@ -141,7 +141,7 @@
         var _saveWareHouse = function () {
             if ($("#frmWareHouse").valid()) {
                 $.ajax({
-                    url: '/Home/SaveWarehouse',
+                    url: '/Masters/SaveWarehouse',
                     type: 'post',
                     data: { "Data": createWarehouse() },
                     beforeSend: function () {
@@ -212,7 +212,7 @@
 
         Mousetrap.bind(['ctrl+backspace', 'command+backspace'], function (e) {
             e.preventDefault();
-            window.location.href = '@Url.Action("Warehouses", "Home")';
+            window.location.href = '@Url.Action("Warehouses", "Masters")';
         });
 
 

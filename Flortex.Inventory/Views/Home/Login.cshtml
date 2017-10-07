@@ -1,4 +1,4 @@
-﻿@using MAP.Inventory.Models;
+﻿@using MAP.Inventory.Common;
 @{
     Layout = null;
     string UserName = "", Password = "";
@@ -14,7 +14,7 @@
     }
     if (_Password != null)
     {
-        Password = MAP.Inventory.Models.Crypto.Decrypt(_Password.Value.ToString(), true);
+        Password = MAP.Inventory.Common.Crypto.Decrypt(_Password.Value.ToString(), true);
     }
     if (_RememberMe != null)
     {

@@ -178,7 +178,7 @@
         var _saveProducts = function () {
             if ($("#frmProducts").valid()) {
                 $.ajax({
-                    url: '/Home/SaveProduct',
+                    url: '/Masters/SaveProduct',
                     type: 'post',
                     data: { "Data": createProduct() },
                     beforeSend: function () {
@@ -271,19 +271,14 @@
 
         Mousetrap.bind(['ctrl+backspace', 'command+backspace'], function (e) {
             e.preventDefault();
-            window.location.href = '@Url.Action("ProductsList", "Home")';
+            window.location.href = '@Url.Action("ProductsList", "Masters")';
         });
 
         Mousetrap.bind(['ctrl+r', 'command+r'], function (e) {
             e.preventDefault();
             clearContorls();
         });
-
-        Mousetrap.bind(['ctrl+h', 'command+h'], function (e) {
-            e.preventDefault();
-            window.location.href = '@Url.Action("Index", "Home")';
-        });
-        
+         
         $("#txtCode").focus();
     });
     

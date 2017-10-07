@@ -33,7 +33,7 @@
         // Documents = getDocs();
         function getDocs() {
             $.ajax({
-                url: '/Home/LoadWarehouses',
+                url: '/Masters/LoadWarehouses',
                 type: 'Get',
                 async: false,
                 success: function (res) {
@@ -105,7 +105,7 @@
                                    var tr = $(e.target).closest("tr");
                                    var data = self.dataItem(tr);
                                    $.ajax({
-                                       url: '/Home/DeleteWarehouse',
+                                       url: '/Masters/DeleteWarehouse',
                                        type: 'POST',
                                        data: { "ID": data.id },
                                        beforeSend: function () {
@@ -156,14 +156,14 @@
     });
 
     function toolbar_click() {
-        window.location.href = '/Home/Warehouse';
+        window.location.href = '/Masters/Warehouse';
     }
 
     function onEdit(e) {
         e.preventDefault();
         var tr = $(e.target).closest("tr");
         var data = this.dataItem(tr);
-        window.location.href = "/Home/UpDateWarehouse?ID=" + data.id;
+        window.location.href = "/Masters/UpDateWarehouse?ID=" + data.id;
     }
      
 

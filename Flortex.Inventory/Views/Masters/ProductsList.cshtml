@@ -37,7 +37,7 @@
         function getDocs() {
             Documents = [];
             $.ajax({
-                url: '/Home/LoadProducts',
+                url: '/Masters/LoadProducts',
                 type: 'Get',
                 async: false,
                 success: function (res) {
@@ -109,7 +109,7 @@
                                    var tr = $(eve.target).closest("tr");
                                    var data = self.dataItem(tr);
                                    $.ajax({
-                                       url: '/Home/DeleteProduct',
+                                       url: '/Masters/DeleteProduct',
                                        type: 'POST',
                                        data: { "ID": data.id },
                                        beforeSend: function () {
@@ -161,14 +161,14 @@
     });
 
     function toolbar_click() {
-        window.location.href = '/Home/Products';
+        window.location.href = '/Masters/Products';
     }
 
     function onEdit(e) {
         e.preventDefault();
         var tr = $(e.target).closest("tr");
         var data = this.dataItem(tr);
-        window.location.href = "/Home/UpdateProduct?ID=" + data.id;
+        window.location.href = "/Masters/UpdateProduct?ID=" + data.id;
     }
  
 
