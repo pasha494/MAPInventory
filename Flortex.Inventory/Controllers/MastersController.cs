@@ -299,7 +299,7 @@ namespace MAPInventory.Controllers
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             try
             {
-                WareHouse oWareHouse = new WareHouse();
+                IWareHouseImple oWareHouse = new WareHouseImple();
                 DataTable dt = oWareHouse.GetGridData(0); //0 will gets all the WareHouse data  
 
                 Dictionary<string, object> row;
@@ -324,7 +324,7 @@ namespace MAPInventory.Controllers
         public ActionResult Warehouse()
         {
             PLog.Info("BEGIN::Controller > Home, Method >Warehouse() ");
-            WareHouse objModel = new WareHouse();
+            WareHouseModel objModel = new WareHouseModel();
             PLog.Info("END::Controller > Home, Method > Warehouse()");
             return View(objModel);
         }
@@ -332,15 +332,17 @@ namespace MAPInventory.Controllers
         public ActionResult SaveWarehouse(string Data)
         {
             PLog.Info("BEGIN::Controller > Home, Method > SaveWarehouse(string Data) ");
-            int flg = 0;
+            long flg = 0;
             try
             {
-                WareHouse obj = JsonConvert.DeserializeObject<WareHouse>(Data);
+                WareHouseModel obj = JsonConvert.DeserializeObject<WareHouseModel>(Data);
+
+                IWareHouseImple oWareHouse = new WareHouseImple();
 
                 string[] date = obj.efDate.Split('-');
 
                 obj.efDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0])).ToString();
-                flg = obj.SaveWareHouse();
+                flg = oWareHouse.SaveWareHouse(obj);
             }
             catch (Exception ex)
             {
@@ -353,12 +355,13 @@ namespace MAPInventory.Controllers
         public ActionResult UpDateWarehouse(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method >UpDateWarehouse(string ID) ");
-            WareHouse objModel = new WareHouse();
+            WareHouseModel objModel = null;
+            IWareHouseImple oWareHouse = new WareHouseImple();
             try
             {
                 if (!string.IsNullOrEmpty(ID))
                 {
-                    objModel.EditWareHouse(Convert.ToInt32(ID));
+                    objModel = oWareHouse.EditWareHouse(Convert.ToInt32(ID));
                 }
             }
             catch (Exception ex)
@@ -369,16 +372,16 @@ namespace MAPInventory.Controllers
             return View("Warehouse", objModel);
         }
         
-        public int DeleteWarehouse(string ID)
+        public long DeleteWarehouse(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method >DeleteWarehouse(string ID) ");
-            int ret = 0;
+            long ret = 0;
             if (!string.IsNullOrEmpty(ID))
             {
                 try
                 {
-                    WareHouse obj = new WareHouse();
-                    ret = obj.DeleteWareHouse(Convert.ToInt32(ID));
+                    IWareHouseImple oWareHouse = new WareHouseImple();
+                    ret = oWareHouse.DeleteWareHouse(Convert.ToInt32(ID));
                 }
                 catch (Exception ex)
                 {
