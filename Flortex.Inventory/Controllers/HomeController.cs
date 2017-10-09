@@ -91,7 +91,7 @@ namespace MAP.Inventory.Controllers
             return Content(Flg.ToString());
         }
 
-        [SessionExpire]
+        [SessionExpire(Page="Landing")]
         public ActionResult Index()
         {
             return View();

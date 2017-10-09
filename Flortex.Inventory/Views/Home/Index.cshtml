@@ -26,7 +26,7 @@
 
     <div class="row-fluid">
         <div class="span12">
-            <input id="cg" style="width:150px">
+            <input id="cg" />
         </div>
     </div>
 
@@ -144,23 +144,25 @@
 <script type="text/javascript">
     $(function () {
 
-        var _data = {
-            "rows": [
-        { "userid": "1", "userName": "Jcomey", "bb": { "aa": "00", "cc": "11" } }, { "userid": "2", "userName": "tcomey", "bb": { "aa": "00", "cc": "11" } }, { "userid": "3", "userName": "comey", "bb": { "aa": "00", "cc": "11" } }, { "userid": "4", "userName": "vcomey", "bb": { "aa": "00", "cc": "11" } }]
-        };
-     
+       
 
         $('#cg').combogrid({
-            panelWidth: 500, 
-            idField: 'userid',
-            textField: 'userName',
-            url: '/GridStock/ProductsByName',
+            panelWidth: 800, 
+            idField: 'id',
+            textField: 'pcode',
+            url: '/Generic/GetProductsListView',
             mode: 'remote',
+            method: 'get',
+            searchField:'pcode',
             fitColumns: true,
             columns: [[
-                { field: 'id', title: 'Product ID', width: 60 },
-                { field: 'name', title: 'Product Name', align: 'right', width: 80 },
-                { field: 'id', title: 'Price', align: 'right', width: 60 },
+                { field: 'pcode', title: 'Product ID', width: 150 },
+                { field: 'pname', title: 'Product Name',  width: 250 },
+                { field: 'price', title: 'Price', align: 'right', width: 30 },
+                { field: 'quantity', title: 'Quantity', align: 'right', width: 30 },
+                { field: 'pcategory', title: 'Category', width: 100 },
+                { field: 'wcode', title: 'Warehouse code', width: 30 },
+                { field: 'wname', title: 'Warehouse name', width: 100 }
             ]]
         });
 
