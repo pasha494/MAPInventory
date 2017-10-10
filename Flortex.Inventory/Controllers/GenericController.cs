@@ -20,7 +20,7 @@ namespace MAP.Inventory.Controllers
         }
 
 
-        public string GetProductsListView(string filterCol, string q)
+        public string GetProductsListView(string searchField, string q)
         {
             MAPAutoCompleteListViewImple _listView = new MAPAutoCompleteListViewImple();
 
@@ -32,16 +32,18 @@ namespace MAP.Inventory.Controllers
             try
             {
                 DataTable dt = new DataTable();
-                dt = _listView.GetProductsListViewData(filterCol, q); 
-
-                foreach (DataRow dr in dt.Rows)
+                dt = _listView.GetProductsListViewData(searchField, q);
+                if (dt != null)
                 {
-                    row = new Dictionary<string, object>();
-                    foreach (DataColumn col in dt.Columns)
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        row.Add(col.ColumnName, dr[col]);
+                        row = new Dictionary<string, object>();
+                        foreach (DataColumn col in dt.Columns)
+                        {
+                            row.Add(col.ColumnName, dr[col]);
+                        }
+                        rows.Add(row);
                     }
-                    rows.Add(row);
                 }
             }
             catch (Exception ex)

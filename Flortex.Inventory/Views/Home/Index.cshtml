@@ -147,7 +147,7 @@
        
 
         $('#cg').combogrid({
-            panelWidth: 800, 
+            panelWidth: 1500, 
             idField: 'id',
             textField: 'pcode',
             url: '/Generic/GetProductsListView',
@@ -158,11 +158,11 @@
             columns: [[
                 { field: 'pcode', title: 'Product ID', width: 150 },
                 { field: 'pname', title: 'Product Name',  width: 250 },
-                { field: 'price', title: 'Price', align: 'right', width: 30 },
-                { field: 'quantity', title: 'Quantity', align: 'right', width: 30 },
-                { field: 'pcategory', title: 'Category', width: 100 },
-                { field: 'wcode', title: 'Warehouse code', width: 30 },
-                { field: 'wname', title: 'Warehouse name', width: 100 }
+                { field: 'price', title: 'Price', align: 'right', width: 60 },
+                { field: 'quantity', title: 'Quantity', align: 'right', width: 80 },
+                { field: 'pcategory', title: 'Category', width: 200 },
+                { field: 'wcode', title: 'Warehouse code', width: 200 },
+                { field: 'wname', title: 'Warehouse name', width: 200 }
             ]]
         });
 
