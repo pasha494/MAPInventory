@@ -647,7 +647,6 @@
     <Content Include="Content\Gebo\lib\datatables\extras\Scroller\api_scrolling.html" />
     <Content Include="Content\Gebo\lib\datatables\extras\Scroller\index.html" />
     <Content Include="Content\Gebo\lib\datatables\extras\Scroller\large_js_source.html" />
-    <Content Include="Content\Gebo\lib\datatables\extras\Scroller\media\data\2500.txt" />
     <Content Include="Content\Gebo\lib\datatables\extras\Scroller\media\docs\140369713c.html" />
     <Content Include="Content\Gebo\lib\datatables\extras\Scroller\media\docs\28e3b9ac00.html" />
     <Content Include="Content\Gebo\lib\datatables\extras\Scroller\media\docs\fd374c06d9.html" />
@@ -919,7 +918,6 @@
     <Content Include="Content\Gebo\lib\multiselect\js\jquery.multi-select.js" />
     <Content Include="Content\Gebo\lib\multiselect\js\jquery.multi-select.min.js" />
     <Content Include="Content\Gebo\lib\multiselect\js\jquery.quicksearch.js" />
-    <Content Include="Content\Gebo\lib\plupload\changelog.txt" />
     <Content Include="Content\Gebo\lib\plupload\docs\api\class_plupload.File.html" />
     <Content Include="Content\Gebo\lib\plupload\docs\api\class_plupload.html" />
     <Content Include="Content\Gebo\lib\plupload\docs\api\class_plupload.QueueProgress.html" />
@@ -962,11 +960,6 @@
     <Content Include="Content\Gebo\lib\plupload\docs\api\js\shCore.js" />
     <Content Include="Content\Gebo\lib\plupload\docs\api\model.xml" />
     <Content Include="Content\Gebo\lib\plupload\docs\api\plupload.vsdoc.js" />
-    <Content Include="Content\Gebo\lib\plupload\examples\bg.jpg" />
-    <Content Include="Content\Gebo\lib\plupload\examples\custom.html" />
-    <Content Include="Content\Gebo\lib\plupload\examples\jquery\events.html" />
-    <Content Include="Content\Gebo\lib\plupload\examples\jquery\jquery_ui_widget.html" />
-    <Content Include="Content\Gebo\lib\plupload\examples\jquery\queue_widget.html" />
     <Content Include="Content\Gebo\lib\plupload\js\i18n\cs.js" />
     <Content Include="Content\Gebo\lib\plupload\js\i18n\da.js" />
     <Content Include="Content\Gebo\lib\plupload\js\i18n\de.js" />
@@ -1522,7 +1515,6 @@
     <Content Include="Content\Gebo\lib\datatables\extras\FixedColumns\media\js\FixedColumns.min.js.gz" />
     <Content Include="Content\Gebo\lib\datatables\extras\FixedHeader\js\FixedHeader.min.js.gz" />
     <Content Include="Content\Gebo\lib\datatables\extras\KeyTable\js\KeyTable.min.js.gz" />
-    <Content Include="Content\Gebo\lib\datatables\extras\Scroller\media\data\server_processing.php" />
     <Content Include="Content\Gebo\lib\datatables\extras\Scroller\media\docs\media\license\Syntax Highlighter" />
     <Content Include="Content\Gebo\lib\datatables\extras\Scroller\media\js\Scroller.min.js.gz" />
     <Content Include="Content\Gebo\lib\datatables\extras\TableTools\media\as3\lib\AlivePDF.swc" />
@@ -1534,7 +1526,6 @@
     <Content Include="Content\Gebo\lib\datatables\extras\TableTools\media\images\psd\printer.psd" />
     <Content Include="Content\Gebo\lib\datatables\extras\TableTools\media\js\TableTools.min.js.gz" />
     <Content Include="Content\Gebo\lib\datatables\images\Sorting icons.psd" />
-    <Content Include="Content\Gebo\lib\datatables\server_side.php" />
     <Content Include="Content\Gebo\lib\datepicker\LICENSE" />
     <Content Include="Content\Gebo\lib\flot\examples\data-eu-gdp-growth-1.json" />
     <Content Include="Content\Gebo\lib\flot\examples\data-eu-gdp-growth-2.json" />
@@ -1546,9 +1537,6 @@
     <Content Include="Content\Gebo\lib\flot\examples\data-usa-gdp-growth.json" />
     <Content Include="Content\Gebo\lib\flot\Makefile" />
     <Content Include="Content\Gebo\lib\moment_js\LICENSE" />
-    <Content Include="Content\Gebo\lib\plupload\examples\dump.php" />
-    <Content Include="Content\Gebo\lib\plupload\examples\jquery\s3.php" />
-    <Content Include="Content\Gebo\lib\plupload\examples\upload.php" />
     <Content Include="Content\Gebo\lib\plupload\readme.md" />
     <Content Include="Content\Gebo\lib\stepy\changelog.markdown" />
     <Content Include="Content\Gebo\lib\stepy\README.markdown" />
@@ -1626,7 +1614,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Gebo\lib\plupload\examples\uploads\" />
+    <Folder Include="Content\Gebo\lib\datatables\extras\Scroller\media\data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
