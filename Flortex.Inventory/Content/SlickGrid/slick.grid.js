@@ -56,7 +56,7 @@ if (typeof Slick === "undefined") {
         // settings
         var defaults = {
             explicitInitialization: false,
-            rowHeight: 25,
+            rowHeight: 30,
             defaultColumnWidth: 80,
             enableAddRow: false,
             leaveSpaceForNewRows: false,
@@ -72,7 +72,7 @@ if (typeof Slick === "undefined") {
             autoHeight: false,
             editorLock: Slick.GlobalEditorLock,
             showHeaderRow: false,
-            headerRowHeight: 25,
+            headerRowHeight: 35,
             showTopPanel: false,
             topPanelHeight: 25,
             formatterFactory: null,
@@ -927,7 +927,7 @@ if (typeof Slick === "undefined") {
             $style = $("<style type='text/css' rel='stylesheet' />").appendTo($("head"));
             var rowHeight = (options.rowHeight - cellHeightDiff);
             var rules = [
-              "." + uid + " .slick-header-column { left: 1000px; }",
+              "." + uid + " .slick-header-column { left: 1000px;   }",
               "." + uid + " .slick-top-panel { height:" + options.topPanelHeight + "px; }",
               "." + uid + " .slick-headerrow-columns { height:" + options.headerRowHeight + "px; }",
               "." + uid + " .slick-cell { height:" + rowHeight + "px; }",

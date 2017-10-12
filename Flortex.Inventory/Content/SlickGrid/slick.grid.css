@@ -23,9 +23,8 @@ classes should alter those!
   display: inline-block;
   overflow: hidden;
   -o-text-overflow: ellipsis;
-  text-overflow: ellipsis;
-  height: 16px;
-  line-height: 16px;
+  text-overflow: ellipsis; 
+  line-height: 25px;
   margin: 0;
   padding: 4px;
   border-right: 1px solid silver;
@@ -33,6 +32,7 @@ classes should alter those!
   border-top: 0px;
   border-bottom: 0px;
   float: left;
+  height:25px;
 }
 
 .slick-headerrow-column.ui-state-default {

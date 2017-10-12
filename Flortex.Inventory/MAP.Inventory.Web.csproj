@@ -1354,6 +1354,7 @@
     <Content Include="Content\Gebo\lib\validation\localization\methods_nl.js" />
     <Content Include="Content\Gebo\lib\validation\localization\methods_pt.js" />
     <Content Include="Content\Gebo\lib\validation\version.txt" />
+    <Content Include="Content\SlickGrid\css\examples.css" />
     <Content Include="Content\SlickGrid\css\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\SlickGrid\css\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\SlickGrid\css\smoothness\images\ui-bg_glass_55_fbf9ee_1x400.png" />
