@@ -22,7 +22,8 @@ namespace MAP.Inventory.Controllers
 
         public string GetProductsListView(string searchField, string q)
         {
-            MAPAutoCompleteListViewImple _listView = new MAPAutoCompleteListViewImple();
+            // FeatureId for products view autocomplete list view data is "1"
+            MapListViewImple _listView = new MapListViewImple(1);
 
             PLog.Info("BEGIN::Controller > GridStock, Method > WarehouseData");
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();

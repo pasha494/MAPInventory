@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ILoginImple.cs" />
+    <Compile Include="IMapListViewImple.cs" />
     <Compile Include="IProductsCategoryImple.cs" />
     <Compile Include="IProductsImple.cs" />
     <Compile Include="IUsersImple.cs" />

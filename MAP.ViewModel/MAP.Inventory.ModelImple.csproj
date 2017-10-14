@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoginImple.cs" />
-    <Compile Include="MAPAutoCompleteListViewImple.cs" />
+    <Compile Include="MapListViewImple.cs" />
     <Compile Include="ProductsCategoryImple.cs" />
     <Compile Include="ProductsImple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,6 +57,10 @@
     <ProjectReference Include="..\MAP.Interfaces\MAP.Inventory.Interface.csproj">
       <Project>{db0468ee-e7eb-473c-9aeb-5471190bc9bd}</Project>
       <Name>MAP.Inventory.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MAP.Inventory.Common\MAP.Inventory.Common.csproj">
+      <Project>{30e3cd84-9f1a-4d44-b7cb-c7c03630b05a}</Project>
+      <Name>MAP.Inventory.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\MAP.Logging\MAP.Inventory.Logging.csproj">
       <Project>{8f31a987-2047-41ee-a5c0-e4bf7bd839df}</Project>

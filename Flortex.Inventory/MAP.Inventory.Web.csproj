@@ -186,6 +186,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\GenericController.cs" />
     <Compile Include="Controllers\GridStockController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1612,6 +1613,7 @@
     <Content Include="Views\GridStock\GetQuickStockReport.cshtml" />
     <Content Include="Views\GridStock\GetConsolidateStockReport.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Admin\ListViweCustomization.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

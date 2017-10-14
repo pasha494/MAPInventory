@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MAP.Inventory.Common
+namespace MAP.Inventory.Interface
 {
-    public class Class1
+    public interface IMapListViewImple
     {
+
     }
 }

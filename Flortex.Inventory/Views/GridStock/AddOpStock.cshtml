@@ -87,7 +87,7 @@
                     <label for="drpWarehouse" class="label">Warehouse</label>
                 </div>
                 <div class="span9">
-                    <input id="drpWarehouse" style="width: 250px;" class="mousetrap" value="@Model.WareHouseName" />
+                    <input id="drpWarehouse" style="width: 250px;" class="mousetrap" />
                 </div>
             </div>
         </div>
@@ -176,19 +176,20 @@
             enableCellNavigation: true,
             forceFitColumns: false,
             topPanelHeight: 50,
-            showHeaderRow: true
+            showHeaderRow: true,
+            Warehouse: 0
 
         };
 
 
         var columns = [
   { id: "Sno", name: "S.No", field: "Sno", cssClass: "cell-selection", width: 80, resizable: false, selectable: false },
-  { id: "Code", name: "Product code", field: "Code", width: 300, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.AutocompleteListView },
-  { id: "Name", name: "Product Name", field: "Name", width: 300, editor: Slick.Editors.Text },
-  { id: "Quantity", name: "Quantity", field: "Quantity", width: 100, resizable: false, editor: Slick.Editors.Text  },
+  { id: "Code", name: "Product code", field: "Code", stopDownkey: true, width: 300, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.AutocompleteListView },
+  { id: "Name", name: "Product Name", field: "Name", stopDownkey: true, width: 300, editor: Slick.Editors.Text },
+  { id: "Quantity", name: "Quantity", field: "Quantity", width: 100, resizable: false, editor: Slick.Editors.Text },
   { id: "UnitPrice", name: "Unit Price", field: "UnitPrice", minWidth: 100, editor: Slick.Editors.Text },
-  { id: "Discount", name: "Discount", field: "Discount", minWidth: 100, editor: Slick.Editors.Text  },
-    { id: "Price", name: "Price", field: "Price", minWidth: 100, editor: Slick.Editors.Text }
+  { id: "Discount", name: "Discount", field: "Discount", minWidth: 100, editor: Slick.Editors.Text },
+    { id: "Price", name: "Price", field: "Price", minWidth: 100, editor: Slick.Editors.YesNoSelect }
         ];
 
 
@@ -203,7 +204,7 @@
 
         grid.onBeforeEditCell.subscribe(function (e, args) {
             debugger
-            if(!validateHeaderFields())
+            if (!validateHeaderFields())
                 return false;
 
 
@@ -225,19 +226,22 @@
             dataView.addItem(obj);
         });
 
-        grid.onKeyDown.subscribe(function (e) {
+        grid.onKeyDown.subscribe(function (e, args) {
+            debugger
             // select all rows on ctrl-a
-            if (e.which != 65 || !e.ctrlKey) {
-                return false;
+            if (e.which == 40 || e.which == 38) {
+                if (columns && columns[args.cell] && columns[args.cell].stopDownkey) {
+                    e.stopImmediatePropagation();
+                }
             }
 
-            var rows = [];
-            for (var i = 0; i < dataView.getLength() ; i++) {
-                rows.push(i);
-            }
+            //var rows = [];
+            //for (var i = 0; i < dataView.getLength() ; i++) {
+            //    rows.push(i);
+            //}
 
-            grid.setSelectedRows(rows);
-            e.preventDefault();
+            //grid.setSelectedRows(rows);
+            //e.preventDefault();
         });
 
         // wire up model events to drive the grid
@@ -310,13 +314,12 @@
             });
             return WarehouseData;
         }
-
-        var combobox = $("#drpWarehouse").data("kendoComboBox");
-
+      
+        // This is for edit mode, when the DocID is greater than zero
         if ('@Model.DocID' > 0) {
 
-            combobox.text('@Model.WareHouseName');
-            combobox.value('@Model.WareHouseId');
+            @*combobox.text('@Model.WareHouseName');
+            combobox.value('@Model.WareHouseId');*@
             var jsonData = '@Html.Raw(Model.GridData)';
             if (jsonData != null && jsonData.length > 0) {
                 var tempData = JSON.parse(jsonData);
@@ -360,6 +363,7 @@
                 $("#drpWarehouse").focus();
                 return false;
             }
+            return flag;
         };
 
         var validateGridData = function () {
