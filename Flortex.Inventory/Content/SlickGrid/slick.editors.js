@@ -15,10 +15,107 @@
         "YesNoSelect": YesNoSelectEditor,
         "Checkbox": CheckboxEditor,
         "PercentComplete": PercentCompleteEditor,
-        "LongText": LongTextEditor
+        "LongText": LongTextEditor,
+        "AutocompleteListView": AutocompleteListView
       }
     }
   });
+
+
+
+  function AutocompleteListView(args) {
+       
+      var $input;
+      var defaultValue;
+      var scope = this;
+      var selectedRow = null;
+
+      this.init = function () {
+          debugger
+          $input = $("<INPUT type=text   />"); 
+          $input.appendTo(args.container);
+          $input.combogrid({
+              width:$(args.container).width(),
+              panelWidth: 1500,
+              idField: 'id',
+              textField: 'pcode',
+              url: '/Generic/GetProductsListView',
+              mode: 'remote',
+              method: 'get',
+              searchField: 'pcode',
+              fitColumns: true,
+              columns: [[
+                  { field: 'pcode', title: 'Product ID', width: 150 },
+                  { field: 'pname', title: 'Product Name', width: 250 },
+                  { field: 'price', title: 'Price', align: 'right', width: 60 },
+                  { field: 'quantity', title: 'Quantity', align: 'right', width: 80 },
+                  { field: 'pcategory', title: 'Category', width: 200 },
+                  { field: 'wcode', title: 'Warehouse code', width: 200 },
+                  { field: 'wname', title: 'Warehouse name', width: 200 }
+              ]],
+              onSelect: onSelectAutocompleteListView
+          });
+      };
+
+      var onSelectAutocompleteListView = function (index, row) {
+          selectedRow = row;
+          console.log('hi ' + index);
+      }
+
+      this.destroy = function () {
+          $input.combogrid('destroy');
+      };
+
+      this.focus = function () {
+         
+      };
+
+      this.getValue = function () {
+          return $input && $input.getValue ? $input.getValue() : '';
+      };
+
+      this.setValue = function (val) {
+          $input.setValue(val);
+      };
+
+      this.loadValue = function (item) {
+          debugger
+          defaultValue = item[args.column.field] || "";
+          $input.combogrid('setText', defaultValue);   
+      };
+
+      this.serializeValue = function () {
+          debugger
+          return $input.combogrid('getText');
+      };
+
+      this.applyValue = function (item, state) {
+          debugger
+          item[args.column.field] = state;
+      };
+
+      this.isValueChanged = function () {
+          debugger
+          return (!($input.combogrid('getText') == "" && defaultValue == null)) && ($input.combogrid('getText') != defaultValue);
+      };
+
+      this.validate = function () {
+          debugger
+          if (args.column.validator) {
+              var validationResults = args.column.validator($input.combogrid('getText'));
+              if (!validationResults.valid) {
+                  return validationResults;
+              }
+          }
+
+          return {
+              valid: true,
+              msg: null
+          };
+      };
+
+      this.init();
+  }
 
   function TextEditor(args) {
     var $input;

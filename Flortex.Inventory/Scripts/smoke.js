@@ -78,27 +78,27 @@
 				buttons = '<div class="dialog-buttons">';
 				if (f.type === 'alert') {
 					buttons +=
-						'<button id="alert-ok-'+f.newid+'">'+ok+'</button>';
+						'<button class="btn" id="alert-ok-' + f.newid + '">' + ok + '</button>';
 				}
 				 else if (f.type === 'quiz') {
 	
 					if (f.params.button_1) {
 						buttons +=
-							'<button class="quiz-button" id="'+f.type+'-ok1-'+f.newid+'">'+f.params.button_1+'</button>';
+							'<button class="btn" id="' + f.type + '-ok1-' + f.newid + '">' + f.params.button_1 + '</button>';
 					}
 	
 					if (f.params.button_2) {
 						buttons +=
-							'<button class="quiz-button" id="'+f.type+'-ok2-'+f.newid+'">'+f.params.button_2+'</button>';
+							'<button class="btn" id="' + f.type + '-ok2-' + f.newid + '">' + f.params.button_2 + '</button>';
 					}
 	
 					if (f.params.button_3) {
 						buttons +=
-							'<button class="quiz-button" id="'+f.type+'-ok3-'+f.newid+'">'+f.params.button_3+'</button>';
+							'<button class="btn" id="' + f.type + '-ok3-' + f.newid + '">' + f.params.button_3 + '</button>';
 					}
 					if (f.params.button_cancel) {
 						buttons +=
-							'<button id="'+f.type+'-cancel-'+f.newid+'" class="cancel">'+f.params.button_cancel+'</button>';
+							'<button  class="btn" id="' + f.type + '-cancel-' + f.newid + '" class="cancel">' + f.params.button_cancel + '</button>';
 					}
 	
 				}
@@ -106,12 +106,12 @@
 				 else if (f.type === 'prompt' || f.type === 'confirm') {
 					if (f.params.reverseButtons) {
 						buttons +=
-							'<button id="'+f.type+'-ok-'+f.newid+'">'+ok+'</button>' +
-							'<button id="'+f.type+'-cancel-'+f.newid+'" class="cancel">'+cancel+'</button>';				
+							'<button  class="btn" id="' + f.type + '-ok-' + f.newid + '">' + ok + '</button>' +
+							'<button  class="btn" id="' + f.type + '-cancel-' + f.newid + '" class="cancel">' + cancel + '</button>';
 					} else {
 						buttons +=
-							'<button id="'+f.type+'-cancel-'+f.newid+'" class="cancel">'+cancel+'</button>'+
-							'<button id="'+f.type+'-ok-'+f.newid+'">'+ok+'</button>';
+							'<button  class="btn" id="' + f.type + '-cancel-' + f.newid + '" class="cancel">' + cancel + '</button>' +
+							'<button  class="btn" id="' + f.type + '-ok-' + f.newid + '">' + ok + '</button>';
 					}
 				}
 				buttons += '</div>';

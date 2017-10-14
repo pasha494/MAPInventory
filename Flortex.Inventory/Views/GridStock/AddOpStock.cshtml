@@ -111,7 +111,7 @@
         <div class="span12 ">
             <div class="row-fluid">
                 <div class="span12 ">
-                    <div id="grid1"  style="width:100%;height:380px;"></div>
+                    <div id="grid1" style="width:100%;height:380px;"></div>
                 </div>
             </div>
 
@@ -143,22 +143,13 @@
             }
 </style>
 <script>
-    var record = 0;
     $(document).ready(function () {
 
-        function requiredFieldValidator(value) {
-            if (value == null || value == undefined || !value.length) {
-                return { valid: false, msg: "This is a required field" };
-            }
-            else {
-                return { valid: true, msg: null };
-            }
-        }
-
+        // slick grid variables declaration
         var dataView;
         var grid;
 
-
+        // Add empty rows to the grid
         var GetEmptyRows = function () {
             var _data = [];
             for (var i = 0; i < 10; i++) {
@@ -182,37 +173,46 @@
         var options = {
             editable: true,
             enableAddRow: true,
-            enableCellNavigation: true, 
+            enableCellNavigation: true,
             forceFitColumns: false,
             topPanelHeight: 50,
-            showHeaderRow: true 
+            showHeaderRow: true
+
         };
 
 
         var columns = [
   { id: "Sno", name: "S.No", field: "Sno", cssClass: "cell-selection", width: 80, resizable: false, selectable: false },
-  { id: "Code", name: "Product code", field: "Code", width: 300, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.Text, validator: requiredFieldValidator },
+  { id: "Code", name: "Product code", field: "Code", width: 300, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.AutocompleteListView },
   { id: "Name", name: "Product Name", field: "Name", width: 300, editor: Slick.Editors.Text },
-  { id: "Quantity", name: "Quantity", field: "Quantity", width: 100, resizable: false, editor: Slick.Editors.Text, validator: requiredFieldValidator },
-  { id: "UnitPrice", name: "Unit Price", field: "UnitPrice", minWidth: 100, editor: Slick.Editors.Text, validator: requiredFieldValidator },
-  { id: "Discount", name: "Discount", field: "Discount", minWidth: 100, editor: Slick.Editors.Text, validator: requiredFieldValidator },
-    { id: "Price", name: "Price", field: "Price", minWidth: 100, editor: Slick.Editors.Text, validator: requiredFieldValidator }
+  { id: "Quantity", name: "Quantity", field: "Quantity", width: 100, resizable: false, editor: Slick.Editors.Text  },
+  { id: "UnitPrice", name: "Unit Price", field: "UnitPrice", minWidth: 100, editor: Slick.Editors.Text },
+  { id: "Discount", name: "Discount", field: "Discount", minWidth: 100, editor: Slick.Editors.Text  },
+    { id: "Price", name: "Price", field: "Price", minWidth: 100, editor: Slick.Editors.Text }
         ];
 
 
         dataView = new Slick.Data.DataView({ inlineFilters: true });
         grid = new Slick.Grid("#grid1", dataView, columns, options);
         grid.setSelectionModel(new Slick.RowSelectionModel());
-         
+
 
         grid.onCellChange.subscribe(function (e, args) {
             dataView.updateItem(args.item.id, args.item);
         });
 
+        grid.onBeforeEditCell.subscribe(function (e, args) {
+            debugger
+            if(!validateHeaderFields())
+                return false;
+
+
+        });
+
         grid.onAddNewRow.subscribe(function (e, args) {
             var obj = {};
             obj.id = dataView.getLength();
-            obj.Sno = dataView.getLength()+1;
+            obj.Sno = dataView.getLength() + 1;
             obj.PId = "";
             obj.Code = "";
             obj.Name = "";
@@ -222,7 +222,7 @@
             obj.Price = "";
 
             $.extend(obj, args.item);
-            dataView.addItem(obj); 
+            dataView.addItem(obj);
         });
 
         grid.onKeyDown.subscribe(function (e) {
@@ -239,25 +239,6 @@
             grid.setSelectedRows(rows);
             e.preventDefault();
         });
-         
-        //grid.onAddNewRow.subscribe(function (e, args) {
-        //    var obj = {};
-        //    obj.id = dataView.getLength();
-        //    obj.PId = "";
-        //    obj.Code = "";
-        //    obj.Name = "";
-        //    obj.Quantity = "";
-        //    obj.UnitPrice = "";
-        //    obj.Discount = "";
-        //    obj.Price = "";
-
-        //    $.extend(obj, args.item);
-        //    data.push(obj);
-        //    grid.invalidateRows([data.length - 1]);
-        //    grid.updateRowCount();
-        //    grid.render();
-        //});
-
 
         // wire up model events to drive the grid
         dataView.onRowCountChanged.subscribe(function (e, args) {
@@ -269,7 +250,7 @@
             grid.invalidateRows(args.rows);
             grid.render();
         });
-         
+
 
         // initialize the model after all the events have been hooked up
         dataView.beginUpdate();
@@ -278,7 +259,7 @@
 
         // if you don't want the items that are not visible (due to being filtered out
         // or being on a different page) to stay selected, pass 'false' to the second arg
-        dataView.syncGridSelection(grid, true); 
+        dataView.syncGridSelection(grid, true);
 
 
         // datepicker initialisation
@@ -367,155 +348,24 @@
             }
         }
 
-        var GetEmptyRows = function () {
-            var _data = [];
-            for (var i = 0; i < 30; i++) {
-                var obj = {};
-                obj.id = i + 1;
-                obj.productID = "";
-                obj.Qty = "";
-                _data.push(obj);
+        var validateHeaderFields = function () {
+            var flag = true;
+            if ($("#dtDate").val() == "") {
+                customAlert('Please select Date', 'alert');
+                $("#dtDate").focus();
+                return false;
             }
+            else if (combobox.value() == "" || combobox.text() == "") {
+                customAlert('Please select Warehouse', 'alert');
+                $("#drpWarehouse").focus();
+                return false;
+            }
+        };
 
-            return _data;
-        }
+        var validateGridData = function () {
 
-        var productCodes = [];
-        productCodes = getProductsByCode();
-        function getProductsByCode() {
-            $.ajax({
-                url: '/GridStock/ProductsByCode',
-                type: 'Get',
-                async: false,
-                beforeSend: function () {
-                    $("#ajaxLoadingImg").show();
-                },
-                complete: function () { $("#ajaxLoadingImg").hide(); },
-                success: function (res) {
-                    productCodes = JSON.parse(res);
-                },
-                error: function (e) { customAlert('error', 'alert'); }
-            });
-            return productCodes;
-        }
+        };
 
-        var productNames = [];
-        productNames = getProductsByName();
-        function getProductsByName() {
-            $.ajax({
-                url: '/GridStock/ProductsByName',
-                type: 'Get',
-                async: false,
-                beforeSend: function () {
-                    $("#ajaxLoadingImg").show();
-                },
-                complete: function () { $("#ajaxLoadingImg").hide(); },
-                success: function (res) {
-                    productNames = JSON.parse(res);
-                },
-                error: function (e) { customAlert('error', 'alert'); }
-            });
-            return productNames;
-        }
-
-        var initGrid = function (_inputData) {
-
-            //var dataSource = new kendo.data.DataSource({
-            //    data: _inputData,
-            //    autoSync: true,
-            //    schema: {
-            //        model: {
-            //            fields: {
-            //                id: { editable: false },
-            //                productID: { editable: true },
-            //                Qty: { editable: true }
-            //            }
-            //        }
-            //    }
-            //});
-
-            $("#grid").kendoGrid({
-                dataSource: _inputData,
-                height: 335,
-                editable: true,
-                navigatable: true,
-
-                columns: [
-                    //{
-                    //field: "id",
-                    //title: "S.No",
-                    //width: "5%",
-                    //type: "number",
-                    //template: function (dataItem) { return '<span>' + dataItem.id + '</span>'; }
-                    ////hidden: true
-                    ////template: "#= ++record #"
-                    //},
-                {
-                    field: "productID",
-                    title: "Item Code",
-                    width: "25%",
-                    template: function (dataItem) {
-                        var code = "";
-                        $.each(productCodes, function () {
-                            if (this.id == dataItem.productID) {
-                                code = this.code;
-                                return false;
-                            }
-                        });
-                        return code;
-                    },
-                    editor: function (container, options) {
-                        $("<input class='mousetrap'/>")
-                            .attr("data-bind", "value:productID")
-                            .appendTo(container)
-                            .kendoComboBox({
-                                placeholder: "Select Code...",
-                                dataSource: productCodes,
-                                dataTextField: "code",
-                                dataValueField: "id",
-                                filter: "contains",
-                                autobind: false,
-                                minLength: 1
-                            });
-                    }
-                }, {
-                    field: "productID",
-                    title: "Item Name",
-                    width: "25%",
-                    template: function (dataItem) {
-                        var name = "";
-                        $.each(productNames, function () {
-                            if (this.id == dataItem.productID) {
-                                name = this.name;
-                                return false;
-                            }
-                        });
-                        return name;
-                    },
-                    editor: function (container, options) {
-                        $("<input class='mousetrap'/>")
-                            .attr("data-bind", "value:productID")
-                            .appendTo(container)
-                            .kendoComboBox({
-                                placeholder: "Select Product...",
-                                dataSource: productNames,
-                                dataTextField: "name",
-                                dataValueField: "id",
-                                filter: "contains",
-                                autobind: false,
-                                minLength: 1
-                            });
-                    }
-                }, {
-                    field: "Qty",
-                    title: "Quantity",
-                    type: "number",
-                    width: "20%"
-                }]
-            });
-        }
-
-        initGrid(data);
 
         var refreshAsNewDoc = function () {
             $("#DocID").val(0);
