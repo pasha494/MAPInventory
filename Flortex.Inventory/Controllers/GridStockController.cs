@@ -6,11 +6,11 @@ using System.Web.Mvc;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
-using MAP.Inventory.Models;
+using MAP.Inventory.Web.Models;
 using Newtonsoft.Json;
 using MAP.Inventory.Logging;
 
-namespace MAP.Inventory.Controllers
+namespace MAP.Inventory.Web.Controllers
 {
     [SessionExpire]
     public class GridStockController : Controller

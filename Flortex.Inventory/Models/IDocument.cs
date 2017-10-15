@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MAP.Inventory.Models
+namespace MAP.Inventory.Web.Models
 {
     public interface IDocument
     {

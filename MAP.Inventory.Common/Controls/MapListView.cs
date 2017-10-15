@@ -10,7 +10,7 @@ namespace MAP.Inventory.Common.Controls
     {
         public MapListView()
         { 
-            columns = new List<MapListviewCoumns>();
+            columns = new List<MapListviewColumns>();
             idField = string.Empty;
             mode = string.Empty;
             searchField = string.Empty;
@@ -19,7 +19,7 @@ namespace MAP.Inventory.Common.Controls
             listViewName = string.Empty;
         }
 
-        public List<MapListviewCoumns> columns { get; set; }
+        public List<MapListviewColumns> columns { get; set; }
         public int delay { get; set; }
         public bool fitColumns { get; set; }
         public string idField { get; set; }
@@ -32,9 +32,9 @@ namespace MAP.Inventory.Common.Controls
 
     }
 
-    public class MapListviewCoumns
+    public class MapListviewColumns
     {
-        public MapListviewCoumns()
+        public MapListviewColumns()
         {
             align = string.Empty;
             field = string.Empty;

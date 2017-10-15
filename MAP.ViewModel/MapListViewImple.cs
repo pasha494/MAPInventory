@@ -2,6 +2,7 @@
 using MAP.Inventory.DAL;
 using MAP.Inventory.Interface;
 using MAP.Inventory.Logging;
+using MAP.Inventory.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,21 +21,51 @@ namespace MAP.Inventory.ModelImple
             FeatureId = iFeatureId;
         }
 
-
         public int FeatureId { get; }
 
-        private DataTable GetListViewOptions()
+        private DataTable GetListViewCustomizaitonInfo()
         {
             DataTable dt = new DataTable();
+
+            try
+            {
+                DataSet ds = _General.Get(new ArrayList(), "sp_GetListViewsCustomizationInfo");
+                dt = ds.Tables[0];
+            }
+            catch (Exception ex)
+            {
+                PLog.Error("Error::Class > Products, Method > GetGridData(int ProductCategoryID)", ex);
+            }
+
             return dt;
         }
 
-
-        public Dictionary<int, MapListView> GetListViewsCustomizationInfo()
+        public Dictionary<int, ListViewCustomization> GetListViewsCustomizationInfo()
         {
-            Dictionary<int, MapListView> listViews = new Dictionary<int, MapListView>();
-             
+            Dictionary<int, ListViewCustomization> listViews = new Dictionary<int, ListViewCustomization>();
 
+            DataTable dt = GetListViewCustomizaitonInfo();
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    // create an instance for the listview customization class
+                    ListViewCustomization objListViewCustomization = new ListViewCustomization(
+                       _AcitonMethodName: dt.Rows[i]["ActionMethodName"].ToString(),
+                       _ControllerName: dt.Rows[i]["ControllerName"].ToString(),
+                       _FeatureId: Convert.ToInt32(dt.Rows[i]["NodeNo"].ToString()),
+                       _Name: dt.Rows[i]["Name"].ToString(),
+                       _Options: dt.Rows[i]["TotalRows"].ToString(),
+                       _TotalRows: Convert.ToInt32(dt.Rows[i]["Options"].ToString())
+                        );
+
+                    // create an instance for easyui combogrid options 
+                    MapListView objMapListView = Newtonsoft.Json.JsonConvert.DeserializeObject<MapListView>(objListViewCustomization.Options);
+                    objListViewCustomization.SetMapListViewOptions(objMapListView);
+
+                    listViews.Add(objListViewCustomization.FeatureId, objListViewCustomization);
+                }
+            }
             return listViews;
         }
 

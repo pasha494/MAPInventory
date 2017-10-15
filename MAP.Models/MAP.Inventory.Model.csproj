@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ListViewCustomization.cs" />
     <Compile Include="LoginModel.cs" />
     <Compile Include="ProductsCategoryModel.cs" />
     <Compile Include="ProductsModel.cs" />
@@ -47,6 +48,12 @@
     <Compile Include="SessionManager.cs" />
     <Compile Include="UsersModel.cs" />
     <Compile Include="WareHouseModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MAP.Inventory.Common\MAP.Inventory.Common.csproj">
+      <Project>{30e3cd84-9f1a-4d44-b7cb-c7c03630b05a}</Project>
+      <Name>MAP.Inventory.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

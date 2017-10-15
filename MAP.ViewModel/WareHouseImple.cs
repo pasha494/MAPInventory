@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 
-namespace MAP.Inventory.Models
+namespace MAP.Inventory.ModelImple
 {
     public class WareHouseImple : IWareHouseImple
     {

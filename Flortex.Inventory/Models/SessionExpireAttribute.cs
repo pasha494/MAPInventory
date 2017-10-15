@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace MAP.Inventory.Models
+namespace MAP.Inventory.Web.Models
 { 
     public class SessionExpireAttribute : ActionFilterAttribute
     {

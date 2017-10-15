@@ -7,7 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 
-namespace MAP.Inventory.Models
+namespace MAP.Inventory.Web.Models
 {
     public static class LookUps
     {

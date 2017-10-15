@@ -1,14 +1,14 @@
 ﻿using MAP.Inventory.Logging;
 using MAP.Inventory.Model;
 using MAP.Inventory.ModelImple;
-using MAP.Inventory.Models;
+using MAP.Inventory.Web.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Web.Mvc;
 
-namespace MAPInventory.Controllers
+namespace MAP.Inventory.Web.Controllers
 {
     [SessionExpire]
     public class UsersController : Controller
