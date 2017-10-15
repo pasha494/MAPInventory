@@ -60,8 +60,8 @@ namespace MAP.Inventory.ModelImple
                         );
 
                     // create an instance for easyui combogrid options 
-                    MapListView objMapListView = Newtonsoft.Json.JsonConvert.DeserializeObject<MapListView>(objListViewCustomization.Options);
-                    objListViewCustomization.SetMapListViewOptions(objMapListView);
+                    //MapListView objMapListView = Newtonsoft.Json.JsonConvert.DeserializeObject<MapListView>(objListViewCustomization.Options);
+                    //objListViewCustomization.SetMapListViewOptions(objMapListView);
 
                     listViews.Add( objListViewCustomization);
                 }

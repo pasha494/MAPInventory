@@ -25,12 +25,12 @@ namespace MAP.Inventory.Model
 
         public int FeatureId { get;  }
 
-        private MapListView _ListViewOptions;
+        //private MapListView _ListViewOptions;
 
-        public MapListView MapListViewOptions
-        {
-            get { return _ListViewOptions; } 
-        } 
+        //public MapListView MapListViewOptions
+        //{
+        //    get { return _ListViewOptions; } 
+        //} 
 
         public string Name { get; }
 
@@ -39,12 +39,9 @@ namespace MAP.Inventory.Model
         public int TotalRows { get;   }
 
 
-        public void SetMapListViewOptions(MapListView _MapListViewOptions)
-        {
-            _ListViewOptions = _MapListViewOptions;
-        }
-
-
-
+        //public void SetMapListViewOptions(MapListView _MapListViewOptions)
+        //{
+        //    _ListViewOptions = _MapListViewOptions;
+        //}
     }
 }

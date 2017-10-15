@@ -4,6 +4,9 @@
     ViewBag.Title = "ListViewCustomization";
 }
 
+<!-- input spinners -->
+<script src="~/Content/Gebo/js/forms/jquery.spinners.min.js"></script>
+
 <form role="search" id="frmProducts" class="cmxform">
     <div class="row-fluid heading">
         <div class="span12">
@@ -24,7 +27,7 @@
             <label for="txtCode" class="label">List views</label>
         </div>
         <div class="span8">
-            <select>
+            <select class="form-control mousetrap" id="drpListViews">
                 <option value="0">-------- select view -------- </option>
                 @for (int i = 0; i < Model.Count; i++)
                 {
@@ -34,43 +37,35 @@
             </select>
         </div>
     </div>
+
+    <div class="row-fluid">
+        <div class="span6">
+            <label for="txtCode" class="label">Display Text</label>
+            <select class="form-control mousetrap" id="drpDisplayText"></select>
+        </div>
+        <div class="span6">
+            <label for="txtCode" class="label">Default Search</label>
+            <select class="form-control mousetrap" id="drpSearch"></select>
+        </div>
+    </div>
+
     <div class="row-fluid">
         <div class="span6">
             <label for="txtCode" class="label">Total rows</label>
             <input type="text" class="form-control mousetrap" name="txtTotalRows" id="txtTotalRows" placeholder="Total rows">
         </div>
         <div class="span6">
-            <label for="txtCode" class="label">Delay</label>
-            <input type="text" class="form-control mousetrap" name="txtDelay" id="txtDelay" placeholder="Delay">
-        </div>
-    </div>
-
-
-    <div class="row-fluid">
-        <div class="span6">
-            <label for="txtCode" class="label">Display Text</label>
-            <input type="text" class="form-control mousetrap" name="txtDisplayText" id="txtDisplayText" placeholder="Display Text">
-        </div>
-        <div class="span6">
-            <label for="txtCode" class="label">Default Search</label>
-            <input type="text" class="form-control mousetrap" name="txtDefaultSearch" id="txtDefaultSearch" placeholder="Default Search">
-        </div>
-    </div>
-
-    <div class="row-fluid">
-        <div class="span6">
             <label for="txtCode" class="label">Panel width</label>
             <input type="text" class="form-control mousetrap" name="txtPanelWidth" id="txtPanelWidth" placeholder="Panel width">
         </div>
     </div>
+
     <div class="row-fluid">
         <div class="span12">
-            <table class="table">
-                <caption>Data columns</caption>
+            <table class="table" id="tblColumns">
                 <thead>
                     <tr>
-                        <th class="table_checkbox"><input type="checkbox" name="select_rows" class="select_rows" data-tableid="smpl_tbl" /></th>
-
+                        <th class="table_checkbox"><label class="checkbox"><input type="checkbox" name="chkAll" id="chkAll" /></label></th>
                         <th>Field Name</th>
                         <th>Field Text</th>
                         <th>Align</th>
@@ -79,28 +74,28 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><input type="checkbox" name="select_rows" class="select_rows"  /> </td>
+                        <td><input type="checkbox" name="select_row" class="select_row" /> </td>
                         <td> </td>
                         <td>Summer Throssell</td>
                         <td>summert@example.com</td>
                         <td>150</td>
                     </tr>
                     <tr>
-                        <td><input type="checkbox" name="select_rows" class="select_rows" /> </td>
+                        <td><input type="checkbox" name="select_row" class="select_row" /> </td>
                         <td>135</td>
                         <td>Anthony Pound</td>
                         <td>anthonyp@example.com</td>
                         <td>150</td>
                     </tr>
                     <tr>
-                        <td><input type="checkbox" name="select_rows" class="select_rows" /> </td>
+                        <td><input type="checkbox" name="select_row" class="select_row" /> </td>
                         <td>136</td>
                         <td>Erin Church</td>
                         <td>erinc@example.com</td>
                         <td>150</td>
                     </tr>
                     <tr>
-                        <td><input type="checkbox" name="select_rows" class="select_rows" /> </td>  
+                        <td><input type="checkbox" name="select_row" class="select_row" /> </td>
                         <td>137</td>
                         <td>Declan Pamphlett</td>
                         <td>declanp@example.com</td>
@@ -108,8 +103,57 @@
                     </tr>
                 </tbody>
             </table>
-
         </div>
     </div>
+
+    <script type="text/javascript">
+        var model= @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        $(function () {
+
+
+            // select All logic.
+            $('#chkAll').on('click', function (e) {
+                $("#tblColumns").find("input[name=select_row]").attr('checked', this.checked);
+            });
+
+            $("input.select_row").on("click", function (e) {
+                if (this.checked) {
+                    var checkAll = true;
+                    $("#tblColumns").find("input.select_row").each(function (i, element) {
+                        if (!this.checked) {
+                            checkAll = false;
+                        }
+                    });
+                    if (checkAll) {
+                        $('#chkAll').attr('checked', 'checked');
+                    }
+                    else {
+                        $('#chkAll').removeAttr('checked');
+                    }
+                }
+                else {
+                    $('#chkAll').removeAttr('checked');
+                }
+            });
+
+            $("#drpListViews").on('change',function(e){
+                debugger
+                e.preventDefault();
+                var _item= _.findWhere(model, {FeatureId: parseInt(this.value) });
+                loadData(_item);
+            });
+
+
+            var loadData = function(item)  {
+                if(_item)
+                {
+                    var options= JSON.parse(Options);
+
+                }
+            }
+
+        });
+
+    </script>
 </form>
 
