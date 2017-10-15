@@ -4,11 +4,10 @@
     ViewBag.Title = "ListViewCustomization";
 }
 
-<form role="search" id="frmProducts" class="cmxform"> 
+<form role="search" id="frmProducts" class="cmxform">
     <div class="row-fluid heading">
         <div class="span12">
             <h2 class="pull-left">List views</h2>
-
 
             <div class="pull-right">
                 <a id="btnSave" class="btn btn-default">Save</a>
@@ -21,20 +20,95 @@
     </div>
 
     <div class="row-fluid">
-        <div class="row-fluid">
-            <div class="span2">
-                <label for="txtCode" class="label">List views</label>
-            </div>
-            <div class="span8"> 
-                <select>
-                    <option value="0">-------- select view -------- </option>
-                    @for (int i = 0; i < Model.Count ; i++)
-                    {
-                        <option value="@Model[i].FeatureId">@Model[i].Name </option>
-                    } 
+        <div class="span2">
+            <label for="txtCode" class="label">List views</label>
+        </div>
+        <div class="span8">
+            <select>
+                <option value="0">-------- select view -------- </option>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <option value="@Model[i].FeatureId">@Model[i].Name </option>
+                }
 
-                </select>
-            </div>
+            </select>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span6">
+            <label for="txtCode" class="label">Total rows</label>
+            <input type="text" class="form-control mousetrap" name="txtTotalRows" id="txtTotalRows" placeholder="Total rows">
+        </div>
+        <div class="span6">
+            <label for="txtCode" class="label">Delay</label>
+            <input type="text" class="form-control mousetrap" name="txtDelay" id="txtDelay" placeholder="Delay">
+        </div>
+    </div>
+
+
+    <div class="row-fluid">
+        <div class="span6">
+            <label for="txtCode" class="label">Display Text</label>
+            <input type="text" class="form-control mousetrap" name="txtDisplayText" id="txtDisplayText" placeholder="Display Text">
+        </div>
+        <div class="span6">
+            <label for="txtCode" class="label">Default Search</label>
+            <input type="text" class="form-control mousetrap" name="txtDefaultSearch" id="txtDefaultSearch" placeholder="Default Search">
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span6">
+            <label for="txtCode" class="label">Panel width</label>
+            <input type="text" class="form-control mousetrap" name="txtPanelWidth" id="txtPanelWidth" placeholder="Panel width">
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table">
+                <caption>Data columns</caption>
+                <thead>
+                    <tr>
+                        <th class="table_checkbox"><input type="checkbox" name="select_rows" class="select_rows" data-tableid="smpl_tbl" /></th>
+
+                        <th>Field Name</th>
+                        <th>Field Text</th>
+                        <th>Align</th>
+                        <th>Width</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox" name="select_rows" class="select_rows"  /> </td>
+                        <td> </td>
+                        <td>Summer Throssell</td>
+                        <td>summert@example.com</td>
+                        <td>150</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="select_rows" class="select_rows" /> </td>
+                        <td>135</td>
+                        <td>Anthony Pound</td>
+                        <td>anthonyp@example.com</td>
+                        <td>150</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="select_rows" class="select_rows" /> </td>
+                        <td>136</td>
+                        <td>Erin Church</td>
+                        <td>erinc@example.com</td>
+                        <td>150</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="select_rows" class="select_rows" /> </td>  
+                        <td>137</td>
+                        <td>Declan Pamphlett</td>
+                        <td>declanp@example.com</td>
+                        <td>150</td>
+                    </tr>
+                </tbody>
+            </table>
+
         </div>
     </div>
 </form>
