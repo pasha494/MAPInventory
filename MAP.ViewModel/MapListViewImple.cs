@@ -40,9 +40,9 @@ namespace MAP.Inventory.ModelImple
             return dt;
         }
 
-        public Dictionary<int, ListViewCustomization> GetListViewsCustomizationInfo()
+        public List<ListViewCustomization> GetListViewsCustomizationInfo()
         {
-            Dictionary<int, ListViewCustomization> listViews = new Dictionary<int, ListViewCustomization>();
+            List<ListViewCustomization> listViews = new List<ListViewCustomization>();
 
             DataTable dt = GetListViewCustomizaitonInfo();
             if (dt != null && dt.Rows.Count > 0)
@@ -55,15 +55,15 @@ namespace MAP.Inventory.ModelImple
                        _ControllerName: dt.Rows[i]["ControllerName"].ToString(),
                        _FeatureId: Convert.ToInt32(dt.Rows[i]["NodeNo"].ToString()),
                        _Name: dt.Rows[i]["Name"].ToString(),
-                       _Options: dt.Rows[i]["TotalRows"].ToString(),
-                       _TotalRows: Convert.ToInt32(dt.Rows[i]["Options"].ToString())
+                       _Options: dt.Rows[i]["Options"].ToString(),
+                       _TotalRows: Convert.ToInt32(dt.Rows[i]["TotalRows"].ToString())
                         );
 
                     // create an instance for easyui combogrid options 
                     MapListView objMapListView = Newtonsoft.Json.JsonConvert.DeserializeObject<MapListView>(objListViewCustomization.Options);
                     objListViewCustomization.SetMapListViewOptions(objMapListView);
 
-                    listViews.Add(objListViewCustomization.FeatureId, objListViewCustomization);
+                    listViews.Add( objListViewCustomization);
                 }
             }
             return listViews;

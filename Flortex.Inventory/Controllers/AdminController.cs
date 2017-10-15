@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using MAP.Inventory.Common.Controls;
+using MAP.Inventory.ModelImple;
+using MAP.Inventory.Model;
 
 namespace MAP.Inventory.Web.Controllers
 {
@@ -14,11 +16,10 @@ namespace MAP.Inventory.Web.Controllers
         // GET: /Admin/
 
         public ActionResult ListViewCustomization()
-        { 
-            
-
-
-            return View();
+        {
+            MapListViewImple objMapListViewImple = new MapListViewImple(0);
+            List< ListViewCustomization>  objListViewsInfo=  objMapListViewImple.GetListViewsCustomizationInfo();
+            return View(objListViewsInfo);
         }
 
     }
