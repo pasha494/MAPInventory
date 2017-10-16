@@ -40,12 +40,12 @@
 
     <div class="row-fluid">
         <div class="span6">
-            <label for="txtCode" class="label">Display Text</label>
-            <select class="form-control mousetrap" id="drpDisplayText"></select>
+            <label for="drpDefaultText" class="label">Display Text</label>
+            <select class="form-control mousetrap" id="drpDefaultText"></select>
         </div>
         <div class="span6">
-            <label for="txtCode" class="label">Default Search</label>
-            <select class="form-control mousetrap" id="drpSearch"></select>
+            <label for="drpDefaultSearch" class="label">Default Search</label>
+            <select class="form-control mousetrap" id="drpDefaultSearch"></select>
         </div>
     </div>
 
@@ -73,34 +73,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><input type="checkbox" name="select_row" class="select_row" /> </td>
-                        <td> </td>
-                        <td>Summer Throssell</td>
-                        <td>summert@example.com</td>
-                        <td>150</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" name="select_row" class="select_row" /> </td>
-                        <td>135</td>
-                        <td>Anthony Pound</td>
-                        <td>anthonyp@example.com</td>
-                        <td>150</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" name="select_row" class="select_row" /> </td>
-                        <td>136</td>
-                        <td>Erin Church</td>
-                        <td>erinc@example.com</td>
-                        <td>150</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" name="select_row" class="select_row" /> </td>
-                        <td>137</td>
-                        <td>Declan Pamphlett</td>
-                        <td>declanp@example.com</td>
-                        <td>150</td>
-                    </tr>
+                     
                 </tbody>
             </table>
         </div>
@@ -139,16 +112,59 @@
             $("#drpListViews").on('change',function(e){
                 debugger
                 e.preventDefault();
+                $("#tblColumns>tbody").empty();
                 var _item= _.findWhere(model, {FeatureId: parseInt(this.value) });
                 loadData(_item);
             });
 
 
             var loadData = function(item)  {
-                if(_item)
-                {
-                    var options= JSON.parse(Options);
+                if(item){
+                    var options= JSON.parse(item.Options);
+                    if(options && options.columns && options.columns.length==1)
+                    {
+                        // first append data grid columns data
+                        var columns=[];
+                        columns=options.columns[0];
+                        var tr='';
+                        for (var i = 0; i < columns.length; i++) {
+                            tr+=' <tr>';
+                            tr+=' <td><input type="checkbox" id="chkHidden'+i+'" name="select_row" class="select_row"';
+                            if(columns[i].hidden !==undefined &&  columns[i].hidden===false)
+                            {
+                                tr+='checked="checked"'
+                            }
+                            tr+='/> </td>';
+                            tr+=' <td>'+columns[i].field+'</td>';
+                            tr+=' <td><input type="text" id="txtTitle'+i+'" value="'+columns[i].title+'"/></td>';                            
+                            tr+=' <td><select id="drpAlign"'+i+'>';
+                            if(columns[i].align && columns[i].align =='right')
+                            {
+                                tr+=' <option  >left</option>   <option selected="selected" >right</option>';
+                            }
+                            else
+                            {
+                                tr+='  <option  selected="selected" >left</option>   <option >right</option>';
+                            }
+                            
+                            tr+='</select></td>';         
+                            tr+=' <td><input type="text" id="txtWidth'+i+'" value="'+columns[i].width+'"/></td>'; 
+                            tr+=' </tr>';
+                               
 
+                            $("#drpDefaultText").append($('<option value="'+columns[i].field+'">'+columns[i].title+'</option>'));
+                            $("#drpDefaultSearch").append($('<option value="'+columns[i].field+'">'+columns[i].title+'</option>'));
+                            $("#drpDefaultSearch").val(txtPanelWidth);
+                            $("#drpDefaultSearch").val();
+
+                        }
+                        $("#tblColumns>tbody").append(tr);
+                        $("#txtTotalRows").val();
+                        $("#drpDefaultSearch").val(textField);
+                        // load the header field data
+
+
+                    }
                 }
             }
 
