@@ -90,7 +90,7 @@
     @*jBreadcrumbs
         <script src="~/Content/Gebo/lib/jBreadcrumbs/js/jquery.jBreadCrumb.1.1.min.js"></script>*@
     <link href="~/Content/EasyUi/easyui.css" rel="stylesheet" />
- 
+
     <link href="~/Content/EasyUi/icon.css" rel="stylesheet" />
 
     <script src="~/Content/EasyUi/jquery.easyui.min.js"></script>
@@ -146,51 +146,51 @@
                                                 </ul>
                                             </li>
 
-                                                <li class="dropdown">
-                                                    <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-briefcase icon-white"></i> Stocks <b class="caret"></b></a>
-                                                    <ul class="dropdown-menu">
+                                            <li class="dropdown">
+                                                <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-briefcase icon-white"></i> Stocks <b class="caret"></b></a>
+                                                <ul class="dropdown-menu">
 
 
-                                                        <li class="dropdown">
-                                                            <a href="javascript:void(0);">Opening Stocks <b class="caret-right"></b></a>
-                                                            <ul class="dropdown-menu">
-                                                                <li><a href="@Url.Action("OpeningStock", "GridStock")">Opening Stocks list</a></li>
-                                                                <li><a href="@Url.Action("AddOpStock", "GridStock")">Add Opening Stocks</a></li>
-                                                            </ul>
-                                                        </li>
+                                                    <li class="dropdown">
+                                                        <a href="javascript:void(0);">Opening Stocks <b class="caret-right"></b></a>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="@Url.Action("OpeningStock", "GridStock")">Opening Stocks list</a></li>
+                                                            <li><a href="@Url.Action("AddOpStock", "GridStock")">Add Opening Stocks</a></li>
+                                                        </ul>
+                                                    </li>
 
-                                                        <li class="divider"></li>
-                                                        <li>
-                                                            <a href="javascript:void(0);">Inward Stocks <b class="caret-right"></b></a>
-                                                            <ul class="dropdown-menu">
-                                                                <li><a href="@Url.Action("InwardStock", "GridStock")">Inward Stocks list</a></li>
-                                                                <li><a href="@Url.Action("AddInStock", "GridStock")">Add Inward Stocks</a></li>
-                                                            </ul>
-                                                        </li>
-                                                        <li class="divider"></li>
+                                                    <li class="divider"></li>
+                                                    <li>
+                                                        <a href="javascript:void(0);">Inward Stocks <b class="caret-right"></b></a>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="@Url.Action("InwardStock", "GridStock")">Inward Stocks list</a></li>
+                                                            <li><a href="@Url.Action("AddInStock", "GridStock")">Add Inward Stocks</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li class="divider"></li>
 
-                                                        <li>
-                                                            <a href="javascript:void(0);">Outward Stocks <b class="caret-right"></b></a>
-                                                            <ul class="dropdown-menu">
-                                                                <li><a href="@Url.Action("OutwardStock", "GridStock")">Outward Stocks list</a></li>
-                                                                <li><a href="@Url.Action("AddOutStock", "GridStock")">Add Outward Stocks</a></li>
-                                                            </ul>
-                                                        </li>
+                                                    <li>
+                                                        <a href="javascript:void(0);">Outward Stocks <b class="caret-right"></b></a>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="@Url.Action("OutwardStock", "GridStock")">Outward Stocks list</a></li>
+                                                            <li><a href="@Url.Action("AddOutStock", "GridStock")">Add Outward Stocks</a></li>
+                                                        </ul>
+                                                    </li>
 
 
-                                                    </ul>
-                                                </li>
+                                                </ul>
+                                            </li>
 
-                                                <li class="dropdown">
-                                                    <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-retweet icon-white"></i> Transfer <b class="caret"></b></a>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a href="@Url.Action("StockTransfer", "GridStock")">Stock</a>
+                                            <li class="dropdown">
+                                                <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-retweet icon-white"></i> Transfer <b class="caret"></b></a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a href="@Url.Action("StockTransfer", "GridStock")">Stock</a>
 
-                                                        </li>
+                                                    </li>
 
-                                                    </ul>
-                                                </li>
+                                                </ul>
+                                            </li>
 
                                         }
 
@@ -207,7 +207,7 @@
                                         <li class="dropdown">
                                             <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-th icon-white"></i> Customization <b class="caret"></b></a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="@Url.Action("ListViewCustomization", "Admin")">List views</a></li> 
+                                                <li><a href="@Url.Action("ListViewCustomization", "Admin")">List views</a></li>
                                             </ul>
                                         </li>
 
@@ -428,6 +428,7 @@
                 return x;
             }, "Please select ");
 
+            // This is to provide a alert message and this should be a global function
             var customAlert = function (str, type, callback) {
                 if (type == 'alert') {
                     smoke.alert(str, function (e) {
@@ -455,6 +456,16 @@
                 e.preventDefault();
                 window.location.href = '@Url.Action("Index", "Home")';
             });
+
+            var loadingAjaxImg = function (show) {
+                if (show) {
+
+                }
+                else {
+
+                } 
+            }
+
         </script>
 
 

@@ -51,7 +51,7 @@ namespace MAP.Inventory.ModelImple
                 {
                     // create an instance for the listview customization class
                     ListViewCustomization objListViewCustomization = new ListViewCustomization(
-                       _AcitonMethodName: dt.Rows[i]["ActionMethodName"].ToString(),
+                       _ActionMethodName: dt.Rows[i]["ActionMethodName"].ToString(),
                        _ControllerName: dt.Rows[i]["ControllerName"].ToString(),
                        _FeatureId: Convert.ToInt32(dt.Rows[i]["NodeNo"].ToString()),
                        _Name: dt.Rows[i]["Name"].ToString(),
@@ -102,6 +102,21 @@ namespace MAP.Inventory.ModelImple
         }
 
         #endregion
+
+        public long SaveListViewCustomizationInfo(ListViewCustomization model)
+        {
+            long flg = 0;
+            ArrayList al = new ArrayList();
+            al.Add(model.FeatureId);
+            al.Add(model.TotalRows);
+            al.Add(model.Options);
+            al.Add(0);
+            //al.Add(Convert.ToInt32(LookUps.GetSessionObject("UserID")));
+
+            _General.Set(al, "sp_UpdateListViewCustomizationInfo", out flg);
+
+            return flg; 
+        }
 
     }
 }

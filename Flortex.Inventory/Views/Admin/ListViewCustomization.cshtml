@@ -14,10 +14,7 @@
 
             <div class="pull-right">
                 <a id="btnSave" class="btn btn-default">Save</a>
-                <a id="btnNew" class="btn btn-default">New</a>
-                <a id="btnPrev" class="btn btn-default">Previous</a>
-                <a id="btnNext" class="btn btn-default">Next</a>
-                <a id="btnBack" class="btn btn-default">Back to Documents</a>
+                <a id="btnClear" class="btn btn-default">Clear</a>
             </div>
         </div>
     </div>
@@ -52,11 +49,11 @@
     <div class="row-fluid">
         <div class="span6">
             <label for="txtCode" class="label">Total rows</label>
-            <input type="text" class="form-control mousetrap" name="txtTotalRows" id="txtTotalRows" placeholder="Total rows">
+            <input type="text" class="form-control mousetrap" name="txtTotalRows" id="txtTotalRows" placeholder="Default rows is 20">
         </div>
         <div class="span6">
             <label for="txtCode" class="label">Panel width</label>
-            <input type="text" class="form-control mousetrap" name="txtPanelWidth" id="txtPanelWidth" placeholder="Panel width">
+            <input type="text" class="form-control mousetrap" name="txtPanelWidth" id="txtPanelWidth" placeholder="Default panel width is 500">
         </div>
     </div>
 
@@ -72,24 +69,27 @@
                         <th>Width</th>
                     </tr>
                 </thead>
-                <tbody>
-                     
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>
 
     <script type="text/javascript">
         var model= @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        var _item={};
+        var _options={};
         $(function () {
 
 
-            // select All logic.
+            // select All check box logic.
             $('#chkAll').on('click', function (e) {
-                $("#tblColumns").find("input[name=select_row]").attr('checked', this.checked);
+                $("#tblColumns").find(".select_row").attr('checked', this.checked);
             });
 
-            $("input.select_row").on("click", function (e) {
+            $("#tblColumns").on("click",".select_row", function (e) {
+                if(e.isTrigger)
+                    e.preventDefault();
+
                 if (this.checked) {
                     var checkAll = true;
                     $("#tblColumns").find("input.select_row").each(function (i, element) {
@@ -109,34 +109,70 @@
                 }
             });
 
+
+
+            // dropdown change logic
             $("#drpListViews").on('change',function(e){
-                debugger
                 e.preventDefault();
-                $("#tblColumns>tbody").empty();
-                var _item= _.findWhere(model, {FeatureId: parseInt(this.value) });
+                clearControls();
+                _item= _.findWhere(model, {FeatureId: parseInt(this.value) });
                 loadData(_item);
             });
 
+            // buttons click logic
 
+            $("#btnSave").on('click',function(e){
+                e.preventDefault();
+                saveData();
+
+
+            });
+
+            $("#btnClear").on('click',function(e){
+                e.preventDefault();
+                clearControls();
+                $("#drpListViews").val("0");
+
+
+            });
+
+            // clear contorls 1. remove all the options from dropdowns and make the text box value as empty and remove all the rows from the table
+            var clearControls=function()  {
+                $("#tblColumns>tbody").empty();
+                $("#drpDefaultText").empty();
+                $("#drpDefaultSearch").empty();
+
+                // load the header field data
+                $("#txtTotalRows").val("");
+                $("#txtPanelWidth").val("");
+
+                //Get focus back to the listview dropdown
+                $("#drpListViews").focus();
+            }
+
+            // load the data based on dropdown selection
             var loadData = function(item)  {
                 if(item){
                     var options= JSON.parse(item.Options);
+                    $("#drpDefaultText").empty();
+                    $("#drpDefaultSearch").empty();
                     if(options && options.columns && options.columns.length==1)
                     {
+                        _options=options;
                         // first append data grid columns data
                         var columns=[];
                         columns=options.columns[0];
                         var tr='';
                         for (var i = 0; i < columns.length; i++) {
                             tr+=' <tr>';
-                            tr+=' <td><input type="checkbox" id="chkHidden'+i+'" name="select_row" class="select_row"';
-                            if(columns[i].hidden !==undefined &&  columns[i].hidden===false)
+                            tr+=' <td><input type="checkbox" id="chkHidden'+i+'" class="select_row"';
+                            if(!columns[i].hidden===true)
                             {
                                 tr+='checked="checked"'
                             }
                             tr+='/> </td>';
                             tr+=' <td>'+columns[i].field+'</td>';
-                            tr+=' <td><input type="text" id="txtTitle'+i+'" value="'+columns[i].title+'"/></td>';                            
+                            tr+=' <td><input type="text" id="txtTitle'+i+'" value="'+columns[i].title+'" placeholder="Default name will be field name"/></td>';
                             tr+=' <td><select id="drpAlign"'+i+'>';
                             if(columns[i].align && columns[i].align =='right')
                             {
@@ -146,30 +182,105 @@
                             {
                                 tr+='  <option  selected="selected" >left</option>   <option >right</option>';
                             }
-                            
-                            tr+='</select></td>';         
-                            tr+=' <td><input type="text" id="txtWidth'+i+'" value="'+columns[i].width+'"/></td>'; 
+
+                            tr+='</select></td>';
+                            tr+=' <td><input type="text" id="txtWidth'+i+'" value="'+columns[i].width+'"  placeholder="Default width 80"/></td>';
                             tr+=' </tr>';
-                               
+
 
                             $("#drpDefaultText").append($('<option value="'+columns[i].field+'">'+columns[i].title+'</option>'));
                             $("#drpDefaultSearch").append($('<option value="'+columns[i].field+'">'+columns[i].title+'</option>'));
-                            $("#drpDefaultSearch").val(txtPanelWidth);
-                            $("#drpDefaultSearch").val();
+
 
                         }
                         $("#tblColumns>tbody").append(tr);
-                        $("#txtTotalRows").val();
-                        $("#drpDefaultSearch").val(textField);
+
+                        $("#drpDefaultText").val(options.textField);
+                        $("#drpDefaultSearch").val(options.searchField);
+
                         // load the header field data
-
-
+                        $("#txtTotalRows").val(item.TotalRows);
+                        $("#txtPanelWidth").val(options.panelWidth);
+                        $("#tblColumns").find(".select_row").eq(0).trigger('click');
                     }
                 }
             }
 
+
+            // data save logic
+            var saveData=function() {
+                if(validate())
+                {
+                    buildData();
+                    $.ajax({
+                        url: '/Admin/SaveListViewCutomization',
+                        type: 'POST',
+                        data: { model: JSON.stringify(_item) },
+                        success: function (res) {
+                            debugger
+                            if (res != "-494") {
+                                customAlert('Data saved successfully', 'alert', function () { $("#drpListViews").focus(); });
+                                clearControls();
+                            }
+                            else
+                                customAlert('Error occured while saving. Please contact administrator.');
+                        },
+                        beforeSend: function () {
+                            loadingAjaxImg(true);
+                        },
+                        complete: function () {  loadingAjaxImg(false);  },
+                        error: function (e) {
+                            customAlert('Error in Saving..', 'alert');
+                        }
+                    });
+                }
+            };
+
+            //validate the data
+            var validate=function()  {
+                // header fields
+                var flg=true;
+                if( $("#drpDefaultText").val()=="")
+                {
+                    flg=false;
+                    customAlert("selected Invalid Text",'alert',function(){$("#drpDefaultText").focus();});
+                }
+                else if( $("#drpDefaultSearch").val()=="")
+                {
+                    flg=false;
+                    customAlert("selected Invalid Text",'alert',function(){$("#drpDefaultSearch").focus();});
+                }
+
+                return true;
+            };
+
+            //build the data
+            var buildData=function(){
+                // header fields
+                _item.TotalRows= $("#txtTotalRows").val()? parseInt( $("#txtTotalRows").val()):20 ;
+                _options.panelWidth= $("#txtPanelWidth").val()?parseInt($("#txtPanelWidth").val()):500 ;
+                _options.searchField=$("#drpDefaultSearch").val();
+                _options.textField=$("#drpDefaultText").val();
+
+                // table fields (bind column properties)
+                $("#tblColumns>tbody>tr").each(function(i,tr)  {
+
+                    var checkbox=$(tr).find('#chkHidden'+i);
+                    var txtTitle=$(tr).find('#txtTitle'+i);
+                    var drpAlign=$(tr).find('#drpAlign'+i);
+                    var txtWidth=$(tr).find('#txtWidth'+i);
+
+
+                    _options.columns[0][i].hidden= checkbox.attr("checked")=="checked"?false:true;
+                    _options.columns[0][i].title= txtTitle.val()? txtTitle.val():_options.columns[0][i].field;
+                    _options.columns[0][i].align = drpAlign.val()?drpAlign.val():'left';
+                    _options.columns[0][i].width = txtWidth.val()?txtWidth.val():80;
+
+                });
+
+                _item.Options=JSON.stringify(_options);
+            };
         });
 
     </script>
 </form>
-

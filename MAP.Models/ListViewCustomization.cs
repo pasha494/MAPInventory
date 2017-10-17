@@ -9,10 +9,14 @@ namespace MAP.Inventory.Model
 {
     public class ListViewCustomization
     {
-
-        public ListViewCustomization(string _AcitonMethodName, string _ControllerName, int _FeatureId, string _Name, string _Options, int _TotalRows)
+        public ListViewCustomization()
         {
-            AcitonMethodName = _AcitonMethodName;
+
+        }
+
+        public ListViewCustomization(string _ActionMethodName, string _ControllerName, int _FeatureId, string _Name, string _Options, int _TotalRows)
+        {
+            ActionMethodName = _ActionMethodName;
             ControllerName = _ControllerName;
             FeatureId = _FeatureId;
             Name = _Name;
@@ -20,10 +24,12 @@ namespace MAP.Inventory.Model
             TotalRows = _TotalRows; 
         }
 
-        public string AcitonMethodName { get;   }
-        public string ControllerName { get;   }
 
-        public int FeatureId { get;  }
+
+        public string ActionMethodName { get; set; }
+        public string ControllerName { get; set; }
+
+        public int FeatureId { get; set; }
 
         //private MapListView _ListViewOptions;
 
@@ -32,11 +38,11 @@ namespace MAP.Inventory.Model
         //    get { return _ListViewOptions; } 
         //} 
 
-        public string Name { get; }
+        public string Name { get; set; }
 
-        public string Options { get;  }
+        public string Options { get; set; }
 
-        public int TotalRows { get;   }
+        public int TotalRows { get; set; }
 
 
         //public void SetMapListViewOptions(MapListView _MapListViewOptions)

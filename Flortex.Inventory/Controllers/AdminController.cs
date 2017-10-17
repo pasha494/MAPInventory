@@ -18,9 +18,32 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult ListViewCustomization()
         {
             MapListViewImple objMapListViewImple = new MapListViewImple(0);
-            List< ListViewCustomization>  objListViewsInfo=  objMapListViewImple.GetListViewsCustomizationInfo();
+            List<ListViewCustomization> objListViewsInfo = objMapListViewImple.GetListViewsCustomizationInfo();
+            string x = JsonConvert.SerializeObject(objListViewsInfo[0]);
             return View(objListViewsInfo);
         }
+
+
+        public ActionResult SaveListViewCutomization(string model)
+        {
+            long result = 0;
+
+            try
+            {
+                ListViewCustomization objModel = JsonConvert.DeserializeObject<ListViewCustomization>(model);
+                MapListViewImple objImple = new MapListViewImple(objModel.FeatureId);
+                result = objImple.SaveListViewCustomizationInfo(objModel);
+            }
+            catch (Exception ex)
+            {
+                result = -494;
+            }
+
+            return Content(result.ToString());
+        }
+
+
+
 
     }
 }
