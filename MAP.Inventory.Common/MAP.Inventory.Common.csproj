@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Controls\MapListView.cs" />
     <Compile Include="Crypto.cs" />
+    <Compile Include="MapEnums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

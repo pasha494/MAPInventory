@@ -1,4 +1,6 @@
-﻿using MAP.Inventory.Logging;
+﻿using MAP.Inventory.Common;
+using MAP.Inventory.Logging;
+using MAP.Inventory.ModelImple;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -20,6 +22,9 @@ namespace MAP.Inventory.Web.Models
         public string WareHouseId { get; set; }
         public string GridData { get; set; }
         public string WareHouseName { get; set; }
+
+        public string WareHouseOptions { get; set; }
+
 
         string ConverDate(DateTime date)
         {
@@ -45,8 +50,16 @@ namespace MAP.Inventory.Web.Models
         public void init()
         {
             DocName = LookUps.GetDocName(1);// 1 stands for opening stocks.  
+            GetWareHouseListViewOptions();
+
         }
-        
+
+        public void GetWareHouseListViewOptions()
+        {
+            MapListViewImple _wareHouseListView = new MapListViewImple((int)EnumListViews.WareHouses);
+            this.WareHouseOptions = _wareHouseListView.GetListViewOptions();
+        }
+
         public void EditDocument(int DocID)
         {
             DataSet ds = GetGirdData(DocID);
@@ -68,6 +81,7 @@ namespace MAP.Inventory.Web.Models
                         this.GridData = JsonConvert.SerializeObject(ds.Tables[1]);
                     }
                 }
+                GetWareHouseListViewOptions();
             }
             catch (Exception ex)
             {
@@ -81,7 +95,7 @@ namespace MAP.Inventory.Web.Models
             try
             {
 
-                ds=DAL.GetDataSet("sp_GetOpeningStocksData", new List<string>() { "@DocID" }, new ArrayList() { DocID });
+                ds = DAL.GetDataSet("sp_GetOpeningStocksData", new List<string>() { "@DocID" }, new ArrayList() { DocID });
 
             }
             catch (Exception ex)

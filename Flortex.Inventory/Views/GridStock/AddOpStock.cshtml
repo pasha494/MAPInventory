@@ -41,14 +41,7 @@
         </div>
     </div>
 
-
-    <div class="row-fluid">
-        <div class="span12">
-
-        </div>
-    </div>
-
-
+  
     <div class="row-fluid">
         <div class="span6">
             <div class="row-fluid">
@@ -56,7 +49,7 @@
                     <label for="txtDocName" class="label">Doc Name</label>
                 </div>
                 <div class="span9">
-                    <input type="text" style="width:250px;" class="form-control mousetrap" readonly="readonly" name="txtDocName" id="txtDocName" placeholder="Doc Name.." value="@Model.DocName">
+                    <input type="text"  class="form-control mousetrap" readonly="readonly" name="txtDocName" id="txtDocName" placeholder="Doc Name.." value="@Model.DocName">
                 </div>
             </div>
         </div>
@@ -87,7 +80,7 @@
                     <label for="drpWarehouse" class="label">Warehouse</label>
                 </div>
                 <div class="span9">
-                    <input id="drpWarehouse" style="width: 250px;" class="mousetrap" />
+                    <input id="drpWarehouse" class="mousetrap" />
                 </div>
             </div>
         </div>
@@ -144,7 +137,7 @@
 </style>
 <script>
     $(document).ready(function () {
-
+        
         // slick grid variables declaration
         var dataView;
         var grid;
@@ -181,7 +174,7 @@
 
         };
 
-
+        
         var columns = [
   { id: "Sno", name: "S.No", field: "Sno", cssClass: "cell-selection", width: 80, resizable: false, selectable: false },
   { id: "Code", name: "Product code", field: "Code", stopDownkey: true, width: 300, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.AutocompleteListView },
@@ -275,80 +268,18 @@
             var date = new Date();
             return date.getDate() + "-" + parseInt(date.getMonth() + 1) + "-" + date.getFullYear()
         }
-
-        var data = [];
-
+         
+        debugger
         //-----gets the warehouse data in the autocomplete list
-        var WarehouseData = [];
-        WarehouseData = getWarehouseData();
-        function getWarehouseData() {
-            $.ajax({
-                url: '/GridStock/WarehouseData',
-                type: 'Get',
-                async: false,
-                beforeSend: function () {
-                    $("#ajaxLoadingImg").show();
-                },
-                complete: function () { $("#ajaxLoadingImg").hide(); },
-                success: function (res) {
-                    WarehouseData = JSON.parse(res);
-                    $("#drpWarehouse").kendoComboBox({
-                        filter: "startswith",
-                        dataSource: WarehouseData,
-
-                        placeholder: "Select Warehouse...",
-                        headerTemplate: '<div class="drp-header">' +
-                                '<span class="k-widget k-header">Code</span>' +
-                                '<span class="k-widget k-header">Name</span>' +
-                            '</div>',
-                        template: '<span class="k-state-default"><span>#: data.code #</span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
-                                  '<span class="k-state-default"><span  class="drpVal" data-selId="#: data.id #">#: data.name #</span></span>',
-                        dataTextField: "name",
-                        dataValueField: "id"
-
-                    });
-                },
-                error: function (e) {
-                    customAlert('error', 'alert');
-                }
-            });
-            return WarehouseData;
-        }
+        $("#drpWarehouse").combogrid(@Html.Raw(Model.WareHouseOptions));
       
         // This is for edit mode, when the DocID is greater than zero
         if ('@Model.DocID' > 0) {
-
-            @*combobox.text('@Model.WareHouseName');
-            combobox.value('@Model.WareHouseId');*@
-            var jsonData = '@Html.Raw(Model.GridData)';
-            if (jsonData != null && jsonData.length > 0) {
-                var tempData = JSON.parse(jsonData);
-                for (var i = 0; i < tempData.length; i++) {
-                    var obj = {};
-                    obj.id = i + 1;
-                    obj.productID = tempData[i].productID;
-                    obj.Qty = tempData[i].Qty;
-                    data.push(obj);
-                }
-                for (var i = tempData.length; i < 30; i++) {
-                    var obj = {};
-                    obj.id = i + 1;
-                    obj.productID = "";
-                    obj.Qty = "";
-                    data.push(obj);
-                }
-            }
+            $("#drpWarehouse").combogrid('setValue','@Model.WareHouseId'); 
+            var jsonData = '@Html.Raw(Model.GridData)'; 
         }
         else {
-            $("#dtDate").val(getDate());
-
-            for (var i = 0; i < 30; i++) {
-                var obj = {};
-                obj.id = i + 1;
-                obj.productID = "";
-                obj.Qty = "";
-                data.push(obj);
-            }
+            $("#dtDate").val(getDate());  
         }
 
         var validateHeaderFields = function () {
@@ -358,7 +289,7 @@
                 $("#dtDate").focus();
                 return false;
             }
-            else if (combobox.value() == "" || combobox.text() == "") {
+            else if ($("#drpWarehouse").combogrid('getValue') == "" || $("#drpWarehouse").combogrid('getText') == "") {
                 customAlert('Please select Warehouse', 'alert');
                 $("#drpWarehouse").focus();
                 return false;
@@ -373,10 +304,7 @@
 
         var refreshAsNewDoc = function () {
             $("#DocID").val(0);
-            if (combobox && combobox.text && combobox.value) {
-                combobox.text('');
-                combobox.value('');
-            }
+            $("#drpWarehouse").combogrid('setValue', '');
             $("#dtDate").val(getDate());
             initGrid(GetEmptyRows());
 
@@ -413,7 +341,7 @@
                 $("#dtDate").focus();
                 return false;
             }
-            else if (combobox.value() == "" || combobox.text() == "") {
+            else if ($("#drpWarehouse").combogrid('getValue') == "" || $("#drpWarehouse").combogrid('getText') == "") {
                 customAlert('Please select Warehouse', 'alert');
                 $("#drpWarehouse").focus();
                 return false;
