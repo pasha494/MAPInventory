@@ -29,7 +29,7 @@ namespace MAP.Inventory.ModelImple
 
             try
             {
-                DataSet ds = _General.Get(new ArrayList(), "sp_GetListViewsCustomizationInfo");
+                DataSet ds = _General.Get(new ArrayList() { this.FeatureId }, "sp_GetListViewsCustomizationInfo");
                 dt = ds.Tables[0];
             }
             catch (Exception ex)
@@ -63,7 +63,7 @@ namespace MAP.Inventory.ModelImple
                     //MapListView objMapListView = Newtonsoft.Json.JsonConvert.DeserializeObject<MapListView>(objListViewCustomization.Options);
                     //objListViewCustomization.SetMapListViewOptions(objMapListView);
 
-                    listViews.Add( objListViewCustomization);
+                    listViews.Add(objListViewCustomization);
                 }
             }
             return listViews;
@@ -115,8 +115,24 @@ namespace MAP.Inventory.ModelImple
 
             _General.Set(al, "sp_UpdateListViewCustomizationInfo", out flg);
 
-            return flg; 
+            return flg;
         }
 
+        public string GetListViewOptions()
+        {
+            string options = string.Empty;  
+            try
+            {
+                DataTable dt = GetListViewCustomizaitonInfo();
+                if (dt != null && dt.Rows.Count > 0)
+                    options = dt.Rows[0]["options"].ToString();
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return options;
+        }
     }
 }

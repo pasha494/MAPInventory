@@ -113,18 +113,20 @@
 
             // dropdown change logic
             $("#drpListViews").on('change',function(e){
+              
+                    loadAjaxImg(true);
                 e.preventDefault();
-                clearControls();
+                clearControls(true);
                 _item= _.findWhere(model, {FeatureId: parseInt(this.value) });
                 loadData(_item);
+                loadAjaxImg(false);
             });
 
             // buttons click logic
 
             $("#btnSave").on('click',function(e){
                 e.preventDefault();
-                saveData();
-
+                saveData(); 
 
             });
 
@@ -137,7 +139,7 @@
             });
 
             // clear contorls 1. remove all the options from dropdowns and make the text box value as empty and remove all the rows from the table
-            var clearControls=function()  {
+            var clearControls=function(isDropdownChange)  {
                 $("#tblColumns>tbody").empty();
                 $("#drpDefaultText").empty();
                 $("#drpDefaultSearch").empty();
@@ -148,6 +150,14 @@
 
                 //Get focus back to the listview dropdown
                 $("#drpListViews").focus();
+
+                if(!isDropdownChange)
+                {
+                    $("#drpListViews").val("0");
+                }
+
+                $('#chkAll').removeAttr("checked");
+                _item={};
             }
 
             // load the data based on dropdown selection
@@ -173,14 +183,14 @@
                             tr+='/> </td>';
                             tr+=' <td>'+columns[i].field+'</td>';
                             tr+=' <td><input type="text" id="txtTitle'+i+'" value="'+columns[i].title+'" placeholder="Default name will be field name"/></td>';
-                            tr+=' <td><select id="drpAlign"'+i+'>';
+                            tr+=' <td><select id="drpAlign'+i+'">';
                             if(columns[i].align && columns[i].align =='right')
                             {
-                                tr+=' <option  >left</option>   <option selected="selected" >right</option>';
+                                tr+=' <option  val="left" >left</option>   <option selected="selected"  val="right">right</option>';
                             }
                             else
                             {
-                                tr+='  <option  selected="selected" >left</option>   <option >right</option>';
+                                tr+='  <option  selected="selected" val="left" >left</option>   <option val="right" >right</option>';
                             }
 
                             tr+='</select></td>';
@@ -226,9 +236,9 @@
                                 customAlert('Error occured while saving. Please contact administrator.');
                         },
                         beforeSend: function () {
-                            loadingAjaxImg(true);
+                            loadAjaxImg(true); 
                         },
-                        complete: function () {  loadingAjaxImg(false);  },
+                        complete: function () {  loadAjaxImg(false);  },
                         error: function (e) {
                             customAlert('Error in Saving..', 'alert');
                         }
@@ -256,6 +266,7 @@
 
             //build the data
             var buildData=function(){
+                debugger
                 // header fields
                 _item.TotalRows= $("#txtTotalRows").val()? parseInt( $("#txtTotalRows").val()):20 ;
                 _options.panelWidth= $("#txtPanelWidth").val()?parseInt($("#txtPanelWidth").val()):500 ;

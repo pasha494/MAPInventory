@@ -17,6 +17,7 @@ namespace MAP.Inventory.Web.Controllers
 
         public ActionResult ListViewCustomization()
         {
+            // Pass the feature id as zero in the below constructor
             MapListViewImple objMapListViewImple = new MapListViewImple(0);
             List<ListViewCustomization> objListViewsInfo = objMapListViewImple.GetListViewsCustomizationInfo();
             string x = JsonConvert.SerializeObject(objListViewsInfo[0]);

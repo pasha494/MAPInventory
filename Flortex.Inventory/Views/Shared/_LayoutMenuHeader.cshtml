@@ -457,12 +457,12 @@
                 window.location.href = '@Url.Action("Index", "Home")';
             });
 
-            var loadingAjaxImg = function (show) {
+            var loadAjaxImg = function (show) {
                 if (show) {
-
+                    $("#ajaxLoadingImg").show();
                 }
                 else {
-
+                    $("#ajaxLoadingImg").hide();
                 } 
             }
 

@@ -1,5 +1,6 @@
 ﻿@using MAP.Inventory.Web.Models
 @using System.Data
+@using MAP.Inventory.ModelImple;
 @{
     var ShowReOrdQty = Request.Cookies["ShowReOrdQty"];
     var ShowBlckQty = Request.Cookies["ShowBlckQty"];
@@ -19,6 +20,8 @@
     DataSet ds = LookUps.GetDocumentAlerts(ShowReOrdQty_Val, ShowBlckQty_Val);
     int Count1 = 0, Count2 = 0;
     int RoleID = (int)LookUps.GetSessionObject("RoleID");
+    MapListViewImple obj = new MapListViewImple(1);
+    string options = obj.GetListViewOptions();
 }
 
 @if (RoleID == 1)
@@ -146,25 +149,7 @@
 
        
 
-        $('#cg').combogrid({
-            panelWidth: 1500, 
-            idField: 'id',
-            textField: 'pcode',
-            url: '/Generic/GetProductsListView',
-            mode: 'remote',
-            method: 'get',
-            searchField:'pcode',
-            fitColumns: true,
-            columns: [[
-                { field: 'pcode', title: 'Product ID', width: 150 },
-                { field: 'pname', title: 'Product Name',  width: 250 },
-                { field: 'price', title: 'Price', align: 'right', width: 60 },
-                { field: 'quantity', title: 'Quantity', align: 'right', width: 80 },
-                { field: 'pcategory', title: 'Category', width: 200 },
-                { field: 'wcode', title: 'Warehouse code', width: 200 },
-                { field: 'wname', title: 'Warehouse name', width: 200 }
-            ]]
-        });
+        $('#cg').combogrid( @Html.Raw(options));
 
         $("#grid1").kendoGrid({
             height: 500,
