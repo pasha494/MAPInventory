@@ -24,39 +24,21 @@
 
 
     function AutocompleteListView(args) {
-
+        debugger
         var $input;
         var defaultValue;
         var scope = this;
         var selectedRow = null;
 
         this.init = function () {
-             
+            debugger
+            var options = $.extend(true, args.column.editorOptions, { onSelect: onSelectAutocompleteListView, width: $(args.container).width() })
             $input = $("<INPUT type=text   />");
             $input.appendTo(args.container);
-            $input.combogrid({
-                width: $(args.container).width(),
-                panelWidth: 1500,
-                idField: 'id',
-                textField: 'pcode',
-                url: '/Generic/GetProductsListView',
-                mode: 'remote',
-                method: 'get',
-                searchField: 'pcode',
-                keydown: AutocompleteKeydown,
-                fitColumns: true,
-                columns: [[
-                    { field: 'pcode', title: 'Product ID', width: 150 },
-                    { field: 'pname', title: 'Product Name', width: 250 },
-                    { field: 'price', title: 'Price', align: 'right', width: 60 },
-                    { field: 'quantity', title: 'Quantity', align: 'right', width: 80 },
-                    { field: 'pcategory', title: 'Category', width: 200 },
-                    { field: 'wcode', title: 'Warehouse code', width: 200 },
-                    { field: 'wname', title: 'Warehouse name', width: 200 }
-                ]],
-                onSelect: onSelectAutocompleteListView
-            });
+            $input.combogrid(options);
             $input.combogrid('textbox').focus();
+            if (args.item[args.column.id])
+                $input.combogrid('setText', args.item[args.column.id]);
             $input.combogrid('showPanel');
         };
         var AutocompleteKeydown = function (e) {
@@ -65,6 +47,7 @@
         }
 
         var onSelectAutocompleteListView = function (index, row) {
+            debugger
             selectedRow = row;
             console.log('hi ' + index);
         }
@@ -78,36 +61,55 @@
         };
 
         this.getValue = function () {
-            return $input && $input.getValue ? $input.getValue() : '';
+            debugger
+            return $input && $input.combogrid ? $input.combogrid('getValue') : '';
         };
 
         this.setValue = function (val) {
-            $input.setValue(val);
+            debugger
+            $input.combogrid('setValue', val);
         };
 
+        // 1. this will be called while creating the listview control
         this.loadValue = function (item) {
-            
+
             defaultValue = item[args.column.field] || "";
             $input.combogrid('setText', defaultValue);
+            //$input.combogrid('setValue', item["pid"]);
         };
 
+        // 2. This will hold the serialized value
         this.serializeValue = function () {
-            
+
             return $input.combogrid('getText');
         };
 
         this.applyValue = function (item, state) {
-            
+            debugger
             item[args.column.field] = state;
+            if (selectedRow && selectedRow["pid"])
+                item["pid"] = selectedRow["pid"];
+
+            if (selectedRow && selectedRow["pcode"])
+                item["pcode"] = selectedRow["pcode"];
+
+            if (selectedRow && selectedRow["pname"])
+                item["pname"] = selectedRow["pname"];
+
+            if (selectedRow && selectedRow["quantity"] != null)
+                item["quantity"] = selectedRow["quantity"];
+
+            if (selectedRow && selectedRow["price"] != null)
+                item["price"] = selectedRow["price"];
         };
 
         this.isValueChanged = function () {
-            
+            debugger
             return (!($input.combogrid('getText') == "" && defaultValue == null)) && ($input.combogrid('getText') != defaultValue);
         };
 
         this.validate = function () {
-            
+
             if (args.column.validator) {
                 var validationResults = args.column.validator($input.combogrid('getText'));
                 if (!validationResults.valid) {
@@ -120,7 +122,6 @@
                 msg: null
             };
         };
-
         this.init();
     }
 

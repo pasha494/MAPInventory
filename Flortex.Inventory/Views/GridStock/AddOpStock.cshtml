@@ -1,8 +1,6 @@
-﻿@model MAP.Inventory.Web.Models.OpeningStock
-@using System.Data;
-@using MAP.Inventory.Web.Models;
+﻿@model MAP.Inventory.Web.Models.OpeningStock 
 @{
-
+        
 }
 <link rel="stylesheet" href="~/Content/SlickGrid/slick.grid.css" type="text/css" />
 <link rel="stylesheet" href="~/Content/SlickGrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" />
@@ -148,14 +146,14 @@
             for (var i = 0; i < 10; i++) {
                 var obj = {};
                 obj.id = i + 1;
-                obj.Sno = i + 1;
-                obj.PId = "";
-                obj.Code = "   ";
-                obj.Name = "   ";
-                obj.Quantity = "";
-                obj.UnitPrice = "";
-                obj.Discount = "";
-                obj.Price = "";
+                obj.sno = i + 1;
+                obj.pid = "";
+                obj.pcode = "   ";
+                obj.pname = "   ";
+                obj.quantity = "";
+                obj.price = "";
+                obj.discount = "";
+                obj.totalPrice = "";
                 _data.push(obj);
             }
             return _data;
@@ -176,13 +174,13 @@
 
         
         var columns = [
-  { id: "Sno", name: "S.No", field: "Sno", cssClass: "cell-selection", width: 80, resizable: false, selectable: false },
-  { id: "Code", name: "Product code", field: "Code", stopDownkey: true, width: 300, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.AutocompleteListView },
-  { id: "Name", name: "Product Name", field: "Name", stopDownkey: true, width: 300, editor: Slick.Editors.Text },
-  { id: "Quantity", name: "Quantity", field: "Quantity", width: 100, resizable: false, editor: Slick.Editors.Text },
-  { id: "UnitPrice", name: "Unit Price", field: "UnitPrice", minWidth: 100, editor: Slick.Editors.Text },
-  { id: "Discount", name: "Discount", field: "Discount", minWidth: 100, editor: Slick.Editors.Text },
-    { id: "Price", name: "Price", field: "Price", minWidth: 100, editor: Slick.Editors.YesNoSelect }
+  { id: "sno", name: "S.No", field: "sno", cssClass: "cell-selection", width: 80, resizable: false, selectable: false },
+  { id: "pcode", name: "Product code", field: "pcode", stopDownkey: true, width: 300, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.AutocompleteListView , editorOptions: @Html.Raw(Model.ProductsOptions) },
+  { id: "pname", name: "Product Name", field: "pname", stopDownkey: true, width: 300, editor: Slick.Editors.Text,  editor: Slick.Editors.AutocompleteListView , editorOptions: @Html.Raw(Model.ProductsOptions)},
+  { id: "quantity", name: "Quantity", field: "quantity", width: 100, resizable: false, editor: Slick.Editors.Text },
+  { id: "price", name: "Unit Price", field: "price", minWidth: 100, editor: Slick.Editors.Text },
+  { id: "discount", name: "Discount", field: "discount", minWidth: 100, editor: Slick.Editors.Text },
+    { id: "totalPrice", name: "Price", field: "totalPrice", minWidth: 100, editor: Slick.Editors.YesNoSelect }
         ];
 
 

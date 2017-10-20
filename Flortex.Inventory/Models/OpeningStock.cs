@@ -24,6 +24,7 @@ namespace MAP.Inventory.Web.Models
         public string WareHouseName { get; set; }
 
         public string WareHouseOptions { get; set; }
+        public string ProductsOptions { get; set; }
 
 
         string ConverDate(DateTime date)
@@ -51,6 +52,7 @@ namespace MAP.Inventory.Web.Models
         {
             DocName = LookUps.GetDocName(1);// 1 stands for opening stocks.  
             GetWareHouseListViewOptions();
+            GetProductsListViewOptions();
 
         }
 
@@ -58,6 +60,12 @@ namespace MAP.Inventory.Web.Models
         {
             MapListViewImple _wareHouseListView = new MapListViewImple((int)EnumListViews.WareHouses);
             this.WareHouseOptions = _wareHouseListView.GetListViewOptions();
+        }
+        
+        public void GetProductsListViewOptions()
+        {
+            MapListViewImple _productsListView = new MapListViewImple((int)EnumListViews.Products);
+            this.ProductsOptions = _productsListView.GetListViewOptions();
         }
 
         public void EditDocument(int DocID)
@@ -82,6 +90,7 @@ namespace MAP.Inventory.Web.Models
                     }
                 }
                 GetWareHouseListViewOptions();
+                GetProductsListViewOptions();
             }
             catch (Exception ex)
             {
