@@ -135,6 +135,7 @@
 </style>
 <script>
 
+   
     $(document).ready(function () {
 
         // slick grid variables declaration
@@ -199,7 +200,6 @@
 
 
         grid.onCellChange.subscribe(function (e, args) {
-            debugger
 
             // calculate formula fields
             var cols=_.where(args.grid.getColumns(), {isFormula:true}) ;
@@ -222,7 +222,6 @@
         });
 
         grid.onBeforeEditCell.subscribe(function (e, args) {
-            debugger
             if (!validateHeaderFields())
                 return false;
             else
@@ -232,7 +231,6 @@
         });
 
         grid.onAddNewRow.subscribe(function (e, args) {
-
             var obj = {};
             obj.id =  dataView.getLength();
             obj.sno =dataView.getLength() + 1;
@@ -255,14 +253,6 @@
                     e.stopImmediatePropagation();
                 }
             }
-
-            //var rows = [];
-            //for (var i = 0; i < dataView.getLength() ; i++) {
-            //    rows.push(i);
-            //}
-
-            //grid.setSelectedRows(rows);
-            //e.preventDefault();
         });
 
         // wire up model events to drive the grid
@@ -276,12 +266,13 @@
             grid.render();
         });
 
-
-        // initialize the model after all the events have been hooked up
-        dataView.beginUpdate();
-        dataView.setItems(slickData);
-        dataView.endUpdate();
-
+        function initGridData(){
+            // initialize the model after all the events have been hooked up
+            dataView.beginUpdate();
+            dataView.setItems(slickData);
+            dataView.endUpdate();
+        };
+        initGridData();
         // if you don't want the items that are not visible (due to being filtered out
         // or being on a different page) to stay selected, pass 'false' to the second arg
         dataView.syncGridSelection(grid, true);
@@ -334,7 +325,7 @@
             $("#DocID").val(0);
             $("#drpWarehouse").combogrid('setValue', '');
             $("#dtDate").val(getDate());
-            initGrid(GetEmptyRows());
+            initGridData();
 
             getLatestDocNum();
         };
@@ -360,9 +351,6 @@
         }
 
         var getDataObject = function () {
-            //var selwarehouseID = _.pluck(_.where(WarehouseData, { name: $("#drpWarehouse").val() }), 'id')[0];
-
-
             var xmlString = "<Root>";
             if ($("#dtDate").val() == "") {
                 customAlert('Please select Date', 'alert');
@@ -375,28 +363,25 @@
                 return false;
             }
             else {
-                var gridData = $("#grid").data("kendoGrid")._data;
+                debugger
+                var gridData = _.filter(dataView.getItems(), function(item){ return  !(item.pid == undefined || item.pid=="") });
+
+                if (gridData == undefined || gridData.length==0) {
+                    customAlert('Please select atleast one Product at Row 1', 'alert');
+                    return false;
+                }
+
                 for (var i = 0; i < gridData.length; i++) {
-                    if (gridData[0].productID == "" || gridData[0].Qty == null) {
-                        customAlert('Please select atleast one Product at Row 1', 'alert');
+                    if (gridData[i].pid != "" 
+                        && (gridData[i].quantity == null || gridData[i].quantity == "" || gridData[i].quantity==0 
+                            || gridData[i].price == null || gridData[i].price == "" || gridData[i].price==0  )) {
+                        customAlert("Please enter Quantity and Unit Price at Row" + (gridData[i].sno), 'alert');
                         return false;
-                    }
+                        break;
+                    } 
                     else {
-                        if (gridData[i].productID == "" && gridData[i].Qty == null) {
-                            continue;
-                        }
-                        else if (gridData[i].productID != "" && gridData[i].Qty == null && gridData[i].Qty == "") {
-                            customAlert("Please enter Qty at Row" + (i + 1), 'alert');
-                            return false;
-                            break;
-                        }
-                        else if (gridData[i].productID == "" && gridData[i].Qty != null && gridData[i].Qty != "") {
-                            customAlert("Please Select Product at Row" + (i + 1), 'alert');
-                            return false;
-                        }
-                        else {
-                            xmlString += "<Child PID=\"" + gridData[i].productID + "\" QTY=\"" + gridData[i].Qty + "\" />";
-                        }
+                        xmlString += "<Child PID=\"" + gridData[i].pid + "\" QTY=\"" + gridData[i].quantity + "\" UnitPrice=\"" + gridData[i].price
+                                        + "\"  Discount=\"" + gridData[i].discount + "\"  TotalPrice=\"" + gridData[i].totalPrice + "\" />";
                     }
                 }
                 xmlString += "</Root>";
@@ -406,8 +391,8 @@
                 DocID: $("#DocID").val(),
                 DocName: $("#txtDocName").val(),
                 DocDate: $("#dtDate").val(),
-                WareHouseId: combobox.value(),
-                WareHouseName: combobox.text(),
+                WareHouseId: $("#drpWarehouse").combogrid('getValue'),
+                WareHouseName: $("#drpWarehouse").combogrid('getText'),
                 GridData: xmlString
             }
 
@@ -417,6 +402,7 @@
         var _Save = function () {
             var obj = getDataObject();
             if (typeof (obj) != 'boolean' && typeof (obj) == 'object') {
+                debugger
                 $.ajax({
                     url: '/GridStock/SaveDocumentOP',
                     type: 'POST',

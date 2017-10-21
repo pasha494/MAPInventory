@@ -46,16 +46,12 @@
             if (args.item[args.column.id])
                 $input.combogrid('setText', args.item[args.column.id]);
             $input.combogrid('showPanel');
-        };
-        var AutocompleteKeydown = function (e) {
-            e.preventDefault();
-
-        }
+        }; 
 
         var onSelectAutocompleteListView = function (index, row) {
              
             selectedRow = row;
-            console.log('hi ' + index);
+            //console.log('hi ' + index);
         }
 
         this.destroy = function () {
