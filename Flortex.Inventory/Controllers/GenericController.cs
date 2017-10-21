@@ -20,7 +20,7 @@ namespace MAP.Inventory.Web.Controllers
             return View();
         }
 
-        public string GetProductsListView(string searchField, string q)
+        public string GetProductsListView(string wareHouseId,string searchField, string q)
         {
             // FeatureId for products view autocomplete list view data is "1"
             MapListViewImple _listView = new MapListViewImple(Convert.ToInt32(EnumListViews.Products));
@@ -33,7 +33,7 @@ namespace MAP.Inventory.Web.Controllers
             try
             {
                 DataTable dt = new DataTable();
-                dt = _listView.GetProductsListViewData(searchField, q);
+                dt = _listView.GetProductsListViewData(wareHouseId,searchField, q);
                 if (dt != null)
                 {
                     foreach (DataRow dr in dt.Rows)

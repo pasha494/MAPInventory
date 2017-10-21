@@ -1,6 +1,6 @@
-﻿@model MAP.Inventory.Web.Models.OpeningStock 
+﻿@model MAP.Inventory.Web.Models.OpeningStock
 @{
-        
+
 }
 <link rel="stylesheet" href="~/Content/SlickGrid/slick.grid.css" type="text/css" />
 <link rel="stylesheet" href="~/Content/SlickGrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" />
@@ -22,11 +22,11 @@
         <div class="span12">
             @if (Model.DocID == 0)
             {
-                <h2 class="pull-left">Add Opening Stocks </h2>
+            <h2 class="pull-left">Add Opening Stocks </h2>
             }
             else if (Model.DocID > 0)
             {
-                <h2>Update Opening Stocks</h2>
+            <h2>Update Opening Stocks</h2>
             }
             <div class="pull-right">
                 <a id="btnSave" class="btn btn-default">Save</a>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-  
+
     <div class="row-fluid">
         <div class="span6">
             <div class="row-fluid">
@@ -47,7 +47,7 @@
                     <label for="txtDocName" class="label">Doc Name</label>
                 </div>
                 <div class="span9">
-                    <input type="text"  class="form-control mousetrap" readonly="readonly" name="txtDocName" id="txtDocName" placeholder="Doc Name.." value="@Model.DocName">
+                    <input type="text" class="form-control mousetrap" readonly="readonly" name="txtDocName" id="txtDocName" placeholder="Doc Name.." value="@Model.DocName">
                 </div>
             </div>
         </div>
@@ -135,7 +135,7 @@
 </style>
 <script>
     $(document).ready(function () {
-        
+
         // slick grid variables declaration
         var dataView;
         var grid;
@@ -148,8 +148,8 @@
                 obj.id = i + 1;
                 obj.sno = i + 1;
                 obj.pid = "";
-                obj.pcode = "   ";
-                obj.pname = "   ";
+                obj.pcode = "";
+                obj.pname = "";
                 obj.quantity = "";
                 obj.price = "";
                 obj.discount = "";
@@ -172,7 +172,7 @@
 
         };
 
-        
+
         var columns = [
   { id: "sno", name: "S.No", field: "sno", cssClass: "cell-selection", width: 80, resizable: false, selectable: false },
   { id: "pcode", name: "Product code", field: "pcode", stopDownkey: true, width: 300, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.AutocompleteListView , editorOptions: @Html.Raw(Model.ProductsOptions) },
@@ -180,7 +180,7 @@
   { id: "quantity", name: "Quantity", field: "quantity", width: 100, resizable: false, editor: Slick.Editors.Text },
   { id: "price", name: "Unit Price", field: "price", minWidth: 100, editor: Slick.Editors.Text },
   { id: "discount", name: "Discount", field: "discount", minWidth: 100, editor: Slick.Editors.Text },
-    { id: "totalPrice", name: "Price", field: "totalPrice", minWidth: 100, editor: Slick.Editors.YesNoSelect }
+    { id: "totalPrice", name: "Price", field: "totalPrice", minWidth: 100  }
         ];
 
 
@@ -197,28 +197,30 @@
             debugger
             if (!validateHeaderFields())
                 return false;
-
-
+            else
+            {
+                grid.setWareHouse($("#drpWarehouse").combogrid('getValue'));
+            }
         });
 
         grid.onAddNewRow.subscribe(function (e, args) {
+
             var obj = {};
-            obj.id = dataView.getLength();
-            obj.Sno = dataView.getLength() + 1;
-            obj.PId = "";
-            obj.Code = "";
-            obj.Name = "";
-            obj.Quantity = "";
-            obj.UnitPrice = "";
-            obj.Discount = "";
-            obj.Price = "";
+            obj.id =  dataView.getLength();
+            obj.sno =dataView.getLength() + 1;
+            obj.pid = "";
+            obj.pcode = "";
+            obj.pname = "";
+            obj.quantity = "";
+            obj.price = "";
+            obj.discount = "";
+            obj.totalPrice = "";
 
             $.extend(obj, args.item);
             dataView.addItem(obj);
         });
 
-        grid.onKeyDown.subscribe(function (e, args) {
-            debugger
+        grid.onKeyDown.subscribe(function (e, args) { 
             // select all rows on ctrl-a
             if (e.which == 40 || e.which == 38) {
                 if (columns && columns[args.cell] && columns[args.cell].stopDownkey) {
@@ -266,18 +268,18 @@
             var date = new Date();
             return date.getDate() + "-" + parseInt(date.getMonth() + 1) + "-" + date.getFullYear()
         }
+
          
-        debugger
         //-----gets the warehouse data in the autocomplete list
         $("#drpWarehouse").combogrid(@Html.Raw(Model.WareHouseOptions));
-      
+
         // This is for edit mode, when the DocID is greater than zero
         if ('@Model.DocID' > 0) {
-            $("#drpWarehouse").combogrid('setValue','@Model.WareHouseId'); 
-            var jsonData = '@Html.Raw(Model.GridData)'; 
+            $("#drpWarehouse").combogrid('setValue','@Model.WareHouseId');
+            var jsonData = '@Html.Raw(Model.GridData)';
         }
         else {
-            $("#dtDate").val(getDate());  
+            $("#dtDate").val(getDate());
         }
 
         var validateHeaderFields = function () {

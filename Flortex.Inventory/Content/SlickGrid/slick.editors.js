@@ -24,15 +24,21 @@
 
 
     function AutocompleteListView(args) {
-        debugger
+         
         var $input;
         var defaultValue;
+        var defaultText
         var scope = this;
         var selectedRow = null;
+        
 
         this.init = function () {
-            debugger
-            var options = $.extend(true, args.column.editorOptions, { onSelect: onSelectAutocompleteListView, width: $(args.container).width() })
+             
+            var _wareHouseId = args.grid.getOptions().wareHouseId ? args.grid.getOptions().wareHouseId : 0;
+            var _defaultSearch=args.item[args.column.id];
+            args.column.editorOptions.searchField = args.column.id;
+            args.column.editorOptions.textField = args.column.id;
+            var options = $.extend(true, args.column.editorOptions, { onSelect: onSelectAutocompleteListView, width: $(args.container).width(), wareHouseId: _wareHouseId, defaultSearch: _defaultSearch })
             $input = $("<INPUT type=text   />");
             $input.appendTo(args.container);
             $input.combogrid(options);
@@ -47,7 +53,7 @@
         }
 
         var onSelectAutocompleteListView = function (index, row) {
-            debugger
+             
             selectedRow = row;
             console.log('hi ' + index);
         }
@@ -61,21 +67,25 @@
         };
 
         this.getValue = function () {
-            debugger
+             
             return $input && $input.combogrid ? $input.combogrid('getValue') : '';
         };
 
         this.setValue = function (val) {
-            debugger
+             
             $input.combogrid('setValue', val);
         };
 
         // 1. this will be called while creating the listview control
-        this.loadValue = function (item) {
+        this.loadValue = function (item) { 
+            defaultText = item[args.column.field] || "";
+            $input.combogrid('setText', defaultText);
 
-            defaultValue = item[args.column.field] || "";
-            $input.combogrid('setText', defaultValue);
-            //$input.combogrid('setValue', item["pid"]);
+            defaultValue = item["pid"] && args.grid.getOptions().wareHouseId?  item["pid"] + '-' + args.grid.getOptions().wareHouseId: 0;
+
+            if (defaultText != null && defaultText != '' && item["pid"] != null && item["pid"] != 0) {
+                $input.combogrid('setValue', item["pid"] + '-' + args.grid.getOptions().wareHouseId);
+            }
         };
 
         // 2. This will hold the serialized value
@@ -85,7 +95,7 @@
         };
 
         this.applyValue = function (item, state) {
-            debugger
+             
             item[args.column.field] = state;
             if (selectedRow && selectedRow["pid"])
                 item["pid"] = selectedRow["pid"];
@@ -104,8 +114,8 @@
         };
 
         this.isValueChanged = function () {
-            debugger
-            return (!($input.combogrid('getText') == "" && defaultValue == null)) && ($input.combogrid('getText') != defaultValue);
+             
+            return (!($input.combogrid('getValue') == "" && defaultValue == null)) && ($input.combogrid('getValue') != defaultValue);
         };
 
         this.validate = function () {

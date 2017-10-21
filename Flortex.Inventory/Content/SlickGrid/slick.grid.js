@@ -86,7 +86,10 @@ if (typeof Slick === "undefined") {
             multiColumnSort: false,
             defaultFormatter: defaultFormatter,
             forceSyncScrolling: false,
-            addNewRowCssClass: "new-row"
+            addNewRowCssClass: "new-row",
+
+            //Added by Pasha
+            wareHouseId: 0
         };
 
         var columnDefaults = {
@@ -3278,7 +3281,8 @@ if (typeof Slick === "undefined") {
             selectionModel.setSelectedRanges(rowsToRanges(rows));
         }
 
-        function calculateTotals() { 
+        // Added by Pasha
+        function calculateTotals() {
             if (options.showHeaderRow) {
                 if (!_)
                     throw "underscore js is not referenced";
@@ -3286,11 +3290,15 @@ if (typeof Slick === "undefined") {
                 _.each(columns, function (col) {
                     if (col.hasTotals) {
                         var allRowsData = _.pluck(latestData, col.id);
-                        var total = _.reduce(allRowsData, function (memo, num) { return memo + ( parseFloat(num)? num: 0)}, 0);
+                        var total = _.reduce(allRowsData, function (memo, num) { return memo + (parseFloat(num) ? num : 0) }, 0);
                         $(grid.getHeaderRowColumn(col.id)).text(total);
                     }
-                }); 
+                });
             }
+        }
+
+        function setWareHouseId(_wareHouseId) {
+            options.wareHouseId = _wareHouseId;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////
@@ -3440,7 +3448,11 @@ if (typeof Slick === "undefined") {
 
             // IEditor implementation
             "getEditorLock": getEditorLock,
-            "getEditController": getEditController
+            "getEditController": getEditController,
+
+            // Added by Pasha
+            // set wareHouse id 
+            "setWareHouse": setWareHouseId
         });
 
         init();

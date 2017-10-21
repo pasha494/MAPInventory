@@ -71,7 +71,7 @@ namespace MAP.Inventory.ModelImple
         }
 
         #region Fetch ListViews dynamic data
-        public DataTable GetProductsListViewData(string FilterCol, string FilterValue)
+        public DataTable GetProductsListViewData(string wareHouseId, string FilterCol, string FilterValue)
         {
             DataTable dt = null;
 
@@ -81,7 +81,7 @@ namespace MAP.Inventory.ModelImple
                 string spName = getSPName();
                 if (!string.IsNullOrWhiteSpace(spName))
                 {
-                    ds = _General.Get(new ArrayList() { FilterCol, FilterValue }, spName);
+                    ds = _General.Get(new ArrayList() { Convert.ToInt32(wareHouseId), FilterCol, FilterValue }, spName);
                     dt = ds.Tables[0];
                 }
             }
@@ -146,7 +146,7 @@ namespace MAP.Inventory.ModelImple
 
         public string GetListViewOptions()
         {
-            string options = string.Empty;  
+            string options = string.Empty;
             try
             {
                 DataTable dt = GetListViewCustomizaitonInfo();
