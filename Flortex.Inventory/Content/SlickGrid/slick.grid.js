@@ -185,6 +185,7 @@ if (typeof Slick === "undefined") {
         var rowNodeFromLastMouseWheelEvent;  // this node must not be deleted while inertial scrolling
         var zombieRowNodeFromLastMouseWheelEvent;  // node that was hidden instead of getting deleted
 
+        var $self = this;
 
         //////////////////////////////////////////////////////////////////////////////////////////////
         // Initialization
@@ -1974,6 +1975,7 @@ if (typeof Slick === "undefined") {
             lastRenderedScrollTop = scrollTop;
             lastRenderedScrollLeft = scrollLeft;
             h_render = null;
+            calculateTotals();
         }
 
         function handleHeaderRowScroll() {
@@ -3286,12 +3288,16 @@ if (typeof Slick === "undefined") {
             if (options.showHeaderRow) {
                 if (!_)
                     throw "underscore js is not referenced";
-                var latestData = grid.getData().getItems();
+                var latestData = $self.getData().getItems();
                 _.each(columns, function (col) {
                     if (col.hasTotals) {
                         var allRowsData = _.pluck(latestData, col.id);
-                        var total = _.reduce(allRowsData, function (memo, num) { return memo + (parseFloat(num) ? num : 0) }, 0);
-                        $(grid.getHeaderRowColumn(col.id)).text(total);
+                        var total = _.reduce(allRowsData, function (memo, num) { return (parseFloat(memo) || 0) + (parseFloat(num) || 0) }, 0);
+                        $($self.getHeaderRowColumn(col.id)).text(parseFloat(total).toLocaleString('hi-IN', { minimumFractionDigits: 2 }));
+
+                        //// use a string like 'en-US', '' to override browser locale 
+
+
                     }
                 });
             }

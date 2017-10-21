@@ -14,7 +14,7 @@
 <script src="~/Content/SlickGrid/plugins/slick.rowselectionmodel.js"></script>
 <script src="~/Content/SlickGrid/slick.grid.js"></script>
 <script src="~/Content/SlickGrid/slick.dataview.js"></script>
-
+<script src="~/Scripts/math.min.js"></script>
 
 <form class="cmxform" role="search" id="frmOpenStocks">
     @Html.HiddenFor(m => m.DocID)
@@ -22,11 +22,11 @@
         <div class="span12">
             @if (Model.DocID == 0)
             {
-            <h2 class="pull-left">Add Opening Stocks </h2>
+                <h2 class="pull-left">Add Opening Stocks </h2>
             }
             else if (Model.DocID > 0)
             {
-            <h2>Update Opening Stocks</h2>
+                <h2>Update Opening Stocks</h2>
             }
             <div class="pull-right">
                 <a id="btnSave" class="btn btn-default">Save</a>
@@ -134,6 +134,7 @@
             }
 </style>
 <script>
+
     $(document).ready(function () {
 
         // slick grid variables declaration
@@ -172,16 +173,24 @@
 
         };
 
+        function decimalFieldValidator(value) {
+            if (value == null || value == undefined || !value.length || !$.isNumeric(value)) {
+                return {valid: false, msg: "This is a required field"};
+            }
+            else {
+                return {valid: true, msg: null};
+            }
+        }
+
 
         var columns = [
-  { id: "sno", name: "S.No", field: "sno", cssClass: "cell-selection", width: 80, resizable: false, selectable: false },
-  { id: "pcode", name: "Product code", field: "pcode", stopDownkey: true, width: 300, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.AutocompleteListView , editorOptions: @Html.Raw(Model.ProductsOptions) },
-  { id: "pname", name: "Product Name", field: "pname", stopDownkey: true, width: 300, editor: Slick.Editors.Text,  editor: Slick.Editors.AutocompleteListView , editorOptions: @Html.Raw(Model.ProductsOptions)},
-  { id: "quantity", name: "Quantity", field: "quantity", width: 100, resizable: false, editor: Slick.Editors.Text },
-  { id: "price", name: "Unit Price", field: "price", minWidth: 100, editor: Slick.Editors.Text },
-  { id: "discount", name: "Discount", field: "discount", minWidth: 100, editor: Slick.Editors.Text },
-    { id: "totalPrice", name: "Price", field: "totalPrice", minWidth: 100  }
-        ];
+          { id: "sno", name: "S.No", field: "sno", cssClass: "cell-selection", width: 80, resizable: false, selectable: false },
+          { id: "pcode", name: "Product code", field: "pcode", stopDownkey: true, width: 300, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.AutocompleteListView , editorOptions: @Html.Raw(Model.ProductsOptions) },
+          { id: "pname", name: "Product Name", field: "pname", stopDownkey: true, width: 300, editor: Slick.Editors.Text,  editor: Slick.Editors.AutocompleteListView , editorOptions: @Html.Raw(Model.ProductsOptions)},
+          { id: "quantity", name: "Quantity", field: "quantity", width: 100, isDecimal:true, hasTotals:true, resizable: false, editor: Slick.Editors.Text ,formatter: Slick.Formatters.Decimal , validator: decimalFieldValidator},
+          { id: "price", name: "Unit Price", field: "price", minWidth: 100,  isDecimal:true,hasTotals:true,editor: Slick.Editors.Text ,formatter: Slick.Formatters.Decimal, validator: decimalFieldValidator},
+          { id: "discount", name: "Discount", field: "discount", minWidth: 100,  isDecimal:true,hasTotals:true, editor: Slick.Editors.Text ,formatter: Slick.Formatters.Decimal, validator: decimalFieldValidator},
+          { id: "totalPrice", name: "Price", field: "totalPrice", minWidth: 100 ,  isDecimal:true,hasTotals:true,formatter: Slick.Formatters.Decimal , isFormula: true, formula: "(quantity * price) - discount" }  ];
 
 
         dataView = new Slick.Data.DataView({ inlineFilters: true });
@@ -190,6 +199,25 @@
 
 
         grid.onCellChange.subscribe(function (e, args) {
+            debugger
+
+            // calculate formula fields
+            var cols=_.where(args.grid.getColumns(), {isFormula:true}) ;
+
+            _.each(args.grid.getColumns(),function(col){
+
+                // if the decimal field is empty then make it zero
+                if(col.isDecimal)  {
+                    if(args.item[col.id] == undefined || args.item[col.id] =="")
+                        args.item[col.id]=0;
+                }
+
+                // evaluate the formula
+                if(col.formula)  {
+                    args.item[col.id]=math.eval(col.formula,args.item);
+                }
+            });
+
             dataView.updateItem(args.item.id, args.item);
         });
 
@@ -220,7 +248,7 @@
             dataView.addItem(obj);
         });
 
-        grid.onKeyDown.subscribe(function (e, args) { 
+        grid.onKeyDown.subscribe(function (e, args) {
             // select all rows on ctrl-a
             if (e.which == 40 || e.which == 38) {
                 if (columns && columns[args.cell] && columns[args.cell].stopDownkey) {
@@ -269,7 +297,7 @@
             return date.getDate() + "-" + parseInt(date.getMonth() + 1) + "-" + date.getFullYear()
         }
 
-         
+
         //-----gets the warehouse data in the autocomplete list
         $("#drpWarehouse").combogrid(@Html.Raw(Model.WareHouseOptions));
 
