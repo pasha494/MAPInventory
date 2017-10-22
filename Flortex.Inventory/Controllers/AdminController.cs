@@ -44,7 +44,9 @@ namespace MAP.Inventory.Web.Controllers
         }
 
 
+        public ActionResult DocumentGridCustomization()
+        {
 
-
+        }
     }
 }
