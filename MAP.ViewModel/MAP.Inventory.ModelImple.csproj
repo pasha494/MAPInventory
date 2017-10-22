@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoginImple.cs" />
+    <Compile Include="MapGridViewImple.cs" />
     <Compile Include="MapListViewImple.cs" />
     <Compile Include="ProductsCategoryImple.cs" />
     <Compile Include="ProductsImple.cs" />

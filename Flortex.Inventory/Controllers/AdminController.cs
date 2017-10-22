@@ -44,9 +44,11 @@ namespace MAP.Inventory.Web.Controllers
         }
 
 
-        public ActionResult DocumentGridCustomization()
-        {
+        public ActionResult GridViewCustomization()
+        {           
 
+
+            return View();
         }
     }
 }

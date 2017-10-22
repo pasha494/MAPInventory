@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GridViewCustomization.cs" />
     <Compile Include="ListViewCustomization.cs" />
     <Compile Include="LoginModel.cs" />
     <Compile Include="ProductsCategoryModel.cs" />

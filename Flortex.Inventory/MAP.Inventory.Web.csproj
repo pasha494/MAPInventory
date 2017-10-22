@@ -1616,7 +1616,7 @@
     <Content Include="Views\GridStock\GetConsolidateStockReport.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Admin\ListViewCustomization.cshtml" />
-    <Content Include="Views\Admin\DocumentGridCustomization.cshtml" />
+    <Content Include="Views\Admin\GridViewCustomization.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
