@@ -7,7 +7,7 @@
     Dictionary<int, string> items = objGridView.GetGridViewNames();
     int[] keys = items.Keys.ToArray();
 }
- 
+
 <form role="search" id="frmGridViewsCustomization" class="cmxform">
     <div class="row-fluid heading">
         <div class="span12">
@@ -32,14 +32,14 @@
                     for (int i = 0; i < keys.Length; i++)
                     {
 
-                    <option value="@keys[i].ToString()"> @items[keys[i]]</option>
+                        <option value="@keys[i].ToString()"> @items[keys[i]]</option>
                     }
                 }
 
             </select>
         </div>
     </div>
-     
+
     <div class="row-fluid">
         <div class="span6">
             <label for="txtCode" class="label">Total rows</label>
@@ -53,45 +53,90 @@
 
     <div class="row-fluid">
         <div class="span12">
-          <div id="gridViews" style="height:500px;"></div>
+            <div id="gridViews" style="height:500px;"></div>
         </div>
     </div>
 
     <script type="text/javascript">
 
         $(function () {
-          
 
+            var columns = [];
+            var drpGridViews = $("#drpGridViews");
+            var columns = [];
             // dropdown change logic
-            $("#drpGridViews").on('change', function (e) {
+            drpGridViews.on('change', function (e) {
 
                 //loadAjaxImg(true);
                 e.preventDefault();
+                getScreenData();
                 //clearControls(true);
                 //_item= _.findWhere(model, {FeatureId: parseInt(this.value) });
                 //loadData(_item);
                 //loadAjaxImg(false);
             });
 
+            // load the data with the controls
+            var getScreenData = function () {
+                var _FeatureId = drpGridViews.val();
+                if (_FeatureId > 0) {
+                    $.ajax({
+                        url: '/Admin/GetGridViewCustomizationData',
+                        type: 'GET',
+                        data: { FeatureId: _FeatureId },
+                        success: function (res) {
+                            debugger
+                            if (res)
+                                populateModelData($.parseJSON(res));
+
+                        },
+                        beforeSend: function () {
+                            loadAjaxImg(true);
+                        },
+                        complete: function () { loadAjaxImg(false); },
+                        error: function (e) {
+                            customAlert('Error in Saving..', 'alert');
+                        }
+                    });
+                }
+
+            };
+
+            // populate the model data
+            var populateModelData = function (model) {
+
+                // header fields
+                if (model) {
+                    if (model.TotalRows)
+                        $("#txtTotalRows").val(model.TotalRows);
+
+                    if (model.Height)
+                        $("#txtHeight").val(model.Height);
+
+
+                }
+            }
+
+
             // buttons click logic
 
-            $("#btnSave").on('click',function(e){
+            $("#btnSave").on('click', function (e) {
                 e.preventDefault();
-               // saveData();
+                // saveData();
 
             });
 
-            $("#btnClear").on('click',function(e){
+            $("#btnClear").on('click', function (e) {
                 e.preventDefault();
-               /// clearControls();
+                /// clearControls();
                 $("#drpGridViews").val("0");
 
 
             });
 
             // clear contorls 1. remove all the options from dropdowns and make the text box value as empty and remove all the rows from the table
-            var clearControls=function(isDropdownChange)  {
-                 
+            var clearControls = function (isDropdownChange) {
+
                 // load the header field data
                 $("#txtTotalRows").val("");
                 $("#txtHeight").val("");
@@ -99,55 +144,50 @@
                 //Get focus back to the listview dropdown
                 $("#drpListViews").focus();
 
-                if(!isDropdownChange)
-                {
+                if (!isDropdownChange) {
                     $("#drpListViews").val("0");
                 }
 
                 $('#chkAll').removeAttr("checked");
-                _item={};
+                _item = {};
             }
 
             // load the data based on dropdown selection
-            var loadData = function(item)  {
-                if(item){
-                    var options= JSON.parse(item.Options);
+            var loadData = function (item) {
+                if (item) {
+                    var options = JSON.parse(item.Options);
                     $("#drpDefaultText").empty();
                     $("#drpDefaultSearch").empty();
-                    if(options && options.columns && options.columns.length==1)
-                    {
-                        _options=options;
+                    if (options && options.columns && options.columns.length == 1) {
+                        _options = options;
                         // first append data grid columns data
-                        var columns=[];
-                        columns=options.columns[0];
-                        var tr='';
+                        var columns = [];
+                        columns = options.columns[0];
+                        var tr = '';
                         for (var i = 0; i < columns.length; i++) {
-                            tr+=' <tr>';
-                            tr+=' <td><input type="checkbox" id="chkHidden'+i+'" class="select_row"';
-                            if(!columns[i].hidden===true)
-                            {
-                                tr+='checked="checked"'
+                            tr += ' <tr>';
+                            tr += ' <td><input type="checkbox" id="chkHidden' + i + '" class="select_row"';
+                            if (!columns[i].hidden === true) {
+                                tr += 'checked="checked"'
                             }
-                            tr+='/> </td>';
-                            tr+=' <td>'+columns[i].field+'</td>';
-                            tr+=' <td><input type="text" id="txtTitle'+i+'" value="'+columns[i].title+'" placeholder="Default name will be field name"/></td>';
-                            tr+=' <td><select id="drpAlign'+i+'">';
-                            if(columns[i].align && columns[i].align =='right')
-                            {
-                                tr+=' <option  val="left" >left</option>   <option selected="selected"  val="right">right</option>';
+                            tr += '/> </td>';
+                            tr += ' <td>' + columns[i].field + '</td>';
+                            tr += ' <td><input type="text" id="txtTitle' + i + '" value="' + columns[i].title + '" placeholder="Default name will be field name"/></td>';
+                            tr += ' <td><select id="drpAlign' + i + '">';
+                            if (columns[i].align && columns[i].align == 'right') {
+                                tr += ' <option  val="left" >left</option>   <option selected="selected"  val="right">right</option>';
                             }
-                            else
-                            {
-                                tr+='  <option  selected="selected" val="left" >left</option>   <option val="right" >right</option>';
+                            else {
+                                tr += '  <option  selected="selected" val="left" >left</option>   <option val="right" >right</option>';
                             }
 
-                            tr+='</select></td>';
-                            tr+=' <td><input type="text" id="txtWidth'+i+'" value="'+columns[i].width+'"  placeholder="Default width 80"/></td>';
-                            tr+=' </tr>';
+                            tr += '</select></td>';
+                            tr += ' <td><input type="text" id="txtWidth' + i + '" value="' + columns[i].width + '"  placeholder="Default width 80"/></td>';
+                            tr += ' </tr>';
 
 
-                            $("#drpDefaultText").append($('<option value="'+columns[i].field+'">'+columns[i].title+'</option>'));
-                            $("#drpDefaultSearch").append($('<option value="'+columns[i].field+'">'+columns[i].title+'</option>'));
+                            $("#drpDefaultText").append($('<option value="' + columns[i].field + '">' + columns[i].title + '</option>'));
+                            $("#drpDefaultSearch").append($('<option value="' + columns[i].field + '">' + columns[i].title + '</option>'));
 
 
                         }
@@ -166,9 +206,8 @@
 
 
             // data save logic
-            var saveData=function() {
-                if(validate())
-                {
+            var saveData = function () {
+                if (validate()) {
                     buildData();
                     $.ajax({
                         url: '/Admin/SaveListViewCutomization',
@@ -186,7 +225,7 @@
                         beforeSend: function () {
                             loadAjaxImg(true);
                         },
-                        complete: function () {  loadAjaxImg(false);  },
+                        complete: function () { loadAjaxImg(false); },
                         error: function (e) {
                             customAlert('Error in Saving..', 'alert');
                         }
@@ -195,49 +234,47 @@
             };
 
             //validate the data
-            var validate=function()  {
+            var validate = function () {
                 // header fields
-                var flg=true;
-                if( $("#drpDefaultText").val()=="")
-                {
-                    flg=false;
-                    customAlert("selected Invalid Text",'alert',function(){$("#drpDefaultText").focus();});
+                var flg = true;
+                if ($("#drpDefaultText").val() == "") {
+                    flg = false;
+                    customAlert("selected Invalid Text", 'alert', function () { $("#drpDefaultText").focus(); });
                 }
-                else if( $("#drpDefaultSearch").val()=="")
-                {
-                    flg=false;
-                    customAlert("selected Invalid Text",'alert',function(){$("#drpDefaultSearch").focus();});
+                else if ($("#drpDefaultSearch").val() == "") {
+                    flg = false;
+                    customAlert("selected Invalid Text", 'alert', function () { $("#drpDefaultSearch").focus(); });
                 }
 
                 return true;
             };
 
             //build the data
-            var buildData=function(){
+            var buildData = function () {
                 debugger
                 // header fields
-                _item.TotalRows= $("#txtTotalRows").val()? parseInt( $("#txtTotalRows").val()):20 ;
-                _options.panelWidth= $("#txtPanelWidth").val()?parseInt($("#txtPanelWidth").val()):500 ;
-                _options.searchField=$("#drpDefaultSearch").val();
-                _options.textField=$("#drpDefaultText").val();
+                _item.TotalRows = $("#txtTotalRows").val() ? parseInt($("#txtTotalRows").val()) : 20;
+                _options.panelWidth = $("#txtPanelWidth").val() ? parseInt($("#txtPanelWidth").val()) : 500;
+                _options.searchField = $("#drpDefaultSearch").val();
+                _options.textField = $("#drpDefaultText").val();
 
                 // table fields (bind column properties)
-                $("#tblColumns>tbody>tr").each(function(i,tr)  {
+                $("#tblColumns>tbody>tr").each(function (i, tr) {
 
-                    var checkbox=$(tr).find('#chkHidden'+i);
-                    var txtTitle=$(tr).find('#txtTitle'+i);
-                    var drpAlign=$(tr).find('#drpAlign'+i);
-                    var txtWidth=$(tr).find('#txtWidth'+i);
+                    var checkbox = $(tr).find('#chkHidden' + i);
+                    var txtTitle = $(tr).find('#txtTitle' + i);
+                    var drpAlign = $(tr).find('#drpAlign' + i);
+                    var txtWidth = $(tr).find('#txtWidth' + i);
 
 
-                    _options.columns[0][i].hidden= checkbox.attr("checked")=="checked"?false:true;
-                    _options.columns[0][i].title= txtTitle.val()? txtTitle.val():_options.columns[0][i].field;
-                    _options.columns[0][i].align = drpAlign.val()?drpAlign.val():'left';
-                    _options.columns[0][i].width = txtWidth.val()?txtWidth.val():80;
+                    _options.columns[0][i].hidden = checkbox.attr("checked") == "checked" ? false : true;
+                    _options.columns[0][i].title = txtTitle.val() ? txtTitle.val() : _options.columns[0][i].field;
+                    _options.columns[0][i].align = drpAlign.val() ? drpAlign.val() : 'left';
+                    _options.columns[0][i].width = txtWidth.val() ? txtWidth.val() : 80;
 
                 });
 
-                _item.Options=JSON.stringify(_options);
+                _item.Options = JSON.stringify(_options);
             };
         });
 

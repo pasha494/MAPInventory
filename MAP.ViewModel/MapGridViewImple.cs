@@ -65,6 +65,7 @@ namespace MAP.Inventory.ModelImple
 
             if (dt != null && dt.Rows.Count > 0)
             {
+                gridView.FeatureId = this.FeatureId;
                 gridView.Name = dt.Rows[0]["Name"].ToString();
                 gridView.TotalRows = Convert.ToInt32(dt.Rows[0]["TotalRows"].ToString());
                 gridView.Columns = dt.Rows[0]["Columns"].ToString();

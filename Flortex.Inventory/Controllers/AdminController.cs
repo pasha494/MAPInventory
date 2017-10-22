@@ -50,5 +50,15 @@ namespace MAP.Inventory.Web.Controllers
 
             return View();
         }
+
+        public ActionResult GetGridViewCustomizationData(int FeatureId)
+        {
+            MapGridViewImple objGridView = new MapGridViewImple(FeatureId);
+            GridViewCustomization objModal = objGridView.GetGridViewsCustomizationInfo();
+            string modelContent=JsonConvert.SerializeObject(objModal);
+            return Content(modelContent);
+
+        }
+
     }
 }
