@@ -16,7 +16,7 @@
             <div class="pull-right">
                 <a id="btnSave" class="btn btn-default">Save</a>
                 <a id="btnClear" class="btn btn-default">Clear</a>
-                <a id="btnAdd" class="btn btn-default pull-right">Add</a>
+                <a id="btnAddRow" class="btn btn-default pull-right">Add</a>
             </div>
         </div>
     </div>
@@ -73,17 +73,19 @@
     </div>
 
     <script type="text/javascript">
-        var data = [];
+        var originalModel = {};
+        var originalData = [];
         $(function () {
 
             var drpGridViews = $("#drpGridViews");
 
+
             // dropdown change logic
             drpGridViews.on('change', function (e) {
-                 
+
                 e.preventDefault();
                 clearControls();
-                getScreenData(); 
+                getScreenData();
             });
 
             // load the data with the controls
@@ -96,8 +98,10 @@
                         data: { FeatureId: _FeatureId },
                         success: function (res) {
                             debugger
-                            if (res)
-                                populateModelData($.parseJSON(res));
+                            if (res) {
+                                originalModel = $.parseJSON(res);
+                                populateModelData(originalModel);
+                            }
 
                         },
                         beforeSend: function () {
@@ -114,7 +118,7 @@
 
             // load the data based on dropdown selection
             var populateModelData = function (model) {
-                if (model) { 
+                if (model) {
                     // header fields
                     if (model.TotalRows)
                         $("#txtTotalRows").val(model.TotalRows);
@@ -123,13 +127,13 @@
                         $("#txtHeight").val(model.Height);
 
                     var gridData = JSON.parse(model.Columns);
-
+                    $.extend(true, originalData, gridData);
                     if (gridData && gridData.length) {
                         var tr = '';
 
                         for (var i = 0; i < gridData.length; i++) {
 
-                            tr += ' <tr>';
+                            tr += ' <tr data-field="' + gridData[i].field + '"  data-newlyadded="false">';
 
                             // first cell
                             tr += ' <td>' + gridData[i].field + '</td>';
@@ -153,13 +157,13 @@
                             if (gridData[i].isStatic === false) {
                                 tr += ' <td>';
                                 if (gridData[i].editorTpye == 'Empty') {
-                                    tr += ' <select id="drpEditorType' + i + '"><option  val="Empty" selected="selected" >Empty</option>   <option  val="String">String</option><option  val="Decimal">Decimal</option></select>';
+                                    tr += ' <select id="drpEditorType' + i + '"><option  val="Empty" selected="selected" >Empty</option>   <option  val="Decimal">Decimal</option></select>';
                                 }
-                                else if (gridData[i].editorTpye == 'String') {
-                                    tr += ' <select id="drpEditorType' + i + '"><option  val="Empty" selected="selected" >Empty</option>   <option  val="String">String</option><option  val="Decimal">Decimal</option></select>';
-                                }
+                                    //else if (gridData[i].editorTpye == 'String') {
+                                    //    tr += ' <select id="drpEditorType' + i + '"><option  val="Empty" selected="selected" >Empty</option>   <option  val="String">String</option><option  val="Decimal">Decimal</option></select>';
+                                    //}
                                 else if (gridData[i].editorTpye == 'Decimal') {
-                                    tr += ' <select id="drpEditorType' + i + '"><option  val="Empty" selected="selected" >Empty</option>   <option  val="String">String</option><option  val="Decimal">Decimal</option></select>';
+                                    tr += ' <select id="drpEditorType' + i + '"><option  val="Empty" selected="selected" >Empty</option>   <option  val="Decimal">Decimal</option></select>';
                                 }
                                 tr += '</td>';
                             }
@@ -168,14 +172,14 @@
                             }
 
 
-
+                            var _width = gridData[i].width || 100;
                             //  fifth cell
-                            tr += ' <td><input type="text" id="txtWidth' + i + '" value="' + gridData[i].width + '"  placeholder="Default width 80"/></td>';
+                            tr += ' <td><input type="text" id="txtWidth' + i + '" value="' + _width + '"  placeholder="Default width 100"/></td>';
 
                             //sixth cell
                             tr += '<td> ';
                             if (gridData[i].formula) {
-                                tr += '  <input type="text" id="txtFormula' + i + '" value="' + gridData[i].formula + '"  placeholder="Default width 80"/> ';
+                                tr += '  <input type="text" id="txtFormula' + i + '" value="' + _width + '"  placeholder="Formula"/> ';
                             }
                             tr += ' </td>';
 
@@ -191,102 +195,188 @@
                 }
             }
 
-
-
-
-
-
             // buttons click logic
-
             $("#btnSave").on('click', function (e) {
                 e.preventDefault();
-                // saveData();
-
+                saveData();
             });
 
             $("#btnClear").on('click', function (e) {
                 e.preventDefault();
                 clearControls();
                 $("#drpGridViews").val("0");
+            });
 
+            // Add dynamic rows
+            $("#btnAddRow").on('click', function (e) {
+                e.preventDefault();
+                addEmptyRow();
+            });
+
+            // Delete dynamic rows
+            $("#tblGridData").on('click', 'a.deleteRow', function (e) {
+                e.preventDefault();
+                var self = $(this);
+                smoke.confirm("Are you sure, Do you want to delete.?", function (ev) { self.parents('tr').remove(); }, {
+                    ok: "Yep",
+                    cancel: "Nope",
+                    classname: "custom-class",
+                    reverseButtons: true
+                });
 
             });
 
             // clear contorls 1. remove all the options from dropdowns and make the text box value as empty and remove all the rows from the table
-            var clearControls = function () { 
+            var clearControls = function () {
                 // load the header field data
                 $("#txtTotalRows").val("");
-                $("#txtHeight").val("");  
+                $("#txtHeight").val("");
                 $("#tblGridData>tbody").empty();
-
             }
 
-            // data save logic
-            var saveData = function () {
-                if (validate()) {
-                    buildData();
-                    $.ajax({
-                        url: '/Admin/SaveListViewCutomization',
-                        type: 'POST',
-                        data: { model: JSON.stringify(_item) },
-                        success: function (res) {
-                            debugger
-                            if (res != "-494") {
-                                customAlert('Data saved successfully', 'alert', function () { $("#drpListViews").focus(); });
-                                clearControls();
-                            }
-                            else
-                                customAlert('Error occured while saving. Please contact administrator.');
-                        },
-                        beforeSend: function () {
-                            loadAjaxImg(true);
-                        },
-                        complete: function () { loadAjaxImg(false); },
-                        error: function (e) {
-                            customAlert('Error in Saving..', 'alert');
-                        }
-                    });
+            // add an empty row
+            var addEmptyRow = function () {
+                if ($("#drpGridViews").val() > 0) {
+                    var i = $("#tblGridData>tbody>tr").length;
+
+                    var tr = '<tr data-row=' + i + ' data-newlyadded="true">';
+
+                    // first cell
+                    tr += ' <td><input type="text" id="txtField' + i + '" value="" placeholder="field shold in small letters with no spaces"/></td>';
+
+                    // second cell
+                    tr += ' <td><input type="text" id="txtName' + i + '" value="" placeholder="Default name will be field name"/></td>';
+
+
+                    // // Third cell show totals
+                    tr += ' <td><input type="checkbox" id="chkShowTotals' + i + '" class="select_row"/> </td>';
+
+                    // fourth cell
+                    tr += '<td> <select id="drpEditorType' + i + '"><option  val="Empty" >Empty</option> <option  val="Decimal">Decimal</option></select> </td>';
+
+                    //  fifth cell
+                    tr += ' <td><input type="text" id="txtWidth' + i + '" value=""  placeholder="Default width 80"/></td>';
+
+                    //sixth cell
+                    tr += '<td>   <input type="text" id="txtFormula' + i + '" value=""  placeholder="Formula"/>   </td>';
+
+                    // seventh cell
+                    tr += ' <td><a href="javascript:void(0);"  id="btnDelete' + i + '" class="btn btn-default deleteRow" title="Delete"><i class="icon-adt_trash"></i></a></td>';
+
+                    tr += '</tr>';
+
+                    $("#tblGridData>tbody").append(tr);
                 }
             };
 
-            //validate the data
-            var validate = function () {
-                // header fields
-                var flg = true;
-                if ($("#drpDefaultText").val() == "") {
-                    flg = false;
-                    customAlert("selected Invalid Text", 'alert', function () { $("#drpDefaultText").focus(); });
-                }
-                else if ($("#drpDefaultSearch").val() == "") {
-                    flg = false;
-                    customAlert("selected Invalid Text", 'alert', function () { $("#drpDefaultSearch").focus(); });
-                }
+            // data save logic
+            var saveData = function () {
 
-                return true;
+                buildData();
+                //$.ajax({
+                //    url: '/Admin/SaveListViewCutomization',
+                //    type: 'POST',
+                //    data: { model: JSON.stringify(_item) },
+                //    success: function (res) {
+                //        debugger
+                //        if (res != "-494") {
+                //            customAlert('Data saved successfully', 'alert', function () { $("#drpListViews").focus(); });
+                //            clearControls();
+                //        }
+                //        else
+                //            customAlert('Error occured while saving. Please contact administrator.');
+                //    },
+                //    beforeSend: function () {
+                //        loadAjaxImg(true);
+                //    },
+                //    complete: function () { loadAjaxImg(false); },
+                //    error: function (e) {
+                //        customAlert('Error in Saving..', 'alert');
+                //    }
+                //});
             };
 
             //build the data
             var buildData = function () {
                 debugger
                 // header fields
-                _item.TotalRows = $("#txtTotalRows").val() ? parseInt($("#txtTotalRows").val()) : 20;
-                _options.panelWidth = $("#txtPanelWidth").val() ? parseInt($("#txtPanelWidth").val()) : 500;
-                _options.searchField = $("#drpDefaultSearch").val();
-                _options.textField = $("#drpDefaultText").val();
+                originalModel.TotalRows = $("#txtTotalRows").val() ? parseInt($("#txtTotalRows").val()) : 20;
+                originalModel.Height = $("#txtHeight").val() ? parseInt($("#txtPanelWidth").val()) : 500;
 
                 // table fields (bind column properties)
-                $("#tblColumns>tbody>tr").each(function (i, tr) {
+                $("#tblGridData>tbody>tr").each(function (i, tr) {
 
-                    var checkbox = $(tr).find('#chkHidden' + i);
-                    var txtTitle = $(tr).find('#txtTitle' + i);
-                    var drpAlign = $(tr).find('#drpAlign' + i);
+                    var txtName = $(tr).find('#txtName' + i);
+                    var showTotals = $(tr).find('#chkShowTotals' + i);
                     var txtWidth = $(tr).find('#txtWidth' + i);
 
+                    var txtField = $(tr).find('#txtField' + i);
+                    var txtFormula = $(tr).find('#txtFormula' + i);
+                    var drpEditorType = $(tr).find('#drpEditorType' + i);
 
-                    _options.columns[0][i].hidden = checkbox.attr("checked") == "checked" ? false : true;
-                    _options.columns[0][i].title = txtTitle.val() ? txtTitle.val() : _options.columns[0][i].field;
-                    _options.columns[0][i].align = drpAlign.val() ? drpAlign.val() : 'left';
-                    _options.columns[0][i].width = txtWidth.val() ? txtWidth.val() : 80;
+
+                    if (originalData[i] === undefined && i >= originalData.length && $(tr).attr("data-newlyadded") == true) {
+
+                        var rowItem = {};
+                        rowItem.isStatic = false;
+                        rowItem.isFormula = true;
+                        rowItem.isDecimal = true;
+
+                        rowItem.hasTotals = showTotals.attr("checked") == "checked" ? true : false;
+                        rowItem.name = txtName.val() ? txtName.val() : originalData[i].name;
+                        rowItem.width = txtWidth.val() ? txtWidth.val() : 100;
+
+                        rowItem.field = txtField.val() ? txtField.val() : originalData[i].field;
+                        rowItem.id = txtField.val() ? txtField.val() : originalData[i].field;
+
+                        rowItem.width = txtFormula.val() ? txtFormula.val() : "";
+                        rowItem.editorTpye = drpEditorType.val();
+
+                        if (drpEditorType.val() === "Empty") {
+                            rowItem.formatter = "Slick.Formatters.Decimal";
+
+                        }
+                        else if (drpEditorType.val() === "Decimal") {
+                            rowItem.editor = "Slick.Editors.Text";
+                            rowItem.formatter = "Slick.Formatters.Decimal";
+                            rowItem.validator = "Slick.Validator.Decimal";
+                        }
+                        originalData.push(rowItem);
+                    }
+                    else if ($(tr).attr("data-field") == originalData[i].field && $(tr).attr("data-newlyadded") == false && originalData[i].isStatic === false) {
+
+                        originalData[i].isStatic = false;
+                        originalData[i].isFormula = true;
+                        originalData[i].isDecimal = true;
+
+                        originalData[i].hasTotals = showTotals.attr("checked") == "checked" ? true : false;
+                        originalData[i].name = txtName.val() ? txtName.val() : originalData[i].name;
+                        originalData[i].width = txtWidth.val() ? txtWidth.val() : 100;
+
+                        originalData[i].field = txtField.val() ? txtField.val() : originalData[i].field;
+                        originalData[i].id = txtField.val() ? txtField.val() : originalData[i].field;
+
+                        originalData[i].width = txtFormula.val() ? txtFormula.val() : "";
+                        originalData[i].editorTpye = drpEditorType.val();
+
+                        if (drpEditorType.val() === "Empty") {
+                            originalData[i].formatter = "Slick.Formatters.Decimal";
+
+                        }
+                        else if (drpEditorType.val() === "Decimal") {
+                            originalData[i].editor = "Slick.Editors.Text";
+                            originalData[i].formatter = "Slick.Formatters.Decimal";
+                            originalData[i].validator = "Slick.Validator.Decimal";
+                        }
+                    }
+                    else if ($(tr).attr("data-field") == originalData[i].field && $(tr).attr("data-newlyadded") == false) {
+                        originalData[i].hasTotals = showTotals.attr("checked") == "checked" ? true : false;
+                        originalData[i].name = txtName.val() ? txtName.val() : originalData[i].name;
+                        originalData[i].width = txtWidth.val() ? txtWidth.val() : 100;
+                    }
+                    else {
+                        //@@To Do slice this array element
+                    }
 
                 });
 
@@ -296,4 +386,3 @@
 
     </script>
 </form>
-

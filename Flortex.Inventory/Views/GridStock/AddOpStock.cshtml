@@ -153,7 +153,7 @@
           { id: "sno", name: "S.No", field: "sno", cssClass: "cell-selection", width: 80, resizable: false, selectable: false },
           { id: "pcode", name: "Product code", field: "pcode", stopDownkey: true, width: 300, minWidth: 120,  editor: Slick.Editors.AutocompleteListView , editorOptions: @Html.Raw(Model.ProductsOptions) },
           { id: "pname", name: "Product Name", field: "pname", stopDownkey: true, width: 300, editor: Slick.Editors.Text,  editor: Slick.Editors.AutocompleteListView , editorOptions: @Html.Raw(Model.ProductsOptions)},
-          { id: "quantity", name: "Quantity", field: "quantity", width: 100, isDecimal:true, hasTotals:true, resizable: false, editor: Slick.Editors.Text ,formatter: Slick.Formatters.Decimal , validator: decimalFieldValidator},
+          { id: "quantity", name: "Quantity", field: "quantity", width: 100, isDecimal:true, hasTotals:true, editor: Slick.Editors.Text ,formatter: Slick.Formatters.Decimal , validator: decimalFieldValidator},
           { id: "price", name: "Unit Price", field: "price", minWidth: 100,  isDecimal:true,hasTotals:true,editor: Slick.Editors.Text ,formatter: Slick.Formatters.Decimal, validator: decimalFieldValidator},
           { id: "discount", name: "Discount", field: "discount", minWidth: 100,  isDecimal:true,hasTotals:true, editor: Slick.Editors.Text ,formatter: Slick.Formatters.Decimal, validator: decimalFieldValidator},
           { id: "totalPrice", name: "Price", field: "totalPrice", minWidth: 100 ,  isDecimal:true,hasTotals:true,formatter: Slick.Formatters.Decimal , isFormula: true, formula: "(quantity * price) - discount" }  ];
