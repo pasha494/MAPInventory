@@ -133,7 +133,7 @@
 
                         for (var i = 0; i < gridData.length; i++) {
 
-                            tr += ' <tr data-field="' + gridData[i].field + '"  data-newlyadded="false">';
+                            tr += ' <tr data-field="' + gridData[i].field + '"  data-newlyadded="false"  data-row="' + i + '"> ';
 
                             // first cell
                             tr += ' <td>' + gridData[i].field + '</td>';
@@ -183,8 +183,13 @@
                             }
                             tr += ' </td>';
 
-                            // seventh cell
-                            tr += ' <td></td>';
+                            // seventh cell 
+                            if (gridData[i].isStatic === false) {
+                                tr += ' <td><a href="javascript:void(0);"  id="btnDelete' + i + '" class="btn btn-default deleteRow" title="Delete"><i class="icon-adt_trash"></i></a></td>';
+                            }
+                            else {
+                                tr += ' <td></td>';
+                            }
 
                             tr += ' </tr>';
                         }
@@ -239,7 +244,7 @@
                 if ($("#drpGridViews").val() > 0) {
                     var i = $("#tblGridData>tbody>tr").length;
 
-                    var tr = '<tr data-row=' + i + ' data-newlyadded="true">';
+                    var tr = '<tr data-row="' + i + '" data-newlyadded="true">';
 
                     // first cell
                     tr += ' <td><input type="text" id="txtField' + i + '" value="" placeholder="field shold in small letters with no spaces"/></td>';
@@ -298,7 +303,7 @@
 
             //build the data
             var buildData = function () {
-                debugger
+                 
                 // header fields
                 originalModel.TotalRows = $("#txtTotalRows").val() ? parseInt($("#txtTotalRows").val()) : 20;
                 originalModel.Height = $("#txtHeight").val() ? parseInt($("#txtPanelWidth").val()) : 500;
@@ -315,7 +320,7 @@
                     var drpEditorType = $(tr).find('#drpEditorType' + i);
 
 
-                    if (originalData[i] === undefined && i >= originalData.length && $(tr).attr("data-newlyadded") == true) {
+                    if (originalData[i] === undefined && i >= originalData.length && $(tr).attr("data-newlyadded") == "true") {
 
                         var rowItem = {};
                         rowItem.isStatic = false;
@@ -343,7 +348,7 @@
                         }
                         originalData.push(rowItem);
                     }
-                    else if ($(tr).attr("data-field") == originalData[i].field && $(tr).attr("data-newlyadded") == false && originalData[i].isStatic === false) {
+                    else if ($(tr).attr("data-field") == originalData[i].field && $(tr).attr("data-newlyadded") == "false" && i == $(tr).attr("data-row") && originalData[i].isStatic === false) {
 
                         originalData[i].isStatic = false;
                         originalData[i].isFormula = true;
@@ -369,18 +374,19 @@
                             originalData[i].validator = "Slick.Validator.Decimal";
                         }
                     }
-                    else if ($(tr).attr("data-field") == originalData[i].field && $(tr).attr("data-newlyadded") == false) {
+                    else if ($(tr).attr("data-field") == originalData[i].field && $(tr).attr("data-newlyadded") == "false" && i == $(tr).attr("data-row")) {
                         originalData[i].hasTotals = showTotals.attr("checked") == "checked" ? true : false;
                         originalData[i].name = txtName.val() ? txtName.val() : originalData[i].name;
                         originalData[i].width = txtWidth.val() ? txtWidth.val() : 100;
                     }
-                    else {
+                    else if (i == $(tr).attr("data-row")) {
                         //@@To Do slice this array element
+                        originalData.splice(i, 1);
                     }
 
                 });
 
-                _item.Options = JSON.stringify(_options);
+                originalModel.Columns = JSON.stringify(originalData);
             };
         });
 
