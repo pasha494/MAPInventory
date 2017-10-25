@@ -1431,6 +1431,7 @@
     <Content Include="Content\SlickGrid\slick.core.js" />
     <Content Include="Content\SlickGrid\slick.dataview.js" />
     <Content Include="Content\SlickGrid\slick.editors.js" />
+    <Content Include="Content\SlickGrid\slick.validator.js" />
     <Content Include="Content\SlickGrid\slick.formatters.js" />
     <Content Include="Content\SlickGrid\slick.grid.css" />
     <Content Include="Content\SlickGrid\slick.grid.js" />
@@ -1552,6 +1553,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\bootstrap.minOld.js" />
     <Content Include="Scripts\index.js" />
+    <Content Include="Scripts\inventory-documents.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

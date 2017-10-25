@@ -225,7 +225,7 @@
                         type: 'POST',
                         data: { model: JSON.stringify(_item) },
                         success: function (res) {
-                            debugger
+                             
                             if (res != "-494") {
                                 customAlert('Data saved successfully', 'alert', function () { $("#drpListViews").focus(); });
                                 clearControls();
@@ -264,7 +264,7 @@
 
             //build the data
             var buildData=function(){
-                debugger
+                 
                 // header fields
                 _item.TotalRows= $("#txtTotalRows").val()? parseInt( $("#txtTotalRows").val()):20 ;
                 _options.panelWidth= $("#txtPanelWidth").val()?parseInt($("#txtPanelWidth").val()):500 ;

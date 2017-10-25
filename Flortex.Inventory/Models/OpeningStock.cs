@@ -1,5 +1,6 @@
 ﻿using MAP.Inventory.Common;
 using MAP.Inventory.Logging;
+using MAP.Inventory.Model;
 using MAP.Inventory.ModelImple;
 using Newtonsoft.Json;
 using System;
@@ -26,6 +27,8 @@ namespace MAP.Inventory.Web.Models
         public string WareHouseOptions { get; set; }
         public string ProductsOptions { get; set; }
 
+        public GridViewCustomization GridView { get; set; }
+
 
         string ConverDate(DateTime date)
         {
@@ -46,6 +49,7 @@ namespace MAP.Inventory.Web.Models
         public OpeningStock()
         {
             WareHouseName = "";
+            GridView = new GridViewCustomization();
         }
 
         public void init()
@@ -53,6 +57,7 @@ namespace MAP.Inventory.Web.Models
             DocName = LookUps.GetDocName(1);// 1 stands for opening stocks.  
             GetWareHouseListViewOptions();
             GetProductsListViewOptions();
+            GetDocumentsGridViewOptions();
 
         }
 
@@ -66,6 +71,12 @@ namespace MAP.Inventory.Web.Models
         {
             MapListViewImple _productsListView = new MapListViewImple((int)EnumListViews.Products);
             this.ProductsOptions = _productsListView.GetListViewOptions();
+        }
+
+        public void GetDocumentsGridViewOptions()
+        {
+            MapGridViewImple _productsListView = new MapGridViewImple((int)EnumGridView.OpeningStock);
+            this.GridView = _productsListView.GetGridViewsCustomizationInfo();
         }
 
         public void EditDocument(int DocID)
