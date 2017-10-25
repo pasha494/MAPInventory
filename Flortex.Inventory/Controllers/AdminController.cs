@@ -60,5 +60,23 @@ namespace MAP.Inventory.Web.Controllers
 
         }
 
+        public ActionResult SaveGridViewCustomization(string model)
+        {
+            long result = 0;
+
+            try
+            {
+                GridViewCustomization objModel = JsonConvert.DeserializeObject<GridViewCustomization>(model);
+                MapGridViewImple objImple = new MapGridViewImple(objModel.FeatureId);
+                result = objImple.SaveGridViewCustomizationInfo(objModel);
+            }
+            catch (Exception ex)
+            {
+                result = -494;
+            }
+
+            return Content(result.ToString());
+        }
+
     }
 }

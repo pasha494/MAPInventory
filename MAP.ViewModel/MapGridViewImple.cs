@@ -133,20 +133,21 @@ namespace MAP.Inventory.ModelImple
 
         #endregion
 
-        //public long SaveListViewCustomizationInfo(ListViewCustomization model)
-        //{
-        //    long flg = 0;
-        //    ArrayList al = new ArrayList();
-        //    al.Add(model.FeatureId);
-        //    al.Add(model.TotalRows);
-        //    al.Add(model.Options);
-        //    al.Add(0);
-        //    //al.Add(Convert.ToInt32(LookUps.GetSessionObject("UserID")));
+        public long SaveGridViewCustomizationInfo(GridViewCustomization model)
+        {
+            long flg = 0;
+            ArrayList al = new ArrayList();
+            al.Add(model.FeatureId);
+            al.Add(model.TotalRows);
+            al.Add(model.Height);
+            al.Add(model.Columns);
+            al.Add(0);
+            //al.Add(Convert.ToInt32(LookUps.GetSessionObject("UserID")));
 
-        //    _General.Set(al, "sp_UpdateListViewCustomizationInfo", out flg);
+            _General.Set(al, "sp_UpdateGridViewCustomizationInfo", out flg);
 
-        //    return flg;
-        //}
+            return flg;
+        }
 
         //public string GetListViewOptions()
         //{
