@@ -86,7 +86,7 @@
         </div>
         <div class="span6"></div>
     </div>
-      
+
     <div class="row-fluid" style="padding-top:20px;">
         <div class="span12 ">
             <div class="row-fluid">
@@ -99,21 +99,21 @@
     </div>
 
 </form>
- 
+
 <script>
-    // slick grid variables declaration
-    var dataView;
-    var grid;
 
-    var planeColumns=@Html.Raw(Model.GridView.Columns);
-    var editorOptions= @Html.Raw(Model.ProductsOptions);
-
-    var slickColumnParser=new InventoryDocs.ParseToSlickColumns(planeColumns,editorOptions);
-
-    var columns = slickColumnParser.getOptions("slickcolumns");  
     $(document).ready(function () {
 
+        // slick grid variables declaration
+        var dataView;
+        var grid;
 
+        var planeColumns=@Html.Raw(Model.GridView.Columns);
+        var editorOptions= @Html.Raw(Model.ProductsOptions);
+
+        var slickColumnParser=new InventoryDocs.ParseToSlickColumns(planeColumns,editorOptions);
+
+        var columns = slickColumnParser.getOptions("slickcolumns");
 
         // Add empty rows to the grid
         var GetEmptyRows = function (data) {
@@ -153,9 +153,9 @@
             else {
                 return {valid: true, msg: null};
             }
-        } 
-         
-          @*columns = [
+        }
+
+        @*columns = [
           { id: "sno", name: "S.No", field: "sno", cssClass: "cell-selection", width: 80, resizable: false, selectable: false },
           { id: "pcode", name: "Product code", field: "pcode", stopDownkey: true, width: 300, minWidth: 120,  editor: Slick.Editors.AutocompleteListView , editorOptions: @Html.Raw(Model.ProductsOptions) },
           { id: "pname", name: "Product Name", field: "pname", stopDownkey: true, width: 300, editor: Slick.Editors.Text,  editor: Slick.Editors.AutocompleteListView , editorOptions: @Html.Raw(Model.ProductsOptions)},
@@ -171,9 +171,6 @@
 
 
         grid.onCellChange.subscribe(function (e, args) {
-
-            // calculate formula fields
-            var cols=_.where(args.grid.getColumns(), {isFormula:true}) ;
 
             _.each(args.grid.getColumns(),function(col){
 
@@ -239,6 +236,20 @@
 
         function initGridData(_data){
             // initialize the model after all the events have been hooked up
+
+            _.each(_data,function(item){
+
+
+                if( item.pid != "" && item.pcode != "" && item.pname != "" && item.quantity != "" && item.quantity != 0 && item.price != "" && item.price != 0) {
+                    _.each(columns,function(col){
+                        if(col.formula)  {
+                            item[col.id]=math.eval(col.formula,item);
+                        }
+                    });
+                }
+
+            });
+
             dataView.beginUpdate();
             dataView.setItems(_data);
             dataView.endUpdate();
@@ -380,15 +391,22 @@
         var _Save = function () {
             var obj = getDataObject();
             if (typeof (obj) != 'boolean' && typeof (obj) == 'object') {
-                debugger
+
                 $.ajax({
                     url: '/GridStock/SaveDocumentOP',
                     type: 'POST',
                     data: { Data: JSON.stringify(obj) },
                     success: function (res) {
                         if (res != "-494") {
-                            customAlert('Document saved as ' + res, 'alert', function () { $("#txtDocName").focus(); });
-                            refreshAsNewDoc();
+                            customAlert('Document saved as ' + res, 'alert', function () { $("#txtDocName").focus(); 
+                                if(parseInt( $("#DocID").val())>0) {
+                                    $("#btnNew").trigger("click");
+                                }
+                                else  {
+                                    refreshAsNewDoc();
+                                }
+
+                            });
                         }
                         else
                             customAlert('Error occured while saving. Please contact administrator.');

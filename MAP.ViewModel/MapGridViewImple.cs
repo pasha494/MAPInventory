@@ -24,13 +24,13 @@ namespace MAP.Inventory.ModelImple
 
         public int FeatureId { get; }
 
-        private DataTable GetGridViewCustomizaitonInfo()
+        private DataTable GetGridViewCustomizaitonInfo(int DocID)
         {
             DataTable dt = new DataTable();
 
             try
             {
-                DataSet ds = _General.Get(new ArrayList() { this.FeatureId }, "sp_GetGridCustomizationInfo");
+                DataSet ds = _General.Get(new ArrayList() { this.FeatureId , DocID}, "sp_GetGridCustomizationInfo");
                 dt = ds.Tables[0];
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace MAP.Inventory.ModelImple
         public Dictionary<int, string> GetGridViewNames()
         {
             Dictionary<int, string> dicGridViewsList = new Dictionary<int, string>();
-            DataTable dt = GetGridViewCustomizaitonInfo();
+            DataTable dt = GetGridViewCustomizaitonInfo(0);
 
             if (dt != null && dt.Rows.Count > 0)
             {
@@ -58,10 +58,10 @@ namespace MAP.Inventory.ModelImple
             return dicGridViewsList;
         }
 
-        public GridViewCustomization GetGridViewsCustomizationInfo()
+        public GridViewCustomization GetGridViewsCustomizationInfo(int DocID)
         {
             GridViewCustomization gridView = new GridViewCustomization();
-            DataTable dt = GetGridViewCustomizaitonInfo();
+            DataTable dt = GetGridViewCustomizaitonInfo(DocID);
 
             if (dt != null && dt.Rows.Count > 0)
             {

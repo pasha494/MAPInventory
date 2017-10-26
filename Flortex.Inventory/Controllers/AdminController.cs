@@ -54,7 +54,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult GetGridViewCustomizationData(int FeatureId)
         {
             MapGridViewImple objGridView = new MapGridViewImple(FeatureId);
-            GridViewCustomization objModal = objGridView.GetGridViewsCustomizationInfo();
+            GridViewCustomization objModal = objGridView.GetGridViewsCustomizationInfo(0);
             string modelContent=JsonConvert.SerializeObject(objModal);
             return Content(modelContent);
 

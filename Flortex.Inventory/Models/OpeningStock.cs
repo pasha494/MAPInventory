@@ -76,7 +76,7 @@ namespace MAP.Inventory.Web.Models
         public void GetDocumentsGridViewOptions()
         {
             MapGridViewImple _productsListView = new MapGridViewImple((int)EnumGridView.OpeningStock);
-            this.GridView = _productsListView.GetGridViewsCustomizationInfo();
+            this.GridView = _productsListView.GetGridViewsCustomizationInfo(DocID);
         }
 
         public void EditDocument(int DocID)
@@ -102,6 +102,7 @@ namespace MAP.Inventory.Web.Models
                 }
                 GetWareHouseListViewOptions();
                 GetProductsListViewOptions();
+                GetDocumentsGridViewOptions();
             }
             catch (Exception ex)
             {
