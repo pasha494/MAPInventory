@@ -20,18 +20,52 @@
     DataSet ds = LookUps.GetDocumentAlerts(ShowReOrdQty_Val, ShowBlckQty_Val);
     int Count1 = 0, Count2 = 0;
     int RoleID = (int)LookUps.GetSessionObject("RoleID");
-    MapListViewImple obj = new MapListViewImple(1);
-    string options = obj.GetListViewOptions();
-}
-
+} 
+ 
 @if (RoleID == 1)
 {
 
+    <!-- small charts -->
+    <script src="~/Content/Gebo/js/jquery.peity.min.js"></script>
+      
+
     <div class="row-fluid">
-        <div class="span12">
-            <input id="cg" />
+        <div class="span12 tac">
+            <ul class="ov_boxes">
+                <li>
+                    <div class="p_bar_up p_canvas">32.0,4.35,9.9,7.5,12,8,16</div>
+                    <div class="ov_text">
+                        <strong>$3 458,00</strong>
+                        Weekly Sale
+                    </div>
+                </li>
+                <li>
+                    <div class="p_bar_down p_canvas">20,15,18,14,10,13,9,7</div>
+                    <div class="ov_text">
+                        <strong>$43 567,43</strong>
+                        Monthly Sale
+                    </div>
+                </li>
+                <li>
+                    <div class="p_line_up p_canvas">3,5,9,7,12,8,16</div>
+                    <div class="ov_text">
+                        <strong>2304</strong>
+                        Unique visitors (last 24h)
+                    </div>
+                </li>
+                <li>
+                    <div class="p_line_down p_canvas">20,16,14,18,15,14,14,13,12,10,10,8</div>
+                    <div class="ov_text">
+                        <strong>30240</strong>
+                        Unique visitors (last week)
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
+
+
+
 
     <div class="row-fluid">
         <div class="span6">
@@ -145,19 +179,49 @@
 }
 
 <script type="text/javascript">
+
+
     $(function () {
+         
+        $.fn.peity.defaults.line = {
+            strokeWidth: 1,
+            delimeter: ",",
+            height: 32,
+            max: null,
+            min: 0,
+            width: 50
+        };
+        $.fn.peity.defaults.bar = {
+            delimeter: ",",
+            height: 32,
+            max: null,
+            min: 0,
+            width: 50
+        };
+        $(".p_bar_up").peity("bar", {
+            colour: "#6cc334"
+        });
+        $(".p_bar_down").peity("bar", {
+            colour: "#e11b28"
+        });
+        $(".p_line_up").peity("line", {
+            colour: "#b4dbeb",
+            strokeColour: "#3ca0ca"
+        });
+        $(".p_line_down").peity("line", {
+            colour: "#f7bfc3",
+            strokeColour: "#e11b28"
+        });
 
-       
 
-        $('#cg').combogrid( @Html.Raw(options));
 
         $("#grid1").kendoGrid({
-            height: 500,
+            height: 450,
             filterable: true,
             sortable: true
         });
         $("#grid2").kendoGrid({
-            height: 500,
+            height: 450,
             filterable: true,
             sortable: true
         });

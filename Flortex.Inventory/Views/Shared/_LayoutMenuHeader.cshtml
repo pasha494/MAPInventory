@@ -138,6 +138,7 @@
                                                     <li><a href="@Url.Action("ProductsList", "Masters")">Products</a></li>
                                                     <li><a href="@Url.Action("ProductsCategoryList", "Masters")">Product Category</a></li>
                                                     <li><a href="@Url.Action("Warehouses", "Masters")">Warehouses</a></li>
+                                                    <li><a href="@Url.Action("AddCustomer", "Masters")">Add Customer</a></li>
                                                     @if (objSession.RoleID == 1)
                                                     {
                                                         <li><a href="@Url.Action("Index", "Users")">Users</a></li>
@@ -228,13 +229,13 @@
             </div>
         </div>
 
-        <footer style="color: white; margin-left: 43%;">
+        @*<footer style="margin-left: 43%;">
             <div class="content-wrapper">
                 <div class="float-left">
-                    <p>&copy; @DateTime.Now.Year -&copy; Flortex Inventory</p>
+                    <p>&copy; @DateTime.Now.Year -&copy; MAPTech Inventory</p>
                 </div>
             </div>
-        </footer>
+        </footer>*@
 
         <!-- sidebar -->
         <a href="javascript:void(0)" class="sidebar_switch on_switch ttip_r" title="Hide Sidebar">Sidebar switch</a>

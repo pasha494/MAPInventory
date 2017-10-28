@@ -19,6 +19,16 @@ namespace MAP.Inventory.Web.Controllers
     public class HomeController : Controller
     { 
 
+//        select top 7 OS.DocNo, SUM(OM.Quantity) Quantity ,SUM(OM.TotalPrice)  TotalPrice
+//        from OpeningStockMaster OS
+//Inner join OpeningMasterData OM on OS.DocNo=OM.DocNo
+//group by OS.DocNo
+//order by OS.DocNo desc
+
+
+
+
+
         [SessionExpireAttribute]
         public ActionResult UnAuthorizedAction()
         {

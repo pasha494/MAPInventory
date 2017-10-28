@@ -396,5 +396,26 @@ namespace MAP.Inventory.Web.Controllers
 
         #endregion
 
+
+        #region Customers/Vendors
+
+        public ActionResult CustomersList()
+        {
+
+            return View();
+        }
+
+        public ActionResult AddCustomer()
+        {
+
+
+            return View(new CustomerModel());
+
+        }
+
+
+
+        #endregion
+
     }
 }

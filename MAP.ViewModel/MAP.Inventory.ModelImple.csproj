@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomerImple.cs" />
     <Compile Include="LoginImple.cs" />
     <Compile Include="MapGridViewImple.cs" />
     <Compile Include="MapListViewImple.cs" />
