@@ -1,4 +1,4 @@
-﻿@using MAP.Inventory.Web.Models
+﻿ 
 @using System.Data
 @using MAP.Inventory.ModelImple;
 @{
@@ -6,7 +6,7 @@
     var ShowBlckQty = Request.Cookies["ShowBlckQty"];
     bool ShowReOrdQty_Val = false;
     bool ShowBlckQty_Val = false;
-
+    LookUps _LookUps = new LookUps();
     if (ShowReOrdQty != null && ShowReOrdQty.Value.ToString() == "1")
     {
         ShowReOrdQty_Val = true;
@@ -17,9 +17,9 @@
         ShowBlckQty_Val = true;
     }
 
-    DataSet ds = LookUps.GetDocumentAlerts(ShowReOrdQty_Val, ShowBlckQty_Val);
+    DataSet ds = _LookUps.GetDocumentAlerts(ShowReOrdQty_Val, ShowBlckQty_Val);
     int Count1 = 0, Count2 = 0;
-    int RoleID = (int)LookUps.GetSessionObject("RoleID");
+    int RoleID = (int)_LookUps.GetSessionObject("RoleID");
 } 
  
 @if (RoleID == 1)

@@ -44,8 +44,8 @@ namespace MAP.Inventory.Model
             set { _EmailId = value; }
         }
 
-        private int _MobileNo; 
-        public int MobileNo
+        private string _MobileNo = string.Empty; 
+        public string MobileNo
         {
             get { return _MobileNo; }
             set { _MobileNo = value; }
@@ -93,8 +93,8 @@ namespace MAP.Inventory.Model
             set { _City = value; }
         }
 
-        private int _PinCode; 
-        public int PinCode
+        private string _PinCode = string.Empty; 
+        public string PinCode
         {
             get { return _PinCode; }
             set { _PinCode = value; }

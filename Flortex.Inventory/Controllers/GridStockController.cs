@@ -9,6 +9,7 @@ using System.Configuration;
 using MAP.Inventory.Web.Models;
 using Newtonsoft.Json;
 using MAP.Inventory.Logging;
+using MAP.Inventory.ModelImple;
 
 namespace MAP.Inventory.Web.Controllers
 {
@@ -17,12 +18,13 @@ namespace MAP.Inventory.Web.Controllers
     {
         public ActionResult GetLatestDocName(int Type)
         {
+            ModelImple.LookUps _LookUps = new ModelImple.LookUps();
             PLog.Info("BEGIN::Controller > GridStock, Method > GetLatestDocName(int Type)");
             string str = "";
             try
             {
                 if (Type > 0)
-                    str = LookUps.GetDocName(Type);
+                    str = _LookUps.GetDocName(Type);
             }
             catch (Exception ex)
             {
@@ -364,7 +366,7 @@ namespace MAP.Inventory.Web.Controllers
             try
             {
                 DataSet ds = new DataSet();
-                OpeningStock objModel = new OpeningStock();
+                OpeningStockModelImple objModel = new OpeningStockModelImple();
                 ds = objModel.GetGirdData(0);//0 will get all the active opening masters data 
                 DataTable dt = ds.Tables[0];
                 Dictionary<string, object> row;
@@ -393,7 +395,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult AddOpStock()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >AddOpStock()");
-            OpeningStock objModel = new OpeningStock();
+            OpeningStockModelImple objModel = new OpeningStockModelImple();
             try
             {
                 objModel.init();
@@ -414,7 +416,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult UpDateOpStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >UpDateOpStock(string DocID)");
-            OpeningStock objModel = new OpeningStock();
+            OpeningStockModelImple objModel = new OpeningStockModelImple();
 
             if (!string.IsNullOrEmpty(DocID))
             {
@@ -444,8 +446,8 @@ namespace MAP.Inventory.Web.Controllers
             string DocName = "";
             try
             {
-                OpeningStock objModel = JsonConvert.DeserializeObject<OpeningStock>(Data);
-                int Flg = 0;
+                OpeningStockModelImple objModel = JsonConvert.DeserializeObject<OpeningStockModelImple>(Data);
+                long Flg = 0;
                 string[] sD = objModel.DocDate.Split('-');
                 objModel.DocDate = new DateTime(Convert.ToInt32(sD[2]), Convert.ToInt32(sD[1]), Convert.ToInt32(sD[0])).ToString();
                 DocName = objModel.SaveDocument(out Flg);
@@ -470,12 +472,12 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult DeleteOpStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >DeleteOpStock(string DocID)");
-            int flg = 0;
+            long flg = 0;
             if (!string.IsNullOrEmpty(DocID))
             {
                 try
                 {
-                    OpeningStock obj = new Models.OpeningStock();
+                    OpeningStockModelImple obj = new OpeningStockModelImple();
                     flg = obj.DeleteDocument(Convert.ToInt32(DocID));
                 }
                 catch (Exception ex)

@@ -217,7 +217,6 @@
     <Compile Include="Models\IDocument.cs" />
     <Compile Include="Models\InwardDocument.cs" />
     <Compile Include="Models\SessionExpireAttribute.cs" />
-    <Compile Include="Models\OpeningStock.cs" />
     <Compile Include="Models\DAL.cs" />
     <Compile Include="Models\LookUps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -88,7 +88,7 @@
         </div>
         <div class="span6">
             <label for="txtMobileNo">Mobile No</label>
-            <input type="text" class="span6 form-control mousetrap" name="txtMobileNo" id="txtMobileNo" placeholder="Mobile No" value="@(Model.MobileNo==0? "" : Model.MobileNo.ToString())">
+            <input type="text" class="span6 form-control mousetrap" name="txtMobileNo" id="txtMobileNo" placeholder="Mobile No" value="@(Model.MobileNo.ToString())">
         </div>
     </div>
 
@@ -103,7 +103,7 @@
                 <div class="row-fluid">
                     <div class="span6">
                         <label>Address</label>
-                        <textarea name="txtAddress" id="txtAddress" rows="4" cols="40" class="span6" placeholder="Add Door No, Street, LandMark" value="@Model.Address"></textarea>
+                        <textarea name="txtAddress" id="txtAddress" rows="4" cols="40" class="span6" placeholder="Add Door No, Street, LandMark" >@Model.Address</textarea>
                     </div>
                     <div class="span6">
                         <label>Phone No</label>
@@ -117,7 +117,7 @@
                     </div>
                     <div class="span6">
                         <label>Pincode</label>
-                        <input type="text" class="span6 form-control mousetrap" name="txtPincode" id="txtPincode" value="@(Model.PinCode==0? "" : Model.PinCode.ToString())">
+                        <input type="text" class="span6 form-control mousetrap" name="txtPincode" id="txtPincode" value="@(Model.PinCode.ToString())">
                     </div>
                 </div>
             </div>
@@ -186,7 +186,7 @@
 
 
     $(function () {
-        var staticModel = { "CustomerId": 0, "FirstName": "", "LastName": "", "IsCustomer": false, "EmailId": "", "MobileNo": 0, "PhoneNo": "", "PAN": "", "GSTIN": "", "AdharNumber": "", "Address": "", "City": "", "PinCode": 0, "Notes": "", "Extra1": "", "Extra2": "", "Extra3": "", "Extra4": "", "Extra5": "" };
+        var staticModel = { "CustomerId": 0, "FirstName": "", "LastName": "", "IsCustomer": false, "EmailId": "", "MobileNo": "", "PhoneNo": "", "PAN": "", "GSTIN": "", "AdharNumber": "", "Address": "", "City": "", "PinCode": "", "Notes": "", "Extra1": "", "Extra2": "", "Extra3": "", "Extra4": "", "Extra5": "" };
         var model = {};
         $.extend(true, model, staticModel);
 
@@ -301,6 +301,11 @@
         $("#btnClear").on("click", function (e) {
             e.preventDefault();
             _clearContorls();
+        });
+
+        $("#btnBack").on("click", function (e) {
+            e.preventDefault();
+            window.location.href = '@Url.Action("CustomersList", "Masters")';
         });
  
         Mousetrap.bind(['ctrl+s', 'command+s'], function (e) {

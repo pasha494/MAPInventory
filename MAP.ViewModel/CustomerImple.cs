@@ -49,16 +49,16 @@ namespace MAP.Inventory.ModelImple
                     objCustomerModel.FirstName = dt.Rows[0]["FirstName"].ToString();
                     objCustomerModel.LastName = dt.Rows[0]["LastName"].ToString();
                     objCustomerModel.EmailId = dt.Rows[0]["EmailId"].ToString();
-                    objCustomerModel.MobileNo =Convert.ToInt32( dt.Rows[0]["Mobile"].ToString());
+                    objCustomerModel.MobileNo =dt.Rows[0]["Mobile"].ToString();
 
                     objCustomerModel.PhoneNo = dt.Rows[0]["Phone"].ToString();
                     objCustomerModel.PAN = dt.Rows[0]["PAN"].ToString();
                     objCustomerModel.GSTIN = dt.Rows[0]["GSTIN"].ToString();
-                    objCustomerModel.AdharNumber = dt.Rows[0]["AdharNumber"].ToString();
+                    objCustomerModel.AdharNumber = dt.Rows[0]["AadharNumber"].ToString();
 
                     objCustomerModel.Address = dt.Rows[0]["Address"].ToString();
                     objCustomerModel.City = dt.Rows[0]["City"].ToString();
-                    objCustomerModel.PinCode = Convert.ToInt32(dt.Rows[0]["PinCode"].ToString());
+                    objCustomerModel.PinCode = dt.Rows[0]["PinCode"].ToString();
                     objCustomerModel.Notes = dt.Rows[0]["Notes"].ToString();
 
                     objCustomerModel.Extra1 = dt.Rows[0]["Extra1"].ToString();

@@ -167,7 +167,8 @@ namespace MAP.Inventory.Web.Controllers
                 try
                 {
                     UsersImple objUsersImple = new UsersImple();
-                    ret = objUsersImple.ChangePassword(CurrentPassword, NewPassword, Convert.ToInt32(LookUps.GetSessionObject("UserID")));
+                    ModelImple.LookUps _LookUps = new ModelImple.LookUps();
+                    ret = objUsersImple.ChangePassword(CurrentPassword, NewPassword, Convert.ToInt32(_LookUps.GetSessionObject("UserID")));
                 }
                 catch (Exception ex)
                 {

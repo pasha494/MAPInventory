@@ -118,6 +118,8 @@ namespace MAP.Inventory.DAL
                             {
                                 if (dbResult.Contents.Tables[dbResult.Contents.Tables.Count - 1].Columns.Contains("ErrorMessage"))
                                     return dbResult.Contents.Tables[dbResult.Contents.Tables.Count - 1].Rows[0]["ErrorMessage"].ToString();
+                                else if (dbResult.Contents.Tables[dbResult.Contents.Tables.Count - 1].Columns.Contains("DOCNAME"))
+                                    return dbResult.Contents.Tables[dbResult.Contents.Tables.Count - 1].Rows[0]["DOCNAME"].ToString();
                             }
                         }
                     }

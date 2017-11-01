@@ -1,21 +1,23 @@
 ﻿using MAP.Inventory.Common;
+using MAP.Inventory.DAL;
+using MAP.Inventory.Interface;
 using MAP.Inventory.Logging;
 using MAP.Inventory.Model;
-using MAP.Inventory.ModelImple;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MAP.Inventory.Web.Models
+namespace MAP.Inventory.ModelImple
 {
-
-    //OpeningStock  
-    public class OpeningStock : IDocument
+    public class OpeningStockModelImple : IDocument
     {
+        LookUps _LookUps = new LookUps();
+        General _General = new General();
 
         public int DocID { get; set; }
         public string DocName { get; set; }
@@ -46,7 +48,7 @@ namespace MAP.Inventory.Web.Models
             return str;
         }
 
-        public OpeningStock()
+        public OpeningStockModelImple()
         {
             WareHouseName = "";
             GridView = new GridViewCustomization();
@@ -54,7 +56,7 @@ namespace MAP.Inventory.Web.Models
 
         public void init()
         {
-            DocName = LookUps.GetDocName(1);// 1 stands for opening stocks.  
+            DocName = _LookUps.GetDocName(1);// 1 stands for opening stocks.  
             GetWareHouseListViewOptions();
             GetProductsListViewOptions();
             GetDocumentsGridViewOptions();
@@ -66,7 +68,7 @@ namespace MAP.Inventory.Web.Models
             MapListViewImple _wareHouseListView = new MapListViewImple((int)EnumListViews.WareHouses);
             this.WareHouseOptions = _wareHouseListView.GetListViewOptions();
         }
-        
+
         public void GetProductsListViewOptions()
         {
             MapListViewImple _productsListView = new MapListViewImple((int)EnumListViews.Products);
@@ -116,7 +118,7 @@ namespace MAP.Inventory.Web.Models
             try
             {
 
-                ds = DAL.GetDataSet("sp_GetOpeningStocksData", new List<string>() { "@DocID" }, new ArrayList() { DocID });
+                ds = _General.Get(new ArrayList() { DocID }, "sp_GetOpeningStocksData", 0);
 
             }
             catch (Exception ex)
@@ -126,28 +128,22 @@ namespace MAP.Inventory.Web.Models
             return ds;
         }
 
-        public string SaveDocument(out int ret)
+        public string SaveDocument(out long ret)
         {
             ret = 0; string DocName = "";
 
+
             try
             {
-                List<string> objNames = new List<string>();
                 ArrayList al = new ArrayList();
-                objNames.Add("@DocID");
-                objNames.Add("@DocName");
-                objNames.Add("@DocDate");
-                objNames.Add("@WarehouseID");
-                objNames.Add("@Data");
-                objNames.Add("@CreatedBy");
 
                 al.Add(this.DocID);
                 al.Add(this.DocName);
                 al.Add(Convert.ToDateTime(this.DocDate));
                 al.Add(this.WareHouseId);
                 al.Add(this.GridData);
-                al.Add(Convert.ToInt32(LookUps.GetSessionObject("UserID")));
-                DocName = DAL.ExecuteSP("sp_InsertUpdateOpeningStock", objNames, al, out ret);
+                al.Add(Convert.ToInt32(_LookUps.GetSessionObject("UserID")));
+                DocName = _General.Set(al, "sp_InsertUpdateOpeningStock", out ret, 0);
             }
             catch (Exception ex)
             {
@@ -157,20 +153,17 @@ namespace MAP.Inventory.Web.Models
             return DocName;
         }
 
-        public int DeleteDocument(int DocID)
+        public long DeleteDocument(int DocID)
         {
-            int flg = 0;
+            long flg = 0;
             try
-            {
-                List<string> objNames = new List<string>();
-                ArrayList al = new ArrayList();
-                objNames.Add("@DocID");
-                objNames.Add("@CreatedBy");
-
+            { 
+                ArrayList al = new ArrayList(); 
                 al.Add(DocID);
-                al.Add(Convert.ToInt32(LookUps.GetSessionObject("UserID")));
 
-                flg = DAL.ExecuteSP("sp_DeleteOpeningStock", objNames, al);
+                al.Add(Convert.ToInt32(_LookUps.GetSessionObject("UserID")));
+
+                _General.Set(al, "sp_DeleteOpeningStock", out flg, 0);
             }
             catch (Exception ex)
             {
@@ -179,5 +172,6 @@ namespace MAP.Inventory.Web.Models
 
             return flg;
         }
+
     }
 }
