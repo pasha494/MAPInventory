@@ -1,5 +1,4 @@
 ﻿@{
-    ViewBag.Title = "OpeningStock";
     string Data = "[]";
 
     if (ViewBag.Data != "")
@@ -11,7 +10,7 @@
 <form class="cmxform" role="search">
     <div class="row-fluid heading">
         <div class="span12">
-            <h2 >List of Warehouses</h2>
+            <h2>List of Customers</h2>
         </div>
     </div>
     <div class="row-fluid">
@@ -22,18 +21,18 @@
 </form>
 
 <script id="template" type="text/x-kendo-template">
-    <a class="k-button" onclick="return toolbar_click()">ADD NEW WAREHOUSE</a>
+    <a class="k-button" onclick="return toolbar_click()">ADD NEW CUSTOMER</a>
 </script>
 
 <script type="text/javascript">
-     
-    
+
+    var Documents = @Html.Raw(Data)
     $(document).ready(function () {
-        var Documents = @Html.Raw(Data);
+
         // Documents = getDocs();
         function getDocs() {
             $.ajax({
-                url: '/Masters/LoadWarehouses',
+                url: '/Masters/Getcustomers',
                 type: 'Get',
                 async: false,
                 success: function (res) {
@@ -51,10 +50,10 @@
             schema: {
                 model: {
                     fields: {
-                        id: { editable: false },
-                        code: { type: "string", editable: false },
-                        name: { type: "string", editable: false },
-                        status: { type: "string", editable: false },
+                        NodeNo: { editable: false },
+                        FirstName: { type: "string", editable: false },
+                        LastName: { type: "string", editable: false },
+                        Mobile: { type: "string", editable: false },
                     }
                 }
             }
@@ -82,17 +81,10 @@
             ],
             columns: [
                 // { field: "id", title: "Doc No", width: "100px" },
-                { field: "code", title: "Warehouse Code", width: "130px" },
-                { field: "name", title: "Warehouse Name", width: "130px" },
-                {
-                    field: "status", title: "Status", width: "130px",
-                    template: function (data) {
-                        if (data.status == "1") {
-                            return "Active";
-                        }
-                        else if (data.status == "2") { return "Inactive"; }
-                    }
-                },
+                { field: "FirstName", title: "First Name", width: "130px" },
+                { field: "LastName", title: "Last Name", width: "130px" },
+                 { field: "Mobile", title: "Mobile", width: "130px" },
+                 
                { command: { text: "Edit", name: "edit", click: onEdit }, title: " ", width: "100px" },
                {
                    command: {
@@ -105,9 +97,9 @@
                                    var tr = $(e.target).closest("tr");
                                    var data = self.dataItem(tr);
                                    $.ajax({
-                                       url: '/Masters/DeleteWarehouse',
+                                       url: '/Masters/DeleteCustomer',
                                        type: 'POST',
-                                       data: { "ID": data.id },
+                                       data: { "ID": data.NodeNo },
                                        beforeSend: function () {
                                            $("#ajaxLoadingImg").show();
                                        },
@@ -132,7 +124,7 @@
                                reverseButtons: true
                            });
                        }
- 
+
                        }, title: " ", width: "100px"
                    }
                ],
@@ -156,15 +148,15 @@
     });
 
     function toolbar_click() {
-        window.location.href = '/Masters/Warehouse';
+        window.location.href = '/Masters/AddCustomer';
     }
 
     function onEdit(e) {
         e.preventDefault();
         var tr = $(e.target).closest("tr");
         var data = this.dataItem(tr);
-        window.location.href = "/Masters/UpDateWarehouse?ID=" + data.id;
+        window.location.href = "/Masters/UpdateCustomer?ID=" + data.id;
     }
-     
+
 
 </script>

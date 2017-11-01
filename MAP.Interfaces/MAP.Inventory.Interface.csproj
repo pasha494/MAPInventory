@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICustomerImple.cs" />
     <Compile Include="ILoginImple.cs" />
     <Compile Include="IMapGridViewImple.cs" />
     <Compile Include="IMapListViewImple.cs" />

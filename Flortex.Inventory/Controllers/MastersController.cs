@@ -397,24 +397,126 @@ namespace MAP.Inventory.Web.Controllers
         #endregion
 
 
-        #region Customers/Vendors
+        #region Customers/Vendors 
+        public ActionResult AddCustomer()
+        { 
+
+            return View(new CustomerModel()); 
+        }
+
+
+        public ActionResult SaveCustomer(string Data)
+        {
+            PLog.Info("BEGIN::Controller > Home, Method > SaveProduct(string Data)");
+            long flg = 0;
+            ICustomerImple oCustomerImple = new CustomerImple();
+            try
+            {
+                CustomerModel obj = JsonConvert.DeserializeObject<CustomerModel>(Data); 
+                flg = oCustomerImple.Save(obj);
+            }
+            catch (Exception ex)
+            {
+                PLog.Error("Error::Controller > Home, Method > SaveProduct(string Data)", ex);
+            }
+            PLog.Info("END::Controller > Home, Method > SaveProduct(string Data)");
+            return Content(flg.ToString());
+        }
+
+       
+
+        public ActionResult UpdateCustomer(string ID)
+        {
+            PLog.Info("BEGIN::Controller > UpdateCustomer, Method > UpdateCustomer(string ID");
+            ICustomerImple oCustomerImple = new CustomerImple();
+            CustomerModel objModel = null;
+            try
+            {
+
+                if (!string.IsNullOrEmpty(ID))
+                {
+                    objModel = oCustomerImple.Edit(Convert.ToInt32(ID));
+                }
+            }
+            catch (Exception ex)
+            {
+                PLog.Error("Error::Controller > UpdateCustomer, Method > UpdateCustomer(string ID)", ex);
+            }
+            PLog.Info("END::Controller > UpdateCustomer, Method > UpdateCustomer(string ID)");
+            return View("AddCustomer", objModel);
+        }
+
+
+        public long DeleteCustomer(string ID)
+        {
+            PLog.Info("BEGIN::Controller > Home, Method > DeleteProduct(string ID)");
+            long ret = 0;
+            if (!string.IsNullOrEmpty(ID))
+            {
+                try
+                {
+                    ICustomerImple oCustomerImple = new CustomerImple();
+                    ret = oCustomerImple.Delete(Convert.ToInt32(ID));
+                }
+                catch (Exception ex)
+                {
+                    PLog.Error("Error::Controller > Home, Method > DeleteProduct(string ID)", ex);
+
+                }
+            }
+            PLog.Info("END::Controller > Home, Method > DeleteProduct(string ID)");
+            return ret;
+        }
+
 
         public ActionResult CustomersList()
         {
+            PLog.Info("BEGIN::Controller > Home, Method >Warehouses ");
+            string str = "";
+            try
+            {
+                str = Getcustomers();
+                ViewBag.Data = str;
+
+            }
+            catch (Exception ex)
+            {
+                PLog.Error("Error::Controller > Home, Method > Warehouses", ex);
+            }
+            PLog.Info("END::Controller > Home, Method > Warehouses");
 
             return View();
+
         }
 
-        public ActionResult AddCustomer()
+        public string Getcustomers()
         {
+            PLog.Info("BEGIN::Controller > Home, Method >LoadWarehouses ");
+       
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            try
+            {
+                ICustomerImple oCustomerImple = new CustomerImple();
+                DataTable dt = oCustomerImple.GetGridData(0); //0 will gets all the customers data  
 
-
-            return View(new CustomerModel());
-
+                Dictionary<string, object> row;
+                foreach (DataRow dr in dt.Rows)
+                {
+                    row = new Dictionary<string, object>();
+                    foreach (DataColumn col in dt.Columns)
+                    {
+                        row.Add(col.ColumnName, dr[col]);
+                    }
+                    rows.Add(row);
+                }
+            }
+            catch (Exception ex)
+            {
+                PLog.Error("Error::Controller > Home, Method > LoadWarehouses()", ex);
+            }
+            PLog.Info("END::Controller > Home, Method > LoadWarehouses");
+            return Newtonsoft.Json.JsonConvert.SerializeObject(rows);
         }
-
-
-
         #endregion
 
     }

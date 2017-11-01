@@ -1,37 +1,21 @@
 ﻿@model MAP.Inventory.Model.CustomerModel
 @{
     ViewBag.Title = "Products";
-        
+
+
+    string json = Newtonsoft.Json.JsonConvert.SerializeObject(Model);
 }
 
 
-<!-- nice form elements -->
-<link rel="stylesheet" href="~/Content/Gebo/lib/uniform/Aristo/uniform.aristo.css" />
-
-<!-- styled form elements -->
-<script src="~/Content/Gebo/lib/uniform/jquery.uniform.min.js"></script>
 
 
-<form role="search" id="frmProducts" class="cmxform">
+<form role="search" id="frmCustomer" class="cmxform">
 
     @if (Model.CustomerId > 0)
     {
         <div class="row-fluid heading">
             <div class="span12">
-                <h2  class="pull-left">Edit Customer</h2>
-                <div class="pull-right">
-                    <a id="btnSave" class="btn btn-default">Save</a>
-                    <a id="btnClear" class="btn btn-default">Clear</a>
-                    <a id="btnBack" class="btn btn-default">Back to Documents</a>
-                </div>
-            </div>  
-        </div>
-    }
-    else
-    {
-        <div class="row-fluid heading">
-            <div class="span12">
-                <h2  class="pull-left">Add Customer</h2>
+                <h2 class="pull-left">Edit Customer</h2>
                 <div class="pull-right">
                     <a id="btnSave" class="btn btn-default">Save</a>
                     <a id="btnClear" class="btn btn-default">Clear</a>
@@ -39,21 +23,50 @@
                 </div>
             </div>
         </div>
-       
+    }
+    else
+    {
+        <div class="row-fluid heading">
+            <div class="span12">
+                <h2 class="pull-left">Add Customer</h2>
+                <div class="pull-right">
+                    <a id="btnSave" class="btn btn-default">Save</a>
+                    <a id="btnClear" class="btn btn-default">Clear</a>
+                    <a id="btnBack" class="btn btn-default">Back to Documents</a>
+                </div>
+            </div>
+        </div>
+
     }
 
     @Html.HiddenFor(m => m.CustomerId)
 
     <div class="row-fluid">
         <div class="span12">
-            <label class="uni-radio radio inline">
-                <input type="radio" checked="checked" value="1" id="uni_r1a" name="uni_r" class="uni_style" />
-                Customer
-            </label>
-            <label class="uni-radio radio inline">
-                <input type="radio" value="option2" id="0" name="uni_r" class="uni_style" />
-                Vendor
-            </label>
+            @if (Model.IsCustomer || (Model.CustomerId == 0))
+            {
+
+                <label class="uni-radio radio inline">
+                    <input type="radio" checked="checked" value="1" id="chkCustomer" name="uni_r" class="uni_style" />
+                    Customer
+                </label>
+                <label class="uni-radio radio inline">
+                    <input type="radio" value="0" id="chkVendor" name="uni_r" class="uni_style" />
+                    Vendor
+                </label>
+            }
+            else if (!Model.IsCustomer)
+            {
+                <label class="uni-radio radio inline">
+                    <input type="radio" value="1" id="chkCustomer" name="uni_r" class="uni_style" />
+                    Customer
+                </label>
+                <label class="uni-radio radio inline">
+                    <input type="radio" checked="checked" value="0" id="chkVendor" name="uni_r" class="uni_style" />
+                    Vendor
+                </label>
+            }
+
         </div>
     </div>
 
@@ -124,7 +137,7 @@
                 <div class="row-fluid">
                     <div class="span6">
                         <label for="txtEmailId">GSTIN</label>
-                        <input type="text" class="span6 form-control mousetrap" name="txtGSTIN" id="txtEmailId" placeholder="GSTIN" value="@Model.GSTIN">
+                        <input type="text" class="span6 form-control mousetrap" name="txtGSTIN" id="txtGSTIN" placeholder="GSTIN" value="@Model.GSTIN">
                     </div>
 
                 </div>
@@ -164,7 +177,7 @@
             </div>
         </div>
     </div>
-     
+
 </form>
 
 
@@ -173,27 +186,60 @@
 
 
     $(function () {
-        $(".uni_style").uniform();
+        var staticModel = { "CustomerId": 0, "FirstName": "", "LastName": "", "IsCustomer": false, "EmailId": "", "MobileNo": 0, "PhoneNo": "", "PAN": "", "GSTIN": "", "AdharNumber": "", "Address": "", "City": "", "PinCode": 0, "Notes": "", "Extra1": "", "Extra2": "", "Extra3": "", "Extra4": "", "Extra5": "" };
+        var model = {};
+        $.extend(true, model, staticModel);
 
-        var createProduct = function () {
-            var obj = {
-                ProductID: $("#ProductID").val(),
-                Code: $("#txtCode").val(),
-                Name: $("#txtName").val(),
-                ProductCategory: $("#drpCategory option:selected").val(),
-                Status: $("#drpStatus option:selected").val(),
-                Spec: $("#txtSpec").val(),
-                efDate: $("#dtEDate").val()
+        //// check box styles
+        //$(".uni_style").uniform();
+
+        // mandate filds for customer screen
+        $("#frmCustomer").validate({
+            rules: {
+                txtFirstName: "required",
+                txtMobileNo: "required"
+            },
+            messages: {
+                txtFirstName: "please enter customer name",
+                txtMobileNo: "please enter Mobile No"
+
             }
-            return JSON.stringify(obj);
+        });
+
+
+        var getModelData = function () {
+
+            model.CustomerId = $("#CustomerId").val().trim();
+            model.FirstName = $("#txtFirstName").val().trim();
+            model.LastName = $("#txtLastName").val().trim();
+            model.IsCustomer = $("input[name='uni_r']:checked").val() == "1" ? true : false;
+            model.EmailId = $("#txtEmailId").val().trim();
+            model.MobileNo = $("#txtMobileNo").val().trim();
+
+            model.PhoneNo = $("#txtPhoneNo").val().trim();
+            model.PAN = $("#txtPANNumber").val().trim();
+            model.GSTIN = $("#txtGSTIN").val().trim();
+            model.AdharNumber = $("#txtAdharNumber").val().trim();
+            model.Address = $("#txtAddress").val().trim();
+            model.City = $("#txtCity").val().trim();
+            model.PinCode = $("#txtPincode").val().trim();
+
+
+            model.Extra1 = $("#txtExtra1").val().trim();
+            model.Extra2 = $("#txtExtra2").val().trim();
+            model.Extra3 = $("#txtExtra3").val().trim();
+            model.Extra4 = $("#txtExtra4").val().trim();
+            model.Extra5 = $("#txtExtra5").val().trim();
+
+            return JSON.stringify(model);
         }
 
-        var _saveProducts = function () {
-            if ($("#frmProducts").valid()) {
+        var _saveCustomer = function () {
+            if ($("#frmCustomer").valid()) {
                 $.ajax({
-                    url: '/Masters/SaveProduct',
+                    url: '/Masters/SaveCustomer',
                     type: 'post',
-                    data: { "Data": createProduct() },
+                    data: { "Data": getModelData() },
                     beforeSend: function () {
                         $("#ajaxLoadingImg").show();
 
@@ -201,11 +247,11 @@
                     complete: function () { $("#ajaxLoadingImg").hide(); },
                     success: function (data) {
                         if (data > 0) {
-                            if ($("#ProductID").val() > 0)
+                            if ($("#CustomerId").val() > 0)
                                 customAlert('Updated Successfully', 'alert', function () { $("#txtCode").focus(); });
                             else
                                 customAlert('Created Successfully', 'alert', function () { $("#txtCode").focus(); });
-                            clearContorls();
+                            _clearContorls();
                         }
                         else {
                             customAlert('Error occured', 'alert');
@@ -217,60 +263,51 @@
             }
         };
 
-        $("#btnSaveProduct").on("click", function (e) {
+        $("#btnSave").on("click", function (e) {
             e.preventDefault();
-            _saveProducts();
+            _saveCustomer();
         });
 
-        $("#frmProducts").validate({
-            rules: {
-                txtCode: "required",
-                txtName: "required",
-                drpCategory: {
-                    required: true,
-                    greaterThanZero: true
-                },
-                drpStatus: {
-                    required: true,
-                    greaterThanZero: true
-                },
-            },
-            messages: {
-                txtCode: "please enter product code",
-                txtName: "please enter product name",
-                drpCategory: "please select category.",
-                drpStatus: "please select status."
+        var _clearContorls = function () {
 
-            }
-        });
+            $.extend(true, model, staticModel);
+            $("input[name='uni_r']").removeAttr("checked");
+            $("#chkCustomer").attr("checked", "checked");
+            
+            $("#CustomerId").val('0');
+            $("#txtFirstName").val('');
+            $("#txtLastName").val('');
+            $("#txtEmailId").val('');
+            $("#txtMobileNo").val('');
+             
+
+            $("#txtAddress").val('');
+            $("#txtPhoneNo").val('');
+            $("#txtCity").val(''); 
+            $("#txtPincode").val('');
+
+            $("#txtPANNumber").val('');
+            $("#txtGSTIN").val('');
+            $("#txtAdharNumber").val('');
+             
+            $("#txtExtra1").val('');
+            $("#txtExtra2").val('');
+            $("#txtExtra3").val('');
+            $("#txtExtra4").val('');
+            $("#txtExtra5").val('');
+
+        };
 
         $("#btnClear").on("click", function (e) {
             e.preventDefault();
-            clearContorls();
+            _clearContorls();
         });
-
-        var clearContorls = function () {
-            $("#ProductID").val('0');
-            $("#txtCode").val('');
-            $("#txtName").val('');
-            $("#txtSpec").val('');
-
-            $("#drpCategory").val('0');
-            $("#drpStatus").val('1');
-
-            $("#dtEDate").val(getDate());
-            $("#drpStatus").change();
-            $("#txtCode").focus();
-        };
-        if ('@Model.CustomerId' > 0) {
-
-        }
-
+ 
         Mousetrap.bind(['ctrl+s', 'command+s'], function (e) {
             e.preventDefault();
             _saveProducts();
         });
-  
+
         Mousetrap.bind(['ctrl+h', 'command+h'], function (e) {
             e.preventDefault();
             window.location.href = '@Url.Action("Index", "Home")';
@@ -278,14 +315,14 @@
 
         Mousetrap.bind(['ctrl+backspace', 'command+backspace'], function (e) {
             e.preventDefault();
-            window.location.href = '@Url.Action("ProductsList", "Masters")';
+            window.location.href = '@Url.Action("CustomersList", "Masters")';
         });
 
         Mousetrap.bind(['ctrl+r', 'command+r'], function (e) {
             e.preventDefault();
-            clearContorls();
+            _clearContorls();
         });
-         
+
     });
 
 </script>

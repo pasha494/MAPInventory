@@ -1633,6 +1633,7 @@
     <Content Include="Views\Admin\ListViewCustomization.cshtml" />
     <Content Include="Views\Admin\GridViewCustomization.cshtml" />
     <Content Include="Views\Masters\AddCustomer.cshtml" />
+    <Content Include="Views\Masters\CustomersList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
