@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MAP.Inventory.ModelImple
 {
-    public class OpeningStockModelImple : IDocument
+    public class OpeningStockImple : IDocument
     {
         LookUps _LookUps = new LookUps();
         General _General = new General();
@@ -48,7 +48,7 @@ namespace MAP.Inventory.ModelImple
             return str;
         }
 
-        public OpeningStockModelImple()
+        public OpeningStockImple()
         {
             WareHouseName = "";
             GridView = new GridViewCustomization();
@@ -56,11 +56,16 @@ namespace MAP.Inventory.ModelImple
 
         public void init()
         {
-            DocName = _LookUps.GetDocName(1);// 1 stands for opening stocks.  
+            DocName = _LookUps.GetDocName((int)EnumGridView.OpeningStock);// 1 stands for opening stocks.  
+            LoadScreenControls();
+
+        }
+
+        void LoadScreenControls()
+        {
             GetWareHouseListViewOptions();
             GetProductsListViewOptions();
             GetDocumentsGridViewOptions();
-
         }
 
         public void GetWareHouseListViewOptions()
@@ -102,9 +107,7 @@ namespace MAP.Inventory.ModelImple
                         this.GridData = JsonConvert.SerializeObject(ds.Tables[1]);
                     }
                 }
-                GetWareHouseListViewOptions();
-                GetProductsListViewOptions();
-                GetDocumentsGridViewOptions();
+                LoadScreenControls();
             }
             catch (Exception ex)
             {

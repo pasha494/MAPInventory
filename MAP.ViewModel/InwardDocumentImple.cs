@@ -1,4 +1,9 @@
-﻿using MAP.Inventory.Logging;
+﻿using MAP.Inventory.Common;
+using MAP.Inventory.DAL;
+using MAP.Inventory.Interface;
+using MAP.Inventory.Logging;
+using MAP.Inventory.Model;
+using MAP.Inventory.ModelImple;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -7,10 +12,13 @@ using System.Data;
 using System.Linq;
 using System.Web;
 
-namespace MAP.Inventory.Web.Models
+namespace MAP.Inventory.ModelImple
 {
-    public class InwardDocument : IDocument
+    public class InwardDocumentImple : IDocument
     {
+        LookUps _LookUps = new LookUps();
+        General _General = new General();
+
         public int DocID { get; set; }
         public string DocName { get; set; }
         public string DocDate { get; set; }
@@ -18,18 +26,61 @@ namespace MAP.Inventory.Web.Models
         public string WareHouseName { get; set; }
         public bool IsExpected { get; set; }
         public string Vendor { get; set; }
+
+        public string VendorId { get; set; }
+        public string VendorName { get; set; }
+
         public string EffectiveDate { get; set; }
         public string Comments { get; set; }
         public string GridData { get; set; }
 
-        public InwardDocument()
+
+        public string WareHouseOptions { get; set; }
+        public string ProductsOptions { get; set; }
+        public string VendorOptions { get; set; }
+        public GridViewCustomization GridView { get; set; }
+
+        public InwardDocumentImple()
         {
 
         }
 
         public void init()
         {
-            DocName = LookUps.GetDocName(2);// 2 stands for inward documents.  
+            DocName = _LookUps.GetDocName((int)EnumGridView.InwardStock);// 2 stands for inward documents.
+            LoadScreenControls();
+        }
+
+        void LoadScreenControls()
+        {
+            GetWareHouseListViewOptions();
+            GetVendorListViewOptions();
+            GetProductsListViewOptions();
+            GetDocumentsGridViewOptions();
+        }
+
+        public void GetWareHouseListViewOptions()
+        {
+            MapListViewImple _wareHouseListView = new MapListViewImple((int)EnumListViews.WareHouses);
+            this.WareHouseOptions = _wareHouseListView.GetListViewOptions();
+        }
+
+        public void GetVendorListViewOptions()
+        {
+            MapListViewImple _vendorListView = new MapListViewImple((int)EnumListViews.Vendors);
+            this.VendorOptions = _vendorListView.GetListViewOptions();
+        }
+
+        public void GetProductsListViewOptions()
+        {
+            MapListViewImple _productsListView = new MapListViewImple((int)EnumListViews.Products);
+            this.ProductsOptions = _productsListView.GetListViewOptions();
+        }
+
+        public void GetDocumentsGridViewOptions()
+        {
+            MapGridViewImple _productsListView = new MapGridViewImple((int)EnumGridView.InwardStock);
+            this.GridView = _productsListView.GetGridViewsCustomizationInfo(DocID);
         }
 
         string ConverDate(DateTime date)
@@ -82,6 +133,7 @@ namespace MAP.Inventory.Web.Models
                         this.GridData = JsonConvert.SerializeObject(ds.Tables[1]);
                     }
                 }
+                LoadScreenControls();
             }
             catch (Exception ex)
             {
@@ -94,7 +146,7 @@ namespace MAP.Inventory.Web.Models
             DataSet ds = new DataSet();
             try
             {
-                ds = DAL.GetDataSet("sp_GetInwardDocData", new List<string>() { "@DocID" }, new ArrayList() { DocID });
+                ds = _General.Get(new ArrayList() { DocID }, "sp_GetInwardDocData", 0);
             }
             catch (Exception ex)
             {
@@ -103,25 +155,13 @@ namespace MAP.Inventory.Web.Models
             return ds;
         }
 
-        public string SaveDocument(out int ret)
+        public string SaveDocument(out long ret)
         {
             ret = 0; string DocName = "";
 
             try
             {
-                List<string> objNames = new List<string>();
                 ArrayList al = new ArrayList();
-                objNames.Add("@DocID");
-                objNames.Add("@DocName");
-                objNames.Add("@DocDate");
-                objNames.Add("@WarehouseID");
-                objNames.Add("@IsExpected");
-                objNames.Add("@Vendor");
-                objNames.Add("@EffectiveDate");
-                objNames.Add("@Data");
-                objNames.Add("@Comments");
-                objNames.Add("@CreatedBy");
-
                 al.Add(this.DocID);
                 al.Add(this.DocName);
                 al.Add(Convert.ToDateTime(this.DocDate));
@@ -131,8 +171,9 @@ namespace MAP.Inventory.Web.Models
                 al.Add(this.IsExpected ? this.EffectiveDate : null);
                 al.Add(this.GridData);
                 al.Add(this.Comments);
-                al.Add(Convert.ToInt32(LookUps.GetSessionObject("UserID")));
-                DocName = DAL.ExecuteSP("sp_InsertUpdateInwardDoc", objNames, al, out ret);
+                al.Add(Convert.ToInt32(_LookUps.GetSessionObject("UserID")));
+
+                DocName = _General.Set(al, "sp_InsertUpdateInwardDoc", out ret, 0);
             }
             catch (Exception ex)
             {
@@ -142,20 +183,16 @@ namespace MAP.Inventory.Web.Models
             return DocName;
         }
 
-        public int DeleteDocument(int DocID)
+        public long DeleteDocument(int DocID)
         {
-            int flg = 0;
-            List<string> objNames = new List<string>();
+            long flg = 0;
             ArrayList al = new ArrayList();
-            objNames.Add("@DocID");
-            objNames.Add("@CreatedBy");
-
             al.Add(DocID);
-            al.Add(Convert.ToInt32(LookUps.GetSessionObject("UserID")));
+            al.Add(Convert.ToInt32(_LookUps.GetSessionObject("UserID")));
 
             try
             {
-                flg = DAL.ExecuteSP("sp_DeleteInwardStock", objNames, al);
+                _General.Set(al, "sp_DeleteInwardStock", out flg, 0);
             }
             catch (Exception ex)
             {

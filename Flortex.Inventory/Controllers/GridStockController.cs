@@ -366,7 +366,7 @@ namespace MAP.Inventory.Web.Controllers
             try
             {
                 DataSet ds = new DataSet();
-                OpeningStockModelImple objModel = new OpeningStockModelImple();
+                OpeningStockImple objModel = new OpeningStockImple();
                 ds = objModel.GetGirdData(0);//0 will get all the active opening masters data 
                 DataTable dt = ds.Tables[0];
                 Dictionary<string, object> row;
@@ -395,7 +395,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult AddOpStock()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >AddOpStock()");
-            OpeningStockModelImple objModel = new OpeningStockModelImple();
+            OpeningStockImple objModel = new OpeningStockImple();
             try
             {
                 objModel.init();
@@ -416,7 +416,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult UpDateOpStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >UpDateOpStock(string DocID)");
-            OpeningStockModelImple objModel = new OpeningStockModelImple();
+            OpeningStockImple objModel = new OpeningStockImple();
 
             if (!string.IsNullOrEmpty(DocID))
             {
@@ -446,7 +446,7 @@ namespace MAP.Inventory.Web.Controllers
             string DocName = "";
             try
             {
-                OpeningStockModelImple objModel = JsonConvert.DeserializeObject<OpeningStockModelImple>(Data);
+                OpeningStockImple objModel = JsonConvert.DeserializeObject<OpeningStockImple>(Data);
                 long Flg = 0;
                 string[] sD = objModel.DocDate.Split('-');
                 objModel.DocDate = new DateTime(Convert.ToInt32(sD[2]), Convert.ToInt32(sD[1]), Convert.ToInt32(sD[0])).ToString();
@@ -477,7 +477,7 @@ namespace MAP.Inventory.Web.Controllers
             {
                 try
                 {
-                    OpeningStockModelImple obj = new OpeningStockModelImple();
+                    OpeningStockImple obj = new OpeningStockImple();
                     flg = obj.DeleteDocument(Convert.ToInt32(DocID));
                 }
                 catch (Exception ex)
@@ -510,7 +510,7 @@ namespace MAP.Inventory.Web.Controllers
             try
             {
                 DataSet ds = new DataSet();
-                InwardDocument objModel = new InwardDocument();
+                InwardDocumentImple objModel = new InwardDocumentImple();
                 ds = objModel.GetGirdData(0);//0 will get all the active inward masters data 
                 DataTable dt = ds.Tables[0];
 
@@ -536,7 +536,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult AddInStock()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >AddInStock()");
-            InwardDocument objModel = new InwardDocument();
+            InwardDocumentImple objModel = new InwardDocumentImple();
             try
             {
                 objModel.init();
@@ -552,7 +552,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult UpDateInStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >UpDateInStock(string DocID)");
-            InwardDocument objModel = new InwardDocument();
+            InwardDocumentImple objModel = new InwardDocumentImple();
             try
             {
                 if (!string.IsNullOrEmpty(DocID))
@@ -576,8 +576,8 @@ namespace MAP.Inventory.Web.Controllers
             string DocName = "";
             try
             {
-                InwardDocument objModel = JsonConvert.DeserializeObject<InwardDocument>(Data);
-                int Flg = 0;
+                InwardDocumentImple objModel = JsonConvert.DeserializeObject<InwardDocumentImple>(Data);
+                long Flg = 0;
                 string[] sD = objModel.DocDate.Split('-');
                 objModel.DocDate = new DateTime(Convert.ToInt32(sD[2]), Convert.ToInt32(sD[1]), Convert.ToInt32(sD[0])).ToString();
                 if (!string.IsNullOrEmpty(objModel.EffectiveDate))
@@ -602,12 +602,12 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult DeleteInStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >DeleteInStock(string DocID)");
-            int flg = 0;
+            long flg = 0;
             if (!string.IsNullOrEmpty(DocID))
             {
                 try
                 {
-                    InwardDocument obj = new InwardDocument();
+                    InwardDocumentImple obj = new InwardDocumentImple();
                     flg = obj.DeleteDocument(Convert.ToInt32(DocID));
                 }
                 catch (Exception ex)

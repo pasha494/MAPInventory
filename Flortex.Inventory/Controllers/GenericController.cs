@@ -20,7 +20,7 @@ namespace MAP.Inventory.Web.Controllers
             return View();
         }
 
-        public string GetProductsListView(string wareHouseId,string searchField, string q)
+        public string GetProductsListView(string wareHouseId, string searchField, string q)
         {
             // FeatureId for products view autocomplete list view data is "1"
             MapListViewImple _listView = new MapListViewImple(Convert.ToInt32(EnumListViews.Products));
@@ -33,7 +33,7 @@ namespace MAP.Inventory.Web.Controllers
             try
             {
                 DataTable dt = new DataTable();
-                dt = _listView.GetProductsListViewData(wareHouseId,searchField, q);
+                dt = _listView.GetProductsListViewData(wareHouseId, searchField, q);
                 if (dt != null)
                 {
                     foreach (DataRow dr in dt.Rows)
@@ -62,7 +62,7 @@ namespace MAP.Inventory.Web.Controllers
         public string GetWareHousesListView(string searchField, string q)
         {
             // FeatureId for products view autocomplete list view data is "1"
-            MapListViewImple _listView = new MapListViewImple(Convert.ToInt32( EnumListViews.WareHouses));
+            MapListViewImple _listView = new MapListViewImple(Convert.ToInt32(EnumListViews.WareHouses));
 
             PLog.Info("BEGIN::Controller > GridStock, Method > WarehouseData");
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
@@ -92,12 +92,82 @@ namespace MAP.Inventory.Web.Controllers
                 throw;
             }
             PLog.Info("END::Controller > GridStock, Method > WarehouseData");
-            return serializer.Serialize(rows); 
+            return serializer.Serialize(rows);
         }
 
 
+        public string GetCustomerListtView(string searchField, string q)
+        {
+            // FeatureId for products view autocomplete list view data is "1"
+            MapListViewImple _listView = new MapListViewImple(Convert.ToInt32(EnumListViews.Customers));
 
-        
+            PLog.Info("BEGIN::Controller > GridStock, Method > WarehouseData");
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            Dictionary<string, object> row;
+
+            try
+            {
+                DataTable dt = new DataTable();
+                dt = _listView.GetCustomerListViewData(1, searchField, q);
+                if (dt != null)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        row = new Dictionary<string, object>();
+                        foreach (DataColumn col in dt.Columns)
+                        {
+                            row.Add(col.ColumnName, dr[col]);
+                        }
+                        rows.Add(row);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                PLog.Error("Error::Controller >GridStock, Method >WarehouseData", ex);
+                throw;
+            }
+            PLog.Info("END::Controller > GridStock, Method > WarehouseData");
+            return serializer.Serialize(rows);
+        }
+
+        public string GetVendorListtView(string searchField, string q)
+        {
+            // FeatureId for products view autocomplete list view data is "1"
+            MapListViewImple _listView = new MapListViewImple(Convert.ToInt32(EnumListViews.Vendors));
+
+            PLog.Info("BEGIN::Controller > GridStock, Method > WarehouseData");
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            Dictionary<string, object> row;
+
+            try
+            {
+                DataTable dt = new DataTable();
+                dt = _listView.GetCustomerListViewData(0, searchField, q);
+                if (dt != null)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        row = new Dictionary<string, object>();
+                        foreach (DataColumn col in dt.Columns)
+                        {
+                            row.Add(col.ColumnName, dr[col]);
+                        }
+                        rows.Add(row);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                PLog.Error("Error::Controller >GridStock, Method >WarehouseData", ex);
+                throw;
+            }
+            PLog.Info("END::Controller > GridStock, Method > WarehouseData");
+            return serializer.Serialize(rows);
+        }
+         
 
     }
 }

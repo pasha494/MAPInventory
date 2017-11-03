@@ -116,6 +116,27 @@ namespace MAP.Inventory.ModelImple
             return dt;
         }
 
+        public DataTable GetCustomerListViewData(int Type, string FilterCol, string FilterValue)
+        {
+            DataTable dt = null;
+
+            try
+            {
+                DataSet ds = new DataSet();
+                string spName = getSPName();
+                if (!string.IsNullOrWhiteSpace(spName))
+                {
+                    ds = _General.Get(new ArrayList() { Type, FilterCol, FilterValue }, spName);
+                    dt = ds.Tables[0];
+                }
+            }
+            catch (Exception ex)
+            {
+                PLog.Error("Error::Class > Products, Method > GetGridData(int ProductCategoryID)", ex);
+            }
+
+            return dt;
+        }
 
         private string getSPName()
         {
@@ -123,6 +144,8 @@ namespace MAP.Inventory.ModelImple
                 return "sp_GetProductsAutoCompleteListData";
             else if (FeatureId == Convert.ToInt32(EnumListViews.WareHouses))
                 return "sp_GetWarehouseAutoCompleteListData";
+            else if (FeatureId == Convert.ToInt32(EnumListViews.Customers) || FeatureId == Convert.ToInt32(EnumListViews.Vendors))
+                return "sp_GetCustomerAutoCompleteListData";
 
             return "";
         }

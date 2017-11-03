@@ -46,11 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomerImple.cs" />
+    <Compile Include="InwardDocumentImple.cs" />
     <Compile Include="LoginImple.cs" />
     <Compile Include="LookUps.cs" />
     <Compile Include="MapGridViewImple.cs" />
     <Compile Include="MapListViewImple.cs" />
-    <Compile Include="OpeningStockModelImple.cs" />
+    <Compile Include="OpeningStockImple.cs" />
     <Compile Include="ProductsCategoryImple.cs" />
     <Compile Include="ProductsImple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
