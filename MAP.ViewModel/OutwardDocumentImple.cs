@@ -1,4 +1,9 @@
-﻿using MAP.Inventory.Logging;
+﻿using MAP.Inventory.Common;
+using MAP.Inventory.DAL;
+using MAP.Inventory.Interface;
+using MAP.Inventory.Logging;
+using MAP.Inventory.Model;
+using MAP.Inventory.ModelImple;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -9,27 +14,74 @@ using System.Web;
 
 namespace MAP.Inventory.Web.Models
 {
-    public class OutwardDocument : IDocument
+    public class OutwardDocumentImple : IDocument
     {
+        LookUps _LookUps = new LookUps();
+        General _General = new General();
+
         public int DocID { get; set; }
         public string DocName { get; set; }
         public string DocDate { get; set; }
         public string WareHouseId { get; set; }
         public string WareHouseName { get; set; }
         public bool IsExpected { get; set; }
-        public string Customer { get; set; }
+        public string CustomerId { get; set; }
+        public string CustomerName { get; set; }
+
         public string EffectiveDate { get; set; }
         public string Comments { get; set; }
         public string GridData { get; set; }
 
-        public OutwardDocument()
-        {
+        public string WareHouseOptions { get; set; }
+        public string ProductsOptions { get; set; }
+        public string CustomerOptions { get; set; }
 
+        public GridViewCustomization GridView { get; set; }
+
+        public OutwardDocumentImple()
+        {
+            Comments = string.Empty;
+            WareHouseName = string.Empty;
+            CustomerName = string.Empty;
+            GridData = string.Empty;
         }
 
         public void init()
         {
-            DocName = LookUps.GetDocName(3);// 3 stands for Outward documents.  
+            DocName = _LookUps.GetDocName((int)EnumGridView.OutwardStock);// 3 stands for inward documents.
+            LoadScreenControls();
+        }
+
+        void LoadScreenControls()
+        {
+            GetWareHouseListViewOptions();
+            GetVendorListViewOptions();
+            GetProductsListViewOptions();
+            GetDocumentsGridViewOptions();
+        }
+
+        public void GetWareHouseListViewOptions()
+        {
+            MapListViewImple _wareHouseListView = new MapListViewImple((int)EnumListViews.WareHouses);
+            this.WareHouseOptions = _wareHouseListView.GetListViewOptions();
+        }
+
+        public void GetVendorListViewOptions()
+        {
+            MapListViewImple _vendorListView = new MapListViewImple((int)EnumListViews.Customers);
+            this.CustomerOptions = _vendorListView.GetListViewOptions();
+        }
+
+        public void GetProductsListViewOptions()
+        {
+            MapListViewImple _productsListView = new MapListViewImple((int)EnumListViews.Products);
+            this.ProductsOptions = _productsListView.GetListViewOptions();
+        }
+
+        public void GetDocumentsGridViewOptions()
+        {
+            MapGridViewImple _productsListView = new MapGridViewImple((int)EnumGridView.InwardStock);
+            this.GridView = _productsListView.GetGridViewsCustomizationInfo(DocID);
         }
 
         string ConverDate(DateTime date)
@@ -71,16 +123,16 @@ namespace MAP.Inventory.Web.Models
                         else
                             this.EffectiveDate = ConverDate(DateTime.Now);
 
-                        this.Customer = ds.Tables[0].Rows[0]["Customer"].ToString();
+                        this.CustomerId = ds.Tables[0].Rows[0]["CustomerId"].ToString();
+                        this.CustomerName = ds.Tables[0].Rows[0]["CustomerName"].ToString();
                         this.Comments = ds.Tables[0].Rows[0]["Comments"].ToString();
-
-
                     }
 
                     if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
                     {
                         this.GridData = JsonConvert.SerializeObject(ds.Tables[1]);
                     }
+                    LoadScreenControls();
                 }
             }
             catch (Exception ex)
@@ -93,8 +145,8 @@ namespace MAP.Inventory.Web.Models
         {
             DataSet ds = new DataSet();
             try
-            {
-                ds = DAL.GetDataSet("sp_GetOutwardDocData", new List<string>() { "@DocID" }, new ArrayList() { DocID });
+            { 
+                ds = _General.Get(new ArrayList() { DocID }, "sp_GetOutwardDocData", 0);
             }
             catch (Exception ex)
             {
@@ -103,36 +155,24 @@ namespace MAP.Inventory.Web.Models
             return ds; throw new NotImplementedException();
         }
 
-        public string SaveDocument(out int ret)
+        public string SaveDocument(out long ret)
         {
             ret = 0; string DocName = "";
 
             try
-            {
-                List<string> objNames = new List<string>();
-                ArrayList al = new ArrayList();
-                objNames.Add("@DocID");
-                objNames.Add("@DocName");
-                objNames.Add("@DocDate");
-                objNames.Add("@WarehouseID");
-                objNames.Add("@IsExpected");
-                objNames.Add("@Customer");
-                objNames.Add("@EffectiveDate");
-                objNames.Add("@Data");
-                objNames.Add("@Comments");
-                objNames.Add("@CreatedBy");
-
+            { 
+                ArrayList al = new ArrayList(); 
                 al.Add(this.DocID);
                 al.Add(this.DocName);
                 al.Add(Convert.ToDateTime(this.DocDate));
                 al.Add(this.WareHouseId);
                 al.Add(this.IsExpected);
-                al.Add(this.Customer);
+                al.Add(this.CustomerId);
                 al.Add(this.IsExpected ? this.EffectiveDate : null);
                 al.Add(this.GridData);
                 al.Add(this.Comments);
-                al.Add(Convert.ToInt32(LookUps.GetSessionObject("UserID")));
-                DocName = DAL.ExecuteSP("sp_InsertUpdateOutwardDoc", objNames, al, out ret);
+                al.Add(Convert.ToInt32(_LookUps.GetSessionObject("UserID")));
+                DocName = _General.Set(al, "sp_InsertUpdateOutwardDoc", out ret, 0); 
             }
             catch (Exception ex)
             {
@@ -142,20 +182,16 @@ namespace MAP.Inventory.Web.Models
             return DocName;
         }
 
-        public int DeleteDocument(int DocID)
+        public long DeleteDocument(int DocID)
         {
-            int flg = 0;
+            long flg = 0;
             try
-            {
-                List<string> objNames = new List<string>();
-                ArrayList al = new ArrayList();
-                objNames.Add("@DocID");
-                objNames.Add("@CreatedBy");
-
+            { 
+                ArrayList al = new ArrayList(); 
                 al.Add(DocID);
-                al.Add(Convert.ToInt32(LookUps.GetSessionObject("UserID")));
+                al.Add(Convert.ToInt32(_LookUps.GetSessionObject("UserID")));
 
-                flg = DAL.ExecuteSP("sp_DeleteOutwardStock", objNames, al);
+                _General.Set(al, "sp_DeleteOutwardStock", out flg, 0); 
             }
             catch (Exception ex)
             {

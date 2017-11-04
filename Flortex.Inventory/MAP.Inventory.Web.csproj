@@ -211,7 +211,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Models\OutwardDocument.cs" />
     <Compile Include="Models\StockReport.cs" />
     <Compile Include="Models\StockTransfer.cs" />
     <Compile Include="Models\IDocument.cs" />

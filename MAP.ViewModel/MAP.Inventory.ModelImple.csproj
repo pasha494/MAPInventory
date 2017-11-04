@@ -52,6 +52,7 @@
     <Compile Include="MapGridViewImple.cs" />
     <Compile Include="MapListViewImple.cs" />
     <Compile Include="OpeningStockImple.cs" />
+    <Compile Include="OutwardDocumentImple.cs" />
     <Compile Include="ProductsCategoryImple.cs" />
     <Compile Include="ProductsImple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

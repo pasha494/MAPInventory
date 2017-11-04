@@ -1,4 +1,4 @@
-﻿@model MAP.Inventory.Web.Models.OutwardDocument
+﻿@model MAP.Inventory.Web.Models.OutwardDocumentImple
 @using System.Data;
 @using MAP.Inventory.Web.Models;
 @{
@@ -6,6 +6,21 @@
    
 }
 
+<link rel="stylesheet" href="~/Content/SlickGrid/slick.grid.css" type="text/css" />
+<link rel="stylesheet" href="~/Content/SlickGrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" />
+<link href="~/Content/SlickGrid/css/examples.css" rel="stylesheet" />
+
+<script src="~/Content/SlickGrid/lib/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="~/Content/SlickGrid/lib/jquery.event.drag-2.2.js"></script>
+<script src="~/Content/SlickGrid/slick.core.js"></script>
+<script src="~/Content/SlickGrid/slick.formatters.js"></script>
+<script src="~/Content/SlickGrid/slick.editors.js"></script>
+<script src="~/Content/SlickGrid/plugins/slick.rowselectionmodel.js"></script>
+<script src="~/Content/SlickGrid/slick.grid.js"></script>
+<script src="~/Content/SlickGrid/slick.dataview.js"></script>
+<script src="~/Scripts/math.min.js"></script>
+<script src="~/Content/SlickGrid/slick.validator.js"></script>
+<script src="~/Scripts/inventory-documents.js"></script>
 
 <form class="cmxform" role="search" id="frmInwardStock">
     @Html.HiddenFor(m => m.DocID)
@@ -37,7 +52,7 @@
                     <label for="txtDocName" class="label">Doc Name</label>
                 </div>
                 <div class="span9">
-                    <input type="text" style="width:250px;" class="form-control mousetrap" readonly="readonly" name="txtDocName"  id="txtDocName" placeholder="Doc Name.." value="@Model.DocName">
+                    <input type="text"  class="form-control mousetrap" readonly="readonly" name="txtDocName"  id="txtDocName" placeholder="Doc Name.." value="@Model.DocName">
                 </div>
             </div>
         </div>
@@ -65,7 +80,7 @@
                     <label for="drpWarehouse" class="label">Warehouse</label>
                 </div>
                 <div class="span9">
-                    <input id="drpWarehouse" name="drpWarehouse" class="mousetrap" style="width: 250px;" value="@Model.WareHouseName"/>
+                    <input id="drpWarehouse" name="drpWarehouse" class="mousetrap"  />
                 </div>
             </div>
 
@@ -76,10 +91,10 @@
         <div class="span4">
             <div class="row-fluid">
                 <div class="span3">
-                    <label for="txtCustomer" class="label">Customer</label>
+                    <label for="drpCustomer" class="label">Customer</label>
                 </div>
                 <div class="span9">
-                    <input type="text" style="width:250px;" class="form-control mousetrap" name="txtCustomer"  id="txtCustomer" placeholder="Customer Name.." value="@Model.Customer">
+                    <input type="text" class="form-control mousetrap" name="drpCustomer"  id="drpCustomer" placeholder="Customer Name.." >
                 </div>
             </div>
         </div>
@@ -94,11 +109,11 @@
                         <div class="span6">
                             @if (Model.DocID > 0 && Model.IsExpected)
                             {
-                                <input type="checkbox" style="padding: 10px; height: 10px;" name="chkShedule" id="chkShedule" checked="checked"  class="mousetrap">  
+                                <input type="checkbox"  name="chkShedule" id="chkShedule" checked="checked"  class="mousetrap">  
                             }
                             else
                             {
-                                <input type="checkbox" style="padding: 20px; height: 30px; margin: 0px;" name="chkShedule" id="chkShedule"  class="mousetrap"> 
+                                <input type="checkbox"  name="chkShedule" id="chkShedule"  class="mousetrap"> 
                             }
                         </div>
                         @if (Model.DocID > 0 && Model.IsExpected)
@@ -128,7 +143,7 @@
                     <label for="txtComments" class="label">Remarks</label>
                 </div>
                 <div class="span9">
-                    <input type="text" style="width:250px;" class="form-control mousetrap" name="txtComments"  id="txtComments" placeholder="Comments.." value="@Model.Comments">
+                    <input type="text" class="form-control mousetrap" name="txtComments"  id="txtComments" placeholder="Comments.." value="@Model.Comments">
                 </div>
             </div>
         </div>
@@ -138,7 +153,7 @@
         <div class="span12 ">
             <div class="row-fluid">
                 <div class="span12 ">
-                    <div id="grid"></div>
+                    <div id="grid" style="width:100%;height:@(Model.GridView.Height)px;"></div>
                 </div>
             </div>
 
@@ -147,33 +162,7 @@
 
 
 </form>
-
-<style>
-    .drp-header {
-        font-size: 1.2em;
-    }
-
-        .drp-header > span {
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-            text-align: left;
-            display: inline-block;
-            border-style: solid;
-            border-width: 0 0 1px 1px;
-            padding: .3em .6em;
-            width: 170px;
-        }
-
-            .drp-header > span:first-child {
-                width: 70px;
-                border-left-width: 0;
-            }
-</style>
-
-
-
-
+ 
 <script>
     $(document).ready(function () {
         var EndDate = '';
@@ -191,43 +180,11 @@
             return date.getDate() + "-" + parseInt(date.getMonth() + 1) + "-" + date.getFullYear()
         }
 
-        var data = [];
+        var warehouseOptions=@Html.Raw(Model.WareHouseOptions);
+        //-----gets the warehouse data in the autocomplete list
+        $("#drpWarehouse").combogrid(warehouseOptions);
 
-        var WarehouseData = [];
-
-        WarehouseData = getWarehouseData();
-
-        function getWarehouseData() {
-            $.ajax({
-                url:  '/GridStock/WarehouseData',
-                type: 'Get',
-                async: false,
-                beforeSend: function () {
-                    $("#ajaxLoadingImg").show();
-                },
-                complete: function () { $("#ajaxLoadingImg").hide(); },
-                success: function (res) {
-                    WarehouseData = JSON.parse(res);
-                    $("#drpWarehouse").kendoComboBox({
-                        dataSource: WarehouseData,
-                        filter: "startswith",
-                        placeholder: "Select Warehouse...",
-
-                        headerTemplate: '<div class="drp-header">' +
-                                '<span class="k-widget k-header">Code</span>' +
-                                '<span class="k-widget k-header">Name</span>' +
-                            '</div>',
-                        template: '<span class="k-state-default"><span>#: data.code #</span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
-                                  '<span class="k-state-default"><span  class="drpVal" data-selId="#: data.id #">#: data.name #</span></span>',
-                        dataTextField: "name",
-                        dataValueField: "id"
-
-                    });
-                },
-                error: function (e) { alert("error"); }
-            });
-            return WarehouseData;
-        }
+        $("#drpCustomer").combogrid(@Html.Raw(Model.CustomerOptions));
 
         if ($('#chkShedule').is(":checked")) {
             $("#divSheduled").show();
@@ -240,206 +197,215 @@
             $('#chkShedule').is(":checked") ? $("#divSheduled").show() : $("#divSheduled").hide();
         });
 
-         
-        var combobox = $("#drpWarehouse").data("kendoComboBox");
+
+        // slick grid variables declaration
+        var dataView;
+        var grid;
+
+        var planeColumns=@Html.Raw(Model.GridView.Columns);
+        var editorOptions= @Html.Raw(Model.ProductsOptions);
+
+        var slickColumnParser=new InventoryDocs.ParseToSlickColumns(planeColumns,editorOptions);
+
+        var columns = slickColumnParser.getOptions("slickcolumns");
+
+        // Add empty rows to the grid
+        var GetEmptyRows = function (data) {
+            var _data = data;
+            for (var i = _data.length; i < @(Model.GridView.TotalRows); i++) {
+                var obj = {};
+                obj.id = i + 1;
+                obj.sno = i + 1;
+                obj.pid = "";
+                obj.pcode = "";
+                obj.pname = "";
+                obj.quantity = "";
+                obj.price = "";
+                obj.discount = "";
+                obj.totalPrice = "";
+                _data.push(obj);
+            }
+            return _data;
+        }
+
+        var slickData = GetEmptyRows([]);
+
+        var options = {
+            editable: true,
+            enableAddRow: true,
+            enableCellNavigation: true,
+            forceFitColumns: false,
+            topPanelHeight: 50,
+            showHeaderRow: true,
+            Warehouse: 0
+        };
+
+        function decimalFieldValidator(value) {
+            if (value == null || value == undefined || !value.length || !$.isNumeric(value)) {
+                return {valid: false, msg: "This is a required field"};
+            }
+            else {
+                return {valid: true, msg: null};
+            }
+        }
+
+
+        dataView = new Slick.Data.DataView({ inlineFilters: true });
+        grid = new Slick.Grid("#grid", dataView, columns, options);
+        grid.setSelectionModel(new Slick.RowSelectionModel());
+
+
+        grid.onCellChange.subscribe(function (e, args) {
+
+            _.each(args.grid.getColumns(),function(col){
+
+                // if the decimal field is empty then make it zero
+                if(col.isDecimal)  {
+                    if(args.item[col.id] == undefined || args.item[col.id] =="")
+                        args.item[col.id]=0;
+                }
+
+                // evaluate the formula
+                if(col.formula)  {
+                    args.item[col.id]=math.eval(col.formula,args.item);
+                }
+            });
+
+            dataView.updateItem(args.item.id, args.item);
+        });
+
+        grid.onBeforeEditCell.subscribe(function (e, args) {
+            if (!validateHeaderFields())
+                return false;
+            else
+            {
+                grid.setWareHouse($("#drpWarehouse").combogrid('getValue'));
+            }
+        });
+
+        grid.onAddNewRow.subscribe(function (e, args) {
+            var obj = {};
+            obj.id =  dataView.getLength() + 1;
+            obj.sno =dataView.getLength() + 1;
+            obj.pid = "";
+            obj.pcode = "";
+            obj.pname = "";
+            obj.quantity = "";
+            obj.price = "";
+            obj.discount = "";
+            obj.totalPrice = "";
+
+            //$.extend(obj, args.item);
+            dataView.addItem(obj);
+        });
+
+        grid.onKeyDown.subscribe(function (e, args) {
+            // select all rows on ctrl-a
+            if (e.which == 40 || e.which == 38) {
+                if (columns && columns[args.cell] && columns[args.cell].stopDownkey) {
+                    e.stopImmediatePropagation();
+                }
+            }
+        });
+
+        // wire up model events to drive the grid
+        dataView.onRowCountChanged.subscribe(function (e, args) {
+            grid.updateRowCount();
+            grid.render();
+        });
+
+        dataView.onRowsChanged.subscribe(function (e, args) {
+            grid.invalidateRows(args.rows);
+            grid.render();
+        });
+
+        function initGridData(_data){
+
+            // initialize the model after all the events have been hooked up
+            _.each(_data,function(item){
+                if( item.pid != "" && item.pcode != "" && item.pname != "" && item.quantity != "" && item.quantity != 0 && item.price != "" && item.price != 0) {
+                    _.each(columns,function(col){
+                        if(col.formula)  {
+                            item[col.id]=math.eval(col.formula,item);
+                        }
+                    });
+                }
+            });
+
+            dataView.beginUpdate();
+            dataView.setItems(_data);
+            dataView.endUpdate();
+            grid.render();
+        };
+
+        // if you don't want the items that are not visible (due to being filtered out
+        // or being on a different page) to stay selected, pass 'false' to the second arg
+        dataView.syncGridSelection(grid, true);
+
+
+        var validateHeaderFields = function () {
+            debugger
+            var flag = true;
+            if ($("#dtDate").val() == "") {
+                customAlert('Please select Date.', 'alert');
+                $("#dtDate").focus();
+                return false;
+            }
+            else if ($("#drpWarehouse").combogrid('getValue') == "" || $("#drpWarehouse").combogrid('getText') == "") {
+                customAlert('Please select Warehouse.', 'alert');
+                $("#drpWarehouse").focus();
+                return false;
+            }
+            else if ($("#drpCustomer").combogrid('getValue') == "" || $("#drpCustomer").combogrid('getText') == "") {
+                customAlert('Please select customer.', 'alert');
+                $("#drpCustomer").focus();
+                return false;
+            }
+            else if ($('#chkShedule').is(":checked") && $("#dtExpDate").val() == '') {
+                customAlert('Please select Sheduled date.', 'alert');
+                $("#dtExpDate").focus();
+                return false;
+            }
+            return flag;
+        };
+
 
         if ('@Model.DocID' > 0) {
 
-            combobox.text('@Model.WareHouseName');
-            combobox.value('@Model.WareHouseId');
+            $("#drpWarehouse").combogrid('disable');
+            $("#drpWarehouse").combogrid('setValue','@Model.WareHouseId');
+            $("#drpWarehouse").combogrid('setText','@Model.WareHouseName');
 
-            var jsonData = '@Html.Raw(Model.GridData)';
+            $("#drpCustomer").combogrid('setValue','@Model.CustomerId');
+            $("#drpCustomer").combogrid('setText','@Model.CustomerName');
 
-            if (jsonData != null && jsonData.length > 0) {
-                var tempData = JSON.parse(jsonData);
-                for (var i = 0; i < tempData.length; i++) {
-                    var obj = {};
-                    obj.id = i + 1;
-                    obj.productID = tempData[i].productID;
-                    obj.Qty = tempData[i].Qty;
-                    data.push(obj);
-                }
-                for (var i = tempData.length; i < 30; i++) {
-                    var obj = {};
-                    obj.id = i + 1;
-                    obj.productID = "";
-                    obj.Qty = "";
-                    data.push(obj);
-                }
-            }
+            var jsonData =$.parseJSON( '@Html.Raw(Model.GridData)');
+            initGridData(GetEmptyRows(jsonData));
+     
         }
         else {
             $("#dtDate").val(getDate());
             $("#dtExpDate").val(getDate());
-            for (var i = 0; i < 30; i++) {
-                var obj = {};
-                obj.id = i + 1;
-                obj.productID = "";
-                obj.Qty = "";
-                data.push(obj);
-            }
+            initGridData(slickData);
         }
-
-        var GetEmptyRows = function () {
-            var _data = [];
-            for (var i = 0; i < 30; i++) {
-                var obj = {};
-                obj.id = i + 1;
-                obj.productID = "";
-                obj.Qty = "";
-                _data.push(obj);
-            }
-
-            return _data;
-        }
-
-
-        var productCodes = [];
-        productCodes = getProductsByCode();
-        function getProductsByCode() {
-            $.ajax({
-                url:  '/GridStock/ProductsByCode',
-                type: 'Get',
-                async: false,
-                beforeSend: function () {
-                    $("#ajaxLoadingImg").show();
-                },
-                complete: function () { $("#ajaxLoadingImg").hide(); },
-                success: function (res) {
-                    productCodes = JSON.parse(res);
-                },
-                error: function (e) { alert("error"); }
-            });
-            return productCodes;
-        }
-
-        var productNames = [];
-        productNames = getProductsByName();
-        function getProductsByName() {
-            $.ajax({
-                url:  '/GridStock/ProductsByName',
-                type: 'Get',
-                async: false,
-                beforeSend: function () {
-                    $("#ajaxLoadingImg").show();
-                },
-                complete: function () { $("#ajaxLoadingImg").hide(); },
-                success: function (res) {
-                    productNames = JSON.parse(res);
-                },
-                error: function (e) { alert("error"); }
-            });
-            return productNames;
-        }
-
-        var initGrid = function (_inputData) {
-            //var dataSource = new kendo.data.DataSource({
-            //    data: _inputData,
-            //    autoSync: true,
-            //    schema: {
-            //        model: {
-            //            fields: {
-            //                id: { editable: false },
-            //                productID: { editable: true },
-            //                Qty: { editable: true }
-            //            }
-            //        }
-            //    }
-            //});
-            $("#grid").kendoGrid({
-                dataSource: _inputData,
-                height: 335,
-                editable: true,
-                navigatable: true,
-                columns: [
-                    //{
-                    //field: "id",
-                    //title: "S.No",
-                    //width: "5%",
-                    //type: "string",
-                    //template: function (dataItem) { return '<span>' + dataItem.id + '</span>'; }
-                    //},
-                {
-                    field: "productID",
-                    title: "Item Code",
-                    width: "25%",
-                    template: function (dataItem) {
-                        var code = "";
-                        $.each(productCodes, function () {
-                            if (this.id == dataItem.productID) {
-                                code = this.code;
-                                return false;
-                            }
-                        });
-                        return code;
-                    },
-                    editor: function (container, options) {
-                        $("<input class='mousetrap'/>")
-                            .attr("data-bind", "value:productID")
-                            .appendTo(container)
-                            .kendoComboBox({
-                                placeholder: "Select Code...",
-                                dataSource: productCodes,
-                                dataTextField: "code",
-                                dataValueField: "id",
-                                filter: "contains",
-                                autobind: false,
-                                minLength: 1
-                            });
-                    }
-                }, {
-                    field: "productID",
-                    title: "Item Name",
-                    width: "25%",
-                    template: function (dataItem) {
-                        var name = "";
-                        $.each(productNames, function () {
-                            if (this.id == dataItem.productID) {
-                                name = this.name;
-                                return false;
-                            }
-                        });
-                        return name;
-                    },
-                    editor: function (container, options) {
-                        $("<input class='mousetrap'/>")
-                            .attr("data-bind", "value:productID")
-                            .appendTo(container)
-                            .kendoComboBox({
-                                placeholder: "Select Product...",
-                                dataSource: productNames,
-                                dataTextField: "name",
-                                dataValueField: "id",
-                                filter: "contains",
-                                autobind: false,
-                                minLength: 1
-                            });
-                    }
-                }, {
-                    field: "Qty",
-                    title: "Quantity",
-                    type: "number",
-                    width: "20%",
-                }]
-            });
-        }
-
-        initGrid(data);
 
         var refreshAsNewDoc = function () {
             $("#DocID").val(0);
-            $("#drpWarehouse").val("");
-            if (combobox && combobox.text && combobox.value) {
-                combobox.text('');
-                combobox.value('');
-            }
+
+            $("#drpWarehouse").combogrid('setValue', '');
+            $("#drpCustomer").combogrid('setValue', '');
+
             $("#dtDate").val(getDate());
             $("#dtExpDate").val(getDate());
             $("#chkShedule").removeAttr("checked");
             $("#divSheduled").hide();
             $("#txtComments").val("");
-            $("#txtCustomer").val("");
-            initGrid(GetEmptyRows());
+
+            // Invalidate the rows
+            grid.invalidateAllRows();
+            initGridData(GetEmptyRows([]));
+
+            // get the latest available document number
             getLatestDocNum();
             $("#txtDocName").focus();
         };
@@ -466,71 +432,53 @@
 
 
         var getDataObject = function () {
-            //var selwarehouseID = _.pluck(_.where(WarehouseData, { name: $("#drpWarehouse").val() }), 'id')[0];
+            var xmlString="";
+            if(validateHeaderFields()){
+                xmlString = "<Root>";
 
-            var combobox1 = $("#drpWarehouse").data("kendoComboBox");
-            var xmlString = "<Root>";
-            if ($("#dtDate").val() == "") {
-                customAlert('Please select Date', 'alert', function () { $("#dtDate").focus(); });
-                $("#dtDate").focus();
-                return false;
-            }
-            else if (combobox1.value() == "" || combobox1.text() == "") {
-                customAlert('Please select Warehouse', 'alert', function () { $("#drpWarehouse").focus(); });
-                $("#drpWarehouse").focus();
-                return false;
-            }
-            else if ($("#txtCustomer").val() == "") {
-                customAlert('Please enter Customer.', 'alert', function () { $("#txtCustomer").focus(); });
+                var gridData = _.filter(dataView.getItems(), function(item){ return  !(item.pid == undefined || item.pid=="") });
 
-                return false;
-            }
-            else if ($('#chkShedule').is(":checked") && $("#dtExpDate").val() == '') {
-                customAlert('Please select Sheduled date.', 'alert');
-                $("#dtExpDate").focus();
-                return false;
-            }
-            else {
-                var gridData = $("#grid").data("kendoGrid")._data;
+                if (gridData == undefined || gridData.length==0) {
+                    customAlert('Please select atleast one Product at Row 1', 'alert');
+                    return false;
+                }
+
                 for (var i = 0; i < gridData.length; i++) {
-                    if (gridData[0].productID == "" || gridData[0].Qty == null) {
-                        customAlert('Please select atleast one Product at Row 1', 'alert');
+                    if (gridData[i].pid != ""
+                        && (gridData[i].quantity == null || gridData[i].quantity == "" || gridData[i].quantity==0
+                            || gridData[i].price == null || gridData[i].price == "" || gridData[i].price==0  )) {
+                        customAlert("Please enter Quantity and Unit Price at Row" + (gridData[i].sno), 'alert');
                         return false;
+                        break;
                     }
                     else {
-                        if (gridData[i].productID == "" && gridData[i].Qty == null) {
-                            continue;
-                        }
-                        else if (gridData[i].productID != "" && gridData[i].Qty == null) {
-                            customAlert("Please enter Qty at Row" + (i + 1), 'alert');
-                            return false;
-                            break;
-                        }
-                        else if (gridData[i].productID == "" && gridData[i].Qty != null) {
-                            customAlert("Please Select Product at Row" + (i + 1), 'alert');
-                            return false;
-                        }
-                        else {
-                            xmlString += "<Child PID=\"" + gridData[i].productID + "\" QTY=\"" + gridData[i].Qty + "\" />";
-                        }
+                        xmlString += "<Child PID=\"" + gridData[i].pid + "\" QTY=\"" + gridData[i].quantity + "\" UnitPrice=\"" + gridData[i].price
+                                        + "\"  Discount=\"" + gridData[i].discount + "\"  TotalPrice=\"" + gridData[i].totalPrice + "\" />";
                     }
                 }
                 xmlString += "</Root>";
-            }
 
-            return {
-                DocID: $("#DocID").val(),
-                DocName: $("#txtDocName").val(),
-                DocDate: $("#dtDate").val(),
-                WareHouseId: combobox1.value(),
-                WareHouseName: combobox1.text(),
-                Customer: $("#txtCustomer").val(),
-                IsExpected: $('#chkShedule').is(":checked"),
-                EffectiveDate: $("#dtExpDate").val(),
-                Comments: $("#txtComments").val(),
-                GridData: xmlString
-            }
+                return {
 
+                    DocID: $("#DocID").val(),
+                    DocName: $("#txtDocName").val(),
+                    DocDate: $("#dtDate").val(),
+
+                    WareHouseId: $("#drpWarehouse").combogrid('getValue'),
+                    WareHouseName: $("#drpWarehouse").combogrid('getText'),
+
+                    CustomerId: $("#drpCustomer").combogrid('getValue'),
+                    CustomerName: $("#drpCustomer").combogrid('getText'),
+
+
+                    IsExpected: $('#chkShedule').is(":checked"),
+                    EffectiveDate: $("#dtExpDate").val(),
+                    Comments: $("#txtComments").val(),
+
+                    GridData: xmlString
+                }
+            }
+            return false;
         };
 
         var _Save = function () {
@@ -542,12 +490,19 @@
                     data: { Data: JSON.stringify(obj) },
                     success: function (res) {
                         if (res != "-494") {
-                            customAlert('Document saved as ' + res, 'alert', function () { $("#txtDocName").focus(); });
-                            refreshAsNewDoc();
+                            customAlert('Document saved as ' + res, 'alert', function () { $("#txtDocName").focus(); 
+                                if(parseInt( $("#DocID").val())>0) {
+                                    $("#btnNew").trigger("click");
+                                }
+                                else  {
+                                    refreshAsNewDoc();
+                                }
+
+                            });
                         }
                         else
                             customAlert('Error occured while saving. Please contact administrator.');
-                        //customAlert('Document saved as ' + res, 'alert', function () { $("#txtDocName").focus(); }); 
+                        //customAlert('Document saved as ' + res, 'alert', function () { $("#txtDocName").focus(); });
                         //refreshAsNewDoc();
                     },
                     beforeSend: function () {
@@ -563,27 +518,26 @@
 
         $("a#btnSave").on("click", function (e) {
             e.preventDefault();
-             
             _Save();
         });
 
-        //btnBack 
+        //btnBack
         $("#btnBack").on("click", function (e) {
             e.preventDefault();
             _back();
         });
 
-        //btnPrev 
+        //btnPrev
         $("#btnPrev").on("click", function (e) {
             e.preventDefault();
             _previousDoc();
         });
-        //btnNext 
+        //btnNext
         $("#btnNext").on("click", function (e) {
             e.preventDefault();
             _nextDoc();
         });
-        //btnBack 
+        //btnBack
         $("#btnNew").on("click", function (e) {
             e.preventDefault();
             _newDoc();

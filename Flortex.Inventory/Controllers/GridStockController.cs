@@ -639,7 +639,7 @@ namespace MAP.Inventory.Web.Controllers
             try
             {
                 DataSet ds = new DataSet();
-                OutwardDocument objModel = new OutwardDocument();
+                OutwardDocumentImple objModel = new OutwardDocumentImple();
                 ds = objModel.GetGirdData(0);//0 will get all the active Outward masters data 
                 DataTable dt = ds.Tables[0];
                 Dictionary<string, object> row;
@@ -664,7 +664,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult AddOutStock()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >AddOutStock()");
-            OutwardDocument objModel = new OutwardDocument();
+            OutwardDocumentImple objModel = new OutwardDocumentImple();
             try
             {
                 objModel.init();
@@ -680,7 +680,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult UpdateOutStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >UpdateOutStock(string DocID)");
-            OutwardDocument objModel = new OutwardDocument();
+            OutwardDocumentImple objModel = new OutwardDocumentImple();
             if (!string.IsNullOrEmpty(DocID))
             {
                 try
@@ -704,8 +704,8 @@ namespace MAP.Inventory.Web.Controllers
             string DocName = "";
             try
             {
-                OutwardDocument objModel = JsonConvert.DeserializeObject<OutwardDocument>(Data);
-                int Flg = 0;
+                OutwardDocumentImple objModel = JsonConvert.DeserializeObject<OutwardDocumentImple>(Data);
+                long Flg = 0;
                 string[] sD = objModel.DocDate.Split('-');
                 objModel.DocDate = new DateTime(Convert.ToInt32(sD[2]), Convert.ToInt32(sD[1]), Convert.ToInt32(sD[0])).ToString();
 
@@ -731,12 +731,12 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult DeleteOutStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >  DeleteOutStock(string DocID)");
-            int flg = 0;
+            long flg = 0;
             if (!string.IsNullOrEmpty(DocID))
             {
                 try
                 {
-                    OutwardDocument obj = new OutwardDocument();
+                    OutwardDocumentImple obj = new OutwardDocumentImple();
                     flg = obj.DeleteDocument(Convert.ToInt32(DocID));
                 }
                 catch (Exception ex)

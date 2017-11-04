@@ -127,8 +127,8 @@ namespace MAP.Inventory.ModelImple
                     {
                         this.GridData = JsonConvert.SerializeObject(ds.Tables[1]);
                     }
-                }
-                LoadScreenControls();
+                    LoadScreenControls();
+                }               
             }
             catch (Exception ex)
             {

@@ -112,11 +112,11 @@
                         <div class="span6">
                             @if (Model.DocID > 0 && Model.IsExpected)
                             {
-                                <input type="checkbox" style="padding: 10px; height: 10px;" class="mousetrap" name="chkShedule" id="chkShedule" checked="checked">
+                                <input type="checkbox" class="mousetrap" name="chkShedule" id="chkShedule" checked="checked">
                             }
                             else
                             {
-                                <input type="checkbox" style="padding: 20px; height: 30px; margin: 0px;" class="mousetrap" name="chkShedule" id="chkShedule">
+                                <input type="checkbox" class="mousetrap" name="chkShedule" id="chkShedule">
                             }
                         </div>
                         @if (Model.DocID > 0 && Model.IsExpected)
@@ -167,7 +167,7 @@
 </form>
 
 <script>
-    var warehouseOptions=@Html.Raw(Model.WareHouseOptions);
+    
     $(document).ready(function () {
         debugger
         var EndDate = '';
@@ -186,8 +186,8 @@
         }
 
 
-        var _warehouseChange=function(newValue, oldValue) {
-            debugger
+        @*var _warehouseChange=function(newValue, oldValue) {
+             
             if ('@Model.DocID' > 0 && oldValue) {
                 smoke.confirm("Existing product list will gets cleared. Do you wanto to proceed?", function (ev) {
                     if (ev) {
@@ -205,9 +205,9 @@
                     reverseButtons: true
                 });
             }
-        }
+        }*@
 
-        debugger
+        var warehouseOptions=@Html.Raw(Model.WareHouseOptions);
 
         //-----gets the warehouse data in the autocomplete list
         $("#drpWarehouse").combogrid(warehouseOptions);
@@ -405,8 +405,9 @@
         if ('@Model.DocID' > 0) {
             $("#drpWarehouse").combogrid('disable');
             $("#drpWarehouse").combogrid('setValue','@Model.WareHouseId');
-            $("#drpVendor").combogrid('setValue','@Model.VendorId');
             $("#drpWarehouse").combogrid('setText','@Model.WareHouseName');
+
+            $("#drpVendor").combogrid('setValue','@Model.VendorId'); 
             $("#drpVendor").combogrid('setText','@Model.VendorName');
             
             var jsonData =$.parseJSON( '@Html.Raw(Model.GridData)');
@@ -519,8 +520,15 @@
                     data: { Data: JSON.stringify(obj) },
                     success: function (res) {
                         if (res != "-494") {
-                            customAlert('Document saved as ' + res, 'alert', function () { $("#txtDocName").focus(); });
-                            refreshAsNewDoc();
+                            customAlert('Document saved as ' + res, 'alert', function () { $("#txtDocName").focus(); 
+                                if(parseInt( $("#DocID").val())>0) {
+                                    $("#btnNew").trigger("click");
+                                }
+                                else  {
+                                    refreshAsNewDoc();
+                                }
+
+                            });
                         }
                         else
                             customAlert('Error occured while saving. Please contact administrator.');
