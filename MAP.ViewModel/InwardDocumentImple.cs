@@ -24,20 +24,18 @@ namespace MAP.Inventory.ModelImple
         public string DocDate { get; set; }
         public string WareHouseId { get; set; }
         public string WareHouseName { get; set; }
-        public bool IsExpected { get; set; }
-        public string Vendor { get; set; }
-
+        public bool IsExpected { get; set; } 
         public string VendorId { get; set; }
         public string VendorName { get; set; }
 
         public string EffectiveDate { get; set; }
         public string Comments { get; set; }
         public string GridData { get; set; }
-
-
+         
         public string WareHouseOptions { get; set; }
         public string ProductsOptions { get; set; }
         public string VendorOptions { get; set; }
+
         public GridViewCustomization GridView { get; set; }
 
         public InwardDocumentImple()
@@ -118,14 +116,11 @@ namespace MAP.Inventory.ModelImple
                         if (this.IsExpected)
                         {
                             this.EffectiveDate = ConverDate(Convert.ToDateTime(ds.Tables[0].Rows[0]["efDate"].ToString()));
-                        }
-                        else
-                            this.EffectiveDate = ConverDate(DateTime.Now);
+                        } 
 
-                        this.Vendor = ds.Tables[0].Rows[0]["Vendor"].ToString();
+                        this.VendorId = ds.Tables[0].Rows[0]["VendorId"].ToString();
+                        this.VendorName = ds.Tables[0].Rows[0]["VendorName"].ToString();
                         this.Comments = ds.Tables[0].Rows[0]["Comments"].ToString();
-
-
                     }
 
                     if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
@@ -167,7 +162,7 @@ namespace MAP.Inventory.ModelImple
                 al.Add(Convert.ToDateTime(this.DocDate));
                 al.Add(this.WareHouseId);
                 al.Add(this.IsExpected);
-                al.Add(this.Vendor);
+                al.Add(this.VendorId);
                 al.Add(this.IsExpected ? this.EffectiveDate : null);
                 al.Add(this.GridData);
                 al.Add(this.Comments);

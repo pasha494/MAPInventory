@@ -237,17 +237,14 @@
         function initGridData(_data){
             // initialize the model after all the events have been hooked up
 
-            _.each(_data,function(item){
-
-
+            _.each(_data,function(item){ 
                 if( item.pid != "" && item.pcode != "" && item.pname != "" && item.quantity != "" && item.quantity != 0 && item.price != "" && item.price != 0) {
                     _.each(columns,function(col){
                         if(col.formula)  {
                             item[col.id]=math.eval(col.formula,item);
                         }
                     });
-                }
-
+                } 
             });
 
             dataView.beginUpdate();
@@ -281,6 +278,8 @@
         // This is for edit mode, when the DocID is greater than zero
         if ('@Model.DocID' > 0) {
             $("#drpWarehouse").combogrid('setValue','@Model.WareHouseId');
+            $("#drpWarehouse").combogrid('setText','@Model.WareHouseName');
+            $("#drpWarehouse").combogrid('disable');
             var jsonData =$.parseJSON( '@Html.Raw(Model.GridData)');
             initGridData(GetEmptyRows(jsonData));
         }
@@ -302,16 +301,12 @@
                 return false;
             }
             return flag;
-        };
-
-        var validateGridData = function () {
-
-        };
-
+        }; 
 
         var refreshAsNewDoc = function () {
             $("#DocID").val(0);
             $("#drpWarehouse").combogrid('setValue', '');
+            $("#drpWarehouse").combogrid('setText','');
             $("#dtDate").val(getDate());
             grid.invalidateAllRows();
             initGridData(GetEmptyRows([]));
