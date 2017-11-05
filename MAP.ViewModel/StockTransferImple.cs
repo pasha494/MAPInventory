@@ -1,4 +1,9 @@
-﻿using MAP.Inventory.Logging;
+﻿using MAP.Inventory.Common;
+using MAP.Inventory.DAL;
+using MAP.Inventory.Interface;
+using MAP.Inventory.Logging;
+using MAP.Inventory.Model;
+using MAP.Inventory.ModelImple;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -11,8 +16,11 @@ namespace MAP.Inventory.Web.Models
 {
 
     //StockTransfer  
-    public class StockTransfer : IDocument
+    public class StockTransferImple : IDocument
     {
+        LookUps _LookUps = new LookUps();
+        General _General = new General();
+
 
         public int DocID { get; set; }
         public string DocName { get; set; }
@@ -23,7 +31,12 @@ namespace MAP.Inventory.Web.Models
         public string ToWareHouseName { get; set; }
         public string Comments { get; set; }
         public string GridData { get; set; }
-        
+
+        public string WareHouseOptions { get; set; }
+        public string ProductsOptions { get; set; }
+
+        public GridViewCustomization GridView { get; set; }
+
         string ConverDate(DateTime date)
         {
             string str = "";
@@ -40,16 +53,43 @@ namespace MAP.Inventory.Web.Models
             return str;
         }
 
-        public StockTransfer()
+        public StockTransferImple()
         {
 
         }
 
         public void init()
         {
-            DocName = LookUps.GetDocName(4);// 1 stands for stock transfer.  
+            DocName = _LookUps.GetDocName((int)EnumGridView.StockTransfer);// 1 stands for stock transfer.  
+            LoadScreenControls();
         }
-        
+
+        void LoadScreenControls()
+        {
+            GetWareHouseListViewOptions(); 
+            GetProductsListViewOptions();
+            GetDocumentsGridViewOptions();
+        }
+
+
+        public void GetWareHouseListViewOptions()
+        {
+            MapListViewImple _wareHouseListView = new MapListViewImple((int)EnumListViews.WareHouses);
+            this.WareHouseOptions = _wareHouseListView.GetListViewOptions();
+        }
+  
+        public void GetProductsListViewOptions()
+        {
+            MapListViewImple _productsListView = new MapListViewImple((int)EnumListViews.Products);
+            this.ProductsOptions = _productsListView.GetListViewOptions();
+        }
+
+        public void GetDocumentsGridViewOptions()
+        {
+            MapGridViewImple _productsListView = new MapGridViewImple((int)EnumGridView.StockTransfer);
+            this.GridView = _productsListView.GetGridViewsCustomizationInfo(DocID);
+        }
+
         public void EditDocument(int DocID)
         {
             try
@@ -73,6 +113,7 @@ namespace MAP.Inventory.Web.Models
                     {
                         this.GridData = JsonConvert.SerializeObject(ds.Tables[1]);
                     }
+                    LoadScreenControls();
                 }
             }
             catch (Exception ex)
@@ -86,7 +127,7 @@ namespace MAP.Inventory.Web.Models
             DataSet ds = new DataSet();
             try
             {
-                ds = DAL.GetDataSet("sp_GetStockTransferData", new List<string>() { "@DocID" }, new ArrayList() { DocID });
+                ds = _General.Get(new ArrayList() { DocID }, "sp_GetStockTransferData", 0); 
             }
             catch (Exception ex)
             {
@@ -95,22 +136,13 @@ namespace MAP.Inventory.Web.Models
             return ds;
         }
 
-        public string SaveDocument(out int ret)
+        public string SaveDocument(out long ret)
         {
             ret = 0; string DocName = "";
 
             try
-            { 
-                List<string> objNames = new List<string>();
-                ArrayList al = new ArrayList();
-                objNames.Add("@DocID");
-                objNames.Add("@DocName");
-                objNames.Add("@DocDate");
-                objNames.Add("@ToWareHouseID");
-                objNames.Add("@FromWareHouseID");
-                objNames.Add("@Comments");
-                objNames.Add("@Data");
-                objNames.Add("@CreatedBy");
+            {  
+                ArrayList al = new ArrayList(); 
 
                 al.Add(this.DocID);
                 al.Add(this.DocName);
@@ -119,9 +151,9 @@ namespace MAP.Inventory.Web.Models
                 al.Add(this.FromWareHouseId);
                 al.Add(this.Comments);
                 al.Add(this.GridData);
-                al.Add(Convert.ToInt32(LookUps.GetSessionObject("UserID")));
-
-                DocName = DAL.ExecuteSP("sp_InsertUpdateStockTransfer", objNames, al, out ret);
+                al.Add(Convert.ToInt32(_LookUps.GetSessionObject("UserID")));
+                 
+                DocName = _General.Set(al, "sp_InsertUpdateStockTransfer", out ret, 0);
             }
             catch (Exception ex)
             {
@@ -131,20 +163,17 @@ namespace MAP.Inventory.Web.Models
             return DocName;
         }
 
-        public int DeleteDocument(int DocID)
+        public long DeleteDocument(int DocID)
         {
-            int flg = 0;
+            long flg = 0;
             try
-            {
-                List<string> objNames = new List<string>();
-                ArrayList al = new ArrayList();
-                objNames.Add("@DocID");
-                objNames.Add("@CreatedBy");
+            { 
+                ArrayList al = new ArrayList(); 
 
                 al.Add(DocID);
-                al.Add(Convert.ToInt32(LookUps.GetSessionObject("UserID")));
-
-                flg = DAL.ExecuteSP("sp_DeleteStockTransfer", objNames, al);
+                al.Add(Convert.ToInt32(_LookUps.GetSessionObject("UserID")));
+                 
+                _General.Set(al, "sp_DeleteStockTransfer", out flg, 0);
             }
             catch (Exception ex)
             {

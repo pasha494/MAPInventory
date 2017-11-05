@@ -212,11 +212,8 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\StockReport.cs" />
-    <Compile Include="Models\StockTransfer.cs" />
-    <Compile Include="Models\IDocument.cs" />
     <Compile Include="Models\SessionExpireAttribute.cs" />
     <Compile Include="Models\DAL.cs" />
-    <Compile Include="Models\LookUps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

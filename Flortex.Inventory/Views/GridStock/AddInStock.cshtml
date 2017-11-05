@@ -167,7 +167,7 @@
 </form>
 
 <script>
-    
+
     $(document).ready(function () {
         debugger
         var EndDate = '';
@@ -186,26 +186,13 @@
         }
 
 
-        @*var _warehouseChange=function(newValue, oldValue) {
-             
+        var _warehouseChange=function(newValue, oldValue) {
             if ('@Model.DocID' > 0 && oldValue) {
-                smoke.confirm("Existing product list will gets cleared. Do you wanto to proceed?", function (ev) {
-                    if (ev) {
-                        // Invalidate the rows
-                        grid.invalidateAllRows();
-                        initGridData(GetEmptyRows([]));
-                    }
-                    else  {
-                        //$("#drpWarehouse").combogrid('setValue',oldValue);
-                    }
-                }, {
-                    ok: "Yep",
-                    cancel: "Nope",
-                    classname: "custom-class",
-                    reverseButtons: true
-                });
+                // Invalidate the rows
+                grid.invalidateAllRows();
+                initGridData(GetEmptyRows([]));
             }
-        }*@
+        }
 
         var warehouseOptions=@Html.Raw(Model.WareHouseOptions);
 
@@ -407,9 +394,9 @@
             $("#drpWarehouse").combogrid('setValue','@Model.WareHouseId');
             $("#drpWarehouse").combogrid('setText','@Model.WareHouseName');
 
-            $("#drpVendor").combogrid('setValue','@Model.VendorId'); 
+            $("#drpVendor").combogrid('setValue','@Model.VendorId');
             $("#drpVendor").combogrid('setText','@Model.VendorName');
-            
+
             var jsonData =$.parseJSON( '@Html.Raw(Model.GridData)');
             initGridData(GetEmptyRows(jsonData));
 
@@ -520,7 +507,7 @@
                     data: { Data: JSON.stringify(obj) },
                     success: function (res) {
                         if (res != "-494") {
-                            customAlert('Document saved as ' + res, 'alert', function () { $("#txtDocName").focus(); 
+                            customAlert('Document saved as ' + res, 'alert', function () { $("#txtDocName").focus();
                                 if(parseInt( $("#DocID").val())>0) {
                                     $("#btnNew").trigger("click");
                                 }

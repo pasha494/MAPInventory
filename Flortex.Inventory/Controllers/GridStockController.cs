@@ -767,7 +767,7 @@ namespace MAP.Inventory.Web.Controllers
             try
             {
                 DataSet ds = new DataSet();
-                StockTransfer objModel = new StockTransfer();
+                StockTransferImple objModel = new StockTransferImple();
                 ds = objModel.GetGirdData(0);//0 will get all the active StockTransfer masters data 
                 DataTable dt = ds.Tables[0];
 
@@ -797,7 +797,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult AddStockTransfer()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method > AddStockTransfer()");
-            StockTransfer objModel = new StockTransfer();
+            StockTransferImple objModel = new StockTransferImple();
             try
             {
                 objModel.init();
@@ -818,7 +818,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult UpDateStockTransfer(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method > UpDateStockTransfer(string DocID)");
-            StockTransfer objModel = new StockTransfer();
+            StockTransferImple objModel = new StockTransferImple();
             try
             {
                 if (!string.IsNullOrEmpty(DocID))
@@ -847,8 +847,8 @@ namespace MAP.Inventory.Web.Controllers
             string DocName = "";
             try
             {
-                StockTransfer objModel = JsonConvert.DeserializeObject<StockTransfer>(Data);
-                int Flg = 0;
+                StockTransferImple objModel = JsonConvert.DeserializeObject<StockTransferImple>(Data);
+                long Flg = 0;
                 string[] sD = objModel.DocDate.Split('-');
                 objModel.DocDate = new DateTime(Convert.ToInt32(sD[2]), Convert.ToInt32(sD[1]), Convert.ToInt32(sD[0])).ToString();
                 DocName = objModel.SaveDocument(out Flg);
@@ -873,12 +873,12 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult DeleteStockTransfer(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method > DeleteStockTransfer(string DocID)");
-            int flg = 0;
+            long flg = 0;
             if (!string.IsNullOrEmpty(DocID))
             {
                 try
                 {
-                    StockTransfer obj = new Models.StockTransfer();
+                    StockTransferImple obj = new StockTransferImple();
                     flg = obj.DeleteDocument(Convert.ToInt32(DocID));
                 }
                 catch (Exception ex)
