@@ -1,12 +1,13 @@
 ﻿@model MAP.Inventory.Model.ProductsModel
 
 @using System.Data;
-@using MAP.Inventory.Web.Models;
+@using MAP.Inventory.ModelImple;
 @{
+    LookUps _LookUps = new LookUps();
     ViewBag.Title = "Products";
-    DataTable dt = LookUps.GetProductCategies();
-    DataTable dtStatus = LookUps.GetLookUps(1);// look up id for status=1 
-    
+    DataTable dt = _LookUps.GetProductCategies();
+    DataTable dtStatus = _LookUps.GetLookUps(1);// look up id for status=1 
+
 }
 
 <form role="search" id="frmProducts" class="cmxform">

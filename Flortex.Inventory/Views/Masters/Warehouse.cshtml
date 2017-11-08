@@ -1,11 +1,12 @@
 ﻿@model MAP.Inventory.Model.WareHouseModel
 
 @using System.Data;
-@using MAP.Inventory.Web.Models;
+@using MAP.Inventory.ModelImple;
 @{
-    ViewBag.Title = "Warehouse"; 
-    DataTable dtStatus = LookUps.GetLookUps(1);// look up id for status=1 
-    
+    ViewBag.Title = "Warehouse";
+    LookUps _LookUps = new LookUps();
+    DataTable dtStatus = _LookUps.GetLookUps(1);// look up id for status=1 
+
 }
 
 <form role="search" id="frmWareHouse" class="cmxform">

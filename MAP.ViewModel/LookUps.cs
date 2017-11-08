@@ -13,23 +13,23 @@ namespace MAP.Inventory.ModelImple
     public class LookUps
     {
         General _General = new General();
-        //public static DataTable GetProductCategies()
-        //{
-        //    DataTable dt = new DataTable();
-        //    try
-        //    {
-        //        DataSet ds = new DataSet();
-        //        ds = DAL.GetDataSet(" Select * from ProductCategory");
-        //        if (ds != null && ds.Tables.Count > 0)
-        //            dt = ds.Tables[0];
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        PLog.Error("Error::Class > LookUps, Method > GetProductCategies()", ex);
-        //    }
+        public DataTable GetProductCategies()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                DataSet ds = new DataSet();
+               // ds = DAL.GetDataSet(" Select * from ProductCategory");
+                if (ds != null && ds.Tables.Count > 0)
+                    dt = ds.Tables[0];
+            }
+            catch (Exception ex)
+            {
+                PLog.Error("Error::Class > LookUps, Method > GetProductCategies()", ex);
+            }
 
-        //    return dt;
-        //}
+            return dt;
+        }
 
         //public static DataTable GetWareHouses()
         //{
