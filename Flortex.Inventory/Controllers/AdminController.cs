@@ -45,7 +45,7 @@ namespace MAP.Inventory.Web.Controllers
 
 
         public ActionResult GridViewCustomization()
-        {           
+        {
 
 
             return View();
@@ -55,7 +55,7 @@ namespace MAP.Inventory.Web.Controllers
         {
             MapGridViewImple objGridView = new MapGridViewImple(FeatureId);
             GridViewCustomization objModal = objGridView.GetGridViewsCustomizationInfo(0);
-            string modelContent=JsonConvert.SerializeObject(objModal);
+            string modelContent = JsonConvert.SerializeObject(objModal);
             return Content(modelContent);
 
         }
@@ -77,6 +77,75 @@ namespace MAP.Inventory.Web.Controllers
 
             return Content(result.ToString());
         }
+
+
+
+        #region Roles
+        public ActionResult Roles()
+        {
+            List<RolesModel> objModel = null;
+            RolesImple _RolesImple = new RolesImple();
+            objModel = _RolesImple.GetRolesData();
+            ViewBag.MainTreeData = JsonConvert.SerializeObject(_RolesImple.GetRolesFeatureActionData());
+
+            return View(objModel);
+        }
+
+        [HttpPost]
+        public ActionResult SaveRoleData(int RoleId, string RoleName, string RoleData)
+        {
+            long result = 0;
+
+            try
+            {
+                RolesImple objModel = new RolesImple();
+                result = objModel.SaveRoleData(RoleId, RoleName, RoleData);
+
+            }
+            catch (Exception ex)
+            {
+                result = -494;
+            }
+
+            return Content(result.ToString());
+        }
+         
+        public ActionResult DeleteRole(int RoleId)
+        {
+            long result = 0;
+
+            try
+            {
+                RolesImple objModel = new RolesImple();
+                result = objModel.DeleteRole(RoleId);
+
+            }
+            catch (Exception ex)
+            {
+                result = -494;
+            }
+
+            return Content(result.ToString());
+        }
+
+        public ActionResult RefreshRoles()
+        {
+            List<RolesModel> objModel = null;
+            RolesImple _RolesImple = new RolesImple();
+            objModel = _RolesImple.GetRolesData();
+            return Content(JsonConvert.SerializeObject(objModel));
+        }
+
+        public ActionResult EditRole(int id)
+        {
+            RolesModel _RolesModel = new RolesModel();
+            RolesImple _RolesImple = new RolesImple();
+            _RolesModel = _RolesImple.GetRolesData(id);
+
+            return Content(JsonConvert.SerializeObject(_RolesModel));
+        }
+
+        #endregion
 
     }
 }

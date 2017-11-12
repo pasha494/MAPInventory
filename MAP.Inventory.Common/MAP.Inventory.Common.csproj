@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\MapListView.cs" />
+    <Compile Include="Controls\MapTree.cs" />
     <Compile Include="Crypto.cs" />
     <Compile Include="MapEnums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
