@@ -73,7 +73,9 @@
         <div class="row-fluid">
             <div class="span12">
                 <label for="roleTree" class="label">Role Features</label>
-                <ul id="roleTree" class="easyui-tree" data-options="animate:true,checkbox:true,width:500"></ul>
+                <div id="divRoleAddEdit">
+                    <ul id="roleTree" class="easyui-tree" data-options="animate:true,checkbox:true,width:500"></ul>
+                </div>
             </div>
         </div>
     </div>
@@ -92,6 +94,13 @@
             _inti();
             ``
             var _loadTree=function(data) {
+
+                if($('#roleTree').tree('getRoot')!=null && $('#roleTree').tree('getRoot').target) {
+                    $('#roleTree').remove();
+                    $("#divRoleAddEdit").append('<ul id="roleTree" class="easyui-tree" data-options="animate:true,checkbox:true,width:500"></ul>');
+
+                }
+
                 $('#roleTree').tree({
                     lines:true,
                     data: data
@@ -106,7 +115,7 @@
             });
 
             $("#tblRoles").on('click','a.btnEdit',function(e){
-                debugger
+                
                 e.preventDefault();
                 var id= parseInt( $(this).parents('tr').attr('data-roleid'));
                 if(id>0) {
@@ -114,7 +123,7 @@
                 }
             });
             $("#tblRoles").on('click','a.btnDelete',function(e){
-                debugger
+                 
                 e.preventDefault();
                 var id= parseInt( $(this).parents('tr').attr('data-roleid'));
                 if(id>0) {
@@ -129,17 +138,17 @@
                         cancel: "Nope",
                         classname: "custom-class",
                         reverseButtons: true
-                    });  
+                    });
                 }
             });
 
 
             $("#btnSaveRole").on('click',function(e){
+                
                 e.preventDefault();
                 if($("#frmRoles").valid() && validateData()){
-                    debugger
-                    model.roleName= $("#txtRoleName").val();
-                    model.roleData= JSON.stringify( [_createRoleData($.extend({},mainTreeData[0],$('#roleTree').tree('getData',$('#roleTree').tree('getRoot').target)))]);
+                    model.roleName= $("#txtRoleName").val().trim();
+                    model.roleData= JSON.stringify( [_createRoleData($.extend({},mainTreeData[0],$('#roleTree').tree('getData',$('#roleTree').tree('getRoot').target)))]);                    
 
                     $.ajax({
                         url: '/Admin/SaveRoleData',
@@ -155,7 +164,8 @@
                                 customAlert('Role has been created successfully.', 'alert',function(){  $("#btnBackToRoles").trigger('click');  });
                             }
                             else if (data ==-491){
-                                customAlert('This role is already exists.', 'alert');
+                                customAlert('This role name is already exists.', 'alert');
+                                _loadTree ($.parseJSON(model.roleData));
                             }
                             else if (data ==-494){
                                 customAlert('Error occured while saving. Please contact administrator.', 'alert');
@@ -230,7 +240,7 @@
                     },
                     complete: function () { $("#ajaxLoadingImg").hide(); },
                     success: function (data) {
-                       debugger
+                        
                         if(data && data.length>0)  {
                             $("#tblRoles>tbody").empty();
                             var tr='';
@@ -259,13 +269,14 @@
 
             var _editRole=function(_id){
                 $.ajax({
-                    url: '/Admin/EditRole',  
+                    url: '/Admin/EditRole',
                     data:{ id:_id},
                     beforeSend: function () {
                         $("#ajaxLoadingImg").show();
                     },
                     complete: function () { $("#ajaxLoadingImg").hide(); },
                     success: function (rolesData) {
+
                         var _rolesData=$.parseJSON(rolesData);
                         if(_rolesData) {
                             model.roleId=_rolesData.RoleId;
@@ -282,14 +293,14 @@
 
             var _deleteRole=function(_id) {
                 $.ajax({
-                    url: '/Admin/DeleteRole', 
+                    url: '/Admin/DeleteRole',
                     data:{ RoleId:_id},
                     beforeSend: function () {
                         $("#ajaxLoadingImg").show();
                     },
                     complete: function () { $("#ajaxLoadingImg").hide(); },
                     success: function (data) {
-                        if (data > 0) { 
+                        if (data > 0) {
                             customAlert('Role has been deleted successfully.', 'alert');
                             _refreshRoles();
                         }
