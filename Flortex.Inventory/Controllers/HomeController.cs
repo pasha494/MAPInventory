@@ -101,7 +101,7 @@ namespace MAP.Inventory.Web.Controllers
             return Content(Flg.ToString());
         }
 
-        [SessionExpire(Page="Landing")]
+        
         public ActionResult Index()
         {
             return View();
@@ -150,6 +150,13 @@ namespace MAP.Inventory.Web.Controllers
 
 
             return Content("1");
+        }
+
+
+        public ActionResult UnAuthorizedFeature()
+        { 
+
+            return Content("-493");
         }
 
 

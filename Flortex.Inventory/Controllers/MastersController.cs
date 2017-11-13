@@ -68,8 +68,8 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("END::Controller > Home, Method > LoadProductsCategory()");
             return serializer.Serialize(rows);
         }
-         
 
+        
         public ActionResult ProductsCategory()
         {
             PLog.Info("BEGIN::Controller > Home, Method > ProductsCategory");
@@ -77,6 +77,7 @@ namespace MAP.Inventory.Web.Controllers
             return View(new ProductsCategoryModel());
         }
          
+
 
         public ActionResult SaveProductsCategory(string Data)
         {
@@ -200,8 +201,8 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("END::Controller > Home, Method >ChangePasswordView");
             return View(new ProductsModel());
         }
-         
 
+        [SessionExpire(FeatureKey = "SaveProduct",RequestType =2)]
         public ActionResult SaveProduct(string Data)
         {
             PLog.Info("BEGIN::Controller > Home, Method > SaveProduct(string Data)");

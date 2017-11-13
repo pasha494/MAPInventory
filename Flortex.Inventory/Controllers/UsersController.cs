@@ -82,7 +82,7 @@ namespace MAP.Inventory.Web.Controllers
             return View(obj);
         }
 
-        
+        [SessionExpire(FeatureKey = "SaveUsers", RequestType = 2)]
         public ActionResult SaveUser(string Data)
         {
             PLog.Info("BEGIN::Controller > Home, Method > SaveUser(string Data)");

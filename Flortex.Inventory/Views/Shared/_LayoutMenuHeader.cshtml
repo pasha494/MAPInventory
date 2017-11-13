@@ -469,6 +469,13 @@
                 } 
             }
 
+
+            $(document).ajaxComplete(function (event, xhr, settings) {
+                debugger
+                    console.log("Triggered ajaxComplete handler. The result is " +
+                      xhr.responseText); 
+            });
+
         </script>
 
 

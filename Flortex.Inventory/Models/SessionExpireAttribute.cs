@@ -8,69 +8,41 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace MAP.Inventory.Web.Models
-{ 
+{
     public class SessionExpireAttribute : ActionFilterAttribute
     {
-        public string Page { get; set; }
+        public string FeatureKey { get; set; }
+
+        /// <summary>
+        /// 1 stands for Page
+        /// 2 stands for Ajax call
+        /// </summary>
+        public int RequestType { get; set; }
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             HttpContext ctx = HttpContext.Current;
-           
+
             // check  sessions here
             if ((HttpContext.Current == null || HttpContext.Current.Session == null) || HttpContext.Current.Session["SessionManager"] == null)
             {
                 filterContext.Result = new RedirectResult("~/Home/Login");
                 return;
             }
-            else if(HttpContext.Current.Session != null &&  HttpContext.Current.Session["SessionManager"] !=null )
+            else if (HttpContext.Current.Session != null && HttpContext.Current.Session["SessionManager"] != null)
             {
-                
-                SessionManager objSession = (SessionManager)HttpContext.Current.Session["SessionManager"];
-                if (objSession.RoleID == 2)//Sales man
+
+                SessionManager objSession = (SessionManager)HttpContext.Current.Session["SessionManager"];  
+
+                if (FeatureKey!=null && (objSession.RoleFeatures==null || !objSession.RoleFeatures.ContainsKey(FeatureKey) || !objSession.RoleFeatures[FeatureKey]))
                 {
-                    bool flg = false;
-                    string Controller=((filterContext.ActionDescriptor).ControllerDescriptor).ControllerName;
-                    string ActionName = (filterContext.ActionDescriptor).ActionName;
-
-                    if (Controller.ToLower() == "home" && (ActionName.ToLower() == "index") || ActionName.ToLower() == "signout"
-                        || ActionName.ToLower() == "changepasswordview" || ActionName.ToLower() == "unauthorizedaction"
-                        || ActionName.ToLower() == "changepassword"
-                        )
-                    {
-                        flg = true;
-                    }
-                    else if (Controller.ToLower() == "gridstock" && (ActionName.ToLower() == "getstockreport"
-                        || ActionName.ToLower() == "productsbyname" || ActionName.ToLower() == "getproductcategory"
-                        || ActionName.ToLower() == "productsbycode"
-                        || ActionName.ToLower() == "getquickstockreport"
-                        || ActionName.ToLower() == "getreordqtyhistory"
-                        || ActionName.ToLower() == "getconsolidatestockreport" 
-                        ))
-                    {
-                        flg = true;
-                    }
-
-                    if (!flg)
+                    if (RequestType == 1)// for page calls
                     {
                         filterContext.Result = new RedirectResult("~/Home/UnAuthorizedAction");
                         return;
                     }
-
-                }
-                else if (objSession.RoleID == 3)
-                {
-                    bool flg = true;
-                    string Controller = ((filterContext.ActionDescriptor).ControllerDescriptor).ControllerName;
-                    string ActionName = (filterContext.ActionDescriptor).ActionName;
-
-                    if (Controller.ToLower() == "home" && (ActionName.ToLower() == "usercreation" || ActionName.ToLower() == "users"
-                        || ActionName.ToLower() == "saveuser" || ActionName.ToLower() == "deleteuser" || ActionName.ToLower() == "updateuser")) 
+                    else // for Ajax calls
                     {
-                        flg = false;
-                    }
-                    if (!flg)
-                    {
-                        filterContext.Result = new RedirectResult("~/Home/UnAuthorizedAction");
+                        filterContext.Result = new RedirectResult("~/Home/UnAuthorizedFeature");
                         return;
                     }
                 }
