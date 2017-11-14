@@ -1,7 +1,7 @@
 ﻿using MAP.Inventory.Interface;
 using MAP.Inventory.Logging;
 using MAP.Inventory.Model;
-using MAP.Inventory.ModelImple; 
+using MAP.Inventory.ModelImple;
 using MAP.Inventory.Web.Models;
 using Newtonsoft.Json;
 using System;
@@ -13,12 +13,15 @@ using System.Web.Mvc;
 
 namespace MAP.Inventory.Web.Controllers
 {
-    [SessionExpire]
+
     public class MastersController : Controller
     {
 
         #region Product Masters
-                
+
+
+
+        [SessionExpire(FeatureKey = "ProductsCategoryLandingPage", RequestType = 1)]
         public ActionResult ProductsCategoryList()
         {
             PLog.Info("BEGIN::Controller > Home, Method > ProductCategoryList()");
@@ -35,7 +38,8 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("END::Controller > Home, Method > ProductCategoryList()");
             return View();
         }
-         
+
+        [SessionExpire(FeatureKey = "ProductsCategoryLandingPage", RequestType = 1)]
         public string LoadProductsCategory()
         {
             PLog.Info("BEGIN::Controller > Home, Method > LoadProductsCategory()");
@@ -69,16 +73,16 @@ namespace MAP.Inventory.Web.Controllers
             return serializer.Serialize(rows);
         }
 
-        
+        [SessionExpire(FeatureKey = "AddProductsCategory", RequestType = 1)]
         public ActionResult ProductsCategory()
         {
             PLog.Info("BEGIN::Controller > Home, Method > ProductsCategory");
             PLog.Info("END::Controller > Home, Method >ProductsCategory");
             return View(new ProductsCategoryModel());
         }
-         
 
 
+        [SessionExpire(FeatureKey = "SaveProductCategory", RequestType = 2)]
         public ActionResult SaveProductsCategory(string Data)
         {
             PLog.Info("BEGIN::Controller > Home, Method > SaveProductsCategory(string Data)");
@@ -96,8 +100,8 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("END::Controller > Home, Method > SaveProductsCategory(string Data)");
             return Content(flg.ToString());
         }
-         
 
+        [SessionExpire(FeatureKey = "EditProductsCategory", RequestType = 1)]
         public ActionResult UpdateProductsCategory(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > UpdateProductsCategory(string ID");
@@ -108,7 +112,7 @@ namespace MAP.Inventory.Web.Controllers
 
                 if (!string.IsNullOrEmpty(ID))
                 {
-                    objModel= oProducts.EditProdcutCategory(Convert.ToInt32(ID));
+                    objModel = oProducts.EditProdcutCategory(Convert.ToInt32(ID));
                 }
             }
             catch (Exception ex)
@@ -118,8 +122,8 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("END::Controller > Home, Method > UpdateProductsCategory(string ID)");
             return View("ProductsCategory", objModel);
         }
-         
 
+        [SessionExpire(FeatureKey = "DeleteProductsCategory", RequestType = 2)]
         public long DeleteProductsCategory(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > DeleteProductsCategory(string ID)");
@@ -141,7 +145,7 @@ namespace MAP.Inventory.Web.Controllers
         }
 
 
-         
+        [SessionExpire(FeatureKey = "ProductsLanding", RequestType = 1)]
         public ActionResult ProductsList()
         {
             PLog.Info("BEGIN::Controller > Home, Method > ProductsList()");
@@ -159,8 +163,8 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("END::Controller > Home, Method > ProductsList()");
             return View();
         }
-         
 
+        [SessionExpire(FeatureKey = "ProductsLanding", RequestType = 1)]
         public string LoadProducts()
         {
             PLog.Info("BEGIN::Controller > Home, Method > LoadProducts()");
@@ -193,8 +197,8 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("END::Controller > Home, Method > LoadProducts()");
             return serializer.Serialize(rows);
         }
-         
 
+        [SessionExpire(FeatureKey = "AddProducts", RequestType = 1)]
         public ActionResult Products()
         {
             PLog.Info("BEGIN::Controller > Home, Method > ChangePasswordView");
@@ -202,7 +206,7 @@ namespace MAP.Inventory.Web.Controllers
             return View(new ProductsModel());
         }
 
-        [SessionExpire(FeatureKey = "SaveProduct",RequestType =2)]
+        [SessionExpire(FeatureKey = "SaveProduct", RequestType = 2)]
         public ActionResult SaveProduct(string Data)
         {
             PLog.Info("BEGIN::Controller > Home, Method > SaveProduct(string Data)");
@@ -223,7 +227,7 @@ namespace MAP.Inventory.Web.Controllers
             return Content(flg.ToString());
         }
 
-
+        [SessionExpire(FeatureKey = "EditProducts", RequestType = 1)]
         public ActionResult UpdateProduct(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > UpdateProduct(string ID");
@@ -234,7 +238,7 @@ namespace MAP.Inventory.Web.Controllers
 
                 if (!string.IsNullOrEmpty(ID))
                 {
-                    objModel=oProductsImple.EditProdcut(Convert.ToInt32(ID));
+                    objModel = oProductsImple.EditProdcut(Convert.ToInt32(ID));
                 }
             }
             catch (Exception ex)
@@ -245,7 +249,7 @@ namespace MAP.Inventory.Web.Controllers
             return View("Products", objModel);
         }
 
-
+        [SessionExpire(FeatureKey = "DeleteProducts", RequestType = 2)]
         public long DeleteProduct(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > DeleteProduct(string ID)");
@@ -254,7 +258,7 @@ namespace MAP.Inventory.Web.Controllers
             {
                 try
                 {
-                    IProductsImple oProductsImple = new ProductsImple(); 
+                    IProductsImple oProductsImple = new ProductsImple();
                     ret = oProductsImple.DeleteProduct(Convert.ToInt32(ID));
                 }
                 catch (Exception ex)
@@ -272,7 +276,7 @@ namespace MAP.Inventory.Web.Controllers
 
 
         #region Warehouse Master
-  
+        [SessionExpire(FeatureKey = "WarehousesLanding", RequestType = 1)]
         public ActionResult Warehouses()
         {
             PLog.Info("BEGIN::Controller > Home, Method >Warehouses ");
@@ -292,7 +296,8 @@ namespace MAP.Inventory.Web.Controllers
             return View();
 
         }
-     
+
+        [SessionExpire(FeatureKey = "WarehousesLanding", RequestType = 1)]
         public string LoadWarehouses()
         {
             PLog.Info("BEGIN::Controller > Home, Method >LoadWarehouses ");
@@ -321,7 +326,8 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("END::Controller > Home, Method > LoadWarehouses");
             return serializer.Serialize(rows);
         }
-        
+
+        [SessionExpire(FeatureKey = "AddWarehouse", RequestType = 1)]
         public ActionResult Warehouse()
         {
             PLog.Info("BEGIN::Controller > Home, Method >Warehouse() ");
@@ -329,7 +335,8 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("END::Controller > Home, Method > Warehouse()");
             return View(objModel);
         }
-     
+
+        [SessionExpire(FeatureKey = "SaveWarehouse", RequestType = 2)]
         public ActionResult SaveWarehouse(string Data)
         {
             PLog.Info("BEGIN::Controller > Home, Method > SaveWarehouse(string Data) ");
@@ -352,7 +359,8 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("END::Controller > Home, Method > SaveWarehouse(string Data)");
             return Content(flg.ToString());
         }
-         
+
+        [SessionExpire(FeatureKey = "EditWarehouse", RequestType = 1)]
         public ActionResult UpDateWarehouse(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method >UpDateWarehouse(string ID) ");
@@ -372,7 +380,8 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("END::Controller > Home, Method > UpDateWarehouse(string ID) ");
             return View("Warehouse", objModel);
         }
-        
+
+        [SessionExpire(FeatureKey = "DeleteWarehouse", RequestType = 2)]
         public long DeleteWarehouse(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method >DeleteWarehouse(string ID) ");
@@ -399,13 +408,15 @@ namespace MAP.Inventory.Web.Controllers
 
 
         #region Customers/Vendors 
+        [SessionExpire(FeatureKey = "AddCustomers", RequestType = 1)]
         public ActionResult AddCustomer()
-        { 
+        {
 
-            return View(new CustomerModel()); 
+            return View(new CustomerModel());
         }
 
 
+        [SessionExpire(FeatureKey = "SaveCustomers", RequestType = 2)]
         public ActionResult SaveCustomer(string Data)
         {
             PLog.Info("BEGIN::Controller > Home, Method > SaveProduct(string Data)");
@@ -413,7 +424,7 @@ namespace MAP.Inventory.Web.Controllers
             ICustomerImple oCustomerImple = new CustomerImple();
             try
             {
-                CustomerModel obj = JsonConvert.DeserializeObject<CustomerModel>(Data); 
+                CustomerModel obj = JsonConvert.DeserializeObject<CustomerModel>(Data);
                 flg = oCustomerImple.Save(obj);
             }
             catch (Exception ex)
@@ -424,8 +435,8 @@ namespace MAP.Inventory.Web.Controllers
             return Content(flg.ToString());
         }
 
-       
 
+        [SessionExpire(FeatureKey = "EditCustomers", RequestType = 1)]
         public ActionResult UpdateCustomer(string ID)
         {
             PLog.Info("BEGIN::Controller > UpdateCustomer, Method > UpdateCustomer(string ID");
@@ -447,7 +458,7 @@ namespace MAP.Inventory.Web.Controllers
             return View("AddCustomer", objModel);
         }
 
-
+        [SessionExpire(FeatureKey = "DeleteCustomers", RequestType = 2)]
         public long DeleteCustomer(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > DeleteProduct(string ID)");
@@ -469,7 +480,7 @@ namespace MAP.Inventory.Web.Controllers
             return ret;
         }
 
-
+        [SessionExpire(FeatureKey = "CustomersLanding", RequestType = 1)]
         public ActionResult CustomersList()
         {
             PLog.Info("BEGIN::Controller > Home, Method >Warehouses ");
@@ -490,10 +501,11 @@ namespace MAP.Inventory.Web.Controllers
 
         }
 
+        [SessionExpire(FeatureKey = "CustomersLanding", RequestType = 1)]
         public string Getcustomers()
         {
             PLog.Info("BEGIN::Controller > Home, Method >LoadWarehouses ");
-       
+
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             try
             {

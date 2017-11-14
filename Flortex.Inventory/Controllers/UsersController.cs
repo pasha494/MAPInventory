@@ -12,7 +12,9 @@ namespace MAP.Inventory.Web.Controllers
 {
     [SessionExpire]
     public class UsersController : Controller
-    { 
+    {
+
+        [SessionExpire(FeatureKey = "UsersLanding", RequestType = 1)]
         public ActionResult Index()
         {
             PLog.Info("BEGIN::Controller > Home, Method > Users()");
@@ -31,7 +33,7 @@ namespace MAP.Inventory.Web.Controllers
             return View();
         }
 
-        
+        [SessionExpire(FeatureKey = "UsersLanding", RequestType = 1)]
         public string LoadUsers()
         {
             PLog.Info("BEGIN::Controller > Home, Method > LoadUsers()");
@@ -64,7 +66,7 @@ namespace MAP.Inventory.Web.Controllers
             return serializer.Serialize(rows);
         }
 
-       
+        [SessionExpire(FeatureKey = "AddUsers", RequestType = 1)]
         public ActionResult UserCreation()
         {
             PLog.Info("BEGIN::Controller > Home, Method > UserCreation()");
@@ -103,7 +105,7 @@ namespace MAP.Inventory.Web.Controllers
             return Content(flg.ToString());
         }
 
-       
+        [SessionExpire(FeatureKey = "DeleteUsers", RequestType = 2)]
         public long DeleteUser(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > DeleteUser(string ID)");
@@ -125,7 +127,7 @@ namespace MAP.Inventory.Web.Controllers
             return ret;
         }
 
-       
+        [SessionExpire(FeatureKey = "EditUsers", RequestType = 1)]
         public ActionResult UpDateUser(string ID)
         {
             PLog.Info("BEGIN::Controller > Home, Method > UpDateUser(string ID)");
@@ -156,8 +158,7 @@ namespace MAP.Inventory.Web.Controllers
             return View();
         }
 
-
-        
+         
         public ActionResult ChangePassword(string CurrentPassword, string NewPassword)
         {
             PLog.Info("BEGIN::Controller > Home, Method > ChangePasswordView(string CurrentPassword, string NewPassword)");
