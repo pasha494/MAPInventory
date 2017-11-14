@@ -148,7 +148,7 @@
                 e.preventDefault();
                 if($("#frmRoles").valid() && validateData()){
                     model.roleName= $("#txtRoleName").val().trim();
-                    model.roleData= JSON.stringify( [_createRoleData($.extend({},mainTreeData[0],$('#roleTree').tree('getData',$('#roleTree').tree('getRoot').target)))]);                    
+                    model.roleData= JSON.stringify( [_createRoleData($.extend(true,{},mainTreeData[0],$('#roleTree').tree('getData',$('#roleTree').tree('getRoot').target)))]);                    
 
                     $.ajax({
                         url: '/Admin/SaveRoleData',

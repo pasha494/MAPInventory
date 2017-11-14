@@ -128,92 +128,166 @@
                             <nav>
                                 <div class="nav-collapse">
                                     <ul class="nav">
+
                                         <li><a href="@Url.Action("Index", "Home")"><i class="icon-home icon-white"></i> Home</a></li>
 
-                                        @if (objSession.RoleID == 1 || objSession.RoleID == 3)
+                                        @if (objSession.RoleFeatures["Masters"])
                                         {
                                             <li class="dropdown">
                                                 <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-book icon-white"> </i> Masters <b class="caret"></b></a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="@Url.Action("ProductsList", "Masters")">Products</a></li>
-                                                    <li><a href="@Url.Action("ProductsCategoryList", "Masters")">Product Category</a></li>
-                                                    <li><a href="@Url.Action("Warehouses", "Masters")">Warehouses</a></li>
-                                                    <li><a href="@Url.Action("AddCustomer", "Masters")">Add Customer</a></li>
-                                                    @if (objSession.RoleID == 1)
+                                                    @if (objSession.RoleFeatures["ProductsLanding"])
+                                                    {
+                                                        <li><a href="@Url.Action("ProductsList", "Masters")">Products</a></li>
+                                                    }
+                                                    @if (objSession.RoleFeatures["ProductsCategoryLandingPage"])
+                                                    {
+                                                        <li><a href="@Url.Action("ProductsCategoryList", "Masters")">Product Category</a></li>
+                                                    }
+                                                    @if (objSession.RoleFeatures["WarehousesLanding"])
+                                                    {
+                                                        <li><a href="@Url.Action("Warehouses", "Masters")">Warehouses</a></li>
+                                                    }
+                                                    @if (objSession.RoleFeatures["CustomersLanding"])
+                                                    {
+                                                        <li><a href="@Url.Action("AddCustomer", "Masters")">Add Customer</a></li>
+                                                    }
+
+                                                    @if (objSession.RoleFeatures["UsersLanding"])
                                                     {
                                                         <li><a href="@Url.Action("Index", "Users")">Users</a></li>
                                                     }
 
                                                 </ul>
                                             </li>
-
+                                        }
+                                        @if (objSession.RoleFeatures["Stocks"])
+                                        {
                                             <li class="dropdown">
                                                 <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-briefcase icon-white"></i> Stocks <b class="caret"></b></a>
                                                 <ul class="dropdown-menu">
 
+                                                    @if (objSession.RoleFeatures["ProductsLanding"] || objSession.RoleFeatures["OPS_Add"])
+                                                    {
 
-                                                    <li class="dropdown">
-                                                        <a href="javascript:void(0);">Opening Stocks <b class="caret-right"></b></a>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a href="@Url.Action("OpeningStock", "GridStock")">Opening Stocks list</a></li>
-                                                            <li><a href="@Url.Action("AddOpStock", "GridStock")">Add Opening Stocks</a></li>
-                                                        </ul>
-                                                    </li>
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);">Opening Stocks <b class="caret-right"></b></a>
+                                                            <ul class="dropdown-menu">
+                                                                @if (objSession.RoleFeatures["ProductsLanding"])
+                                                                {
+                                                                    <li><a href="@Url.Action("OpeningStock", "GridStock")">Opening Stocks list</a></li>
+                                                                }
+                                                                @if (objSession.RoleFeatures["OPS_Add"])
+                                                                {
+                                                                    <li><a href="@Url.Action("AddOpStock", "GridStock")">Add Opening Stocks</a></li>
+                                                                }
+                                                            </ul>
+                                                        </li>
+                                                        <li class="divider"></li>
+                                                    }
+                                                    @if (objSession.RoleFeatures["InwardLanding"] || objSession.RoleFeatures["INW_Add"])
+                                                    {
 
-                                                    <li class="divider"></li>
-                                                    <li>
-                                                        <a href="javascript:void(0);">Inward Stocks <b class="caret-right"></b></a>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a href="@Url.Action("InwardStock", "GridStock")">Inward Stocks list</a></li>
-                                                            <li><a href="@Url.Action("AddInStock", "GridStock")">Add Inward Stocks</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li class="divider"></li>
+                                                        <li>
+                                                            <a href="javascript:void(0);">Inward Stocks <b class="caret-right"></b></a>
+                                                            <ul class="dropdown-menu">
+                                                                @if (objSession.RoleFeatures["InwardLanding"])
+                                                                {
+                                                                    <li><a href="@Url.Action("InwardStock", "GridStock")">Inward Stocks list</a></li>
+                                                                }
 
-                                                    <li>
-                                                        <a href="javascript:void(0);">Outward Stocks <b class="caret-right"></b></a>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a href="@Url.Action("OutwardStock", "GridStock")">Outward Stocks list</a></li>
-                                                            <li><a href="@Url.Action("AddOutStock", "GridStock")">Add Outward Stocks</a></li>
-                                                        </ul>
-                                                    </li>
+                                                                @if (objSession.RoleFeatures["INW_Add"])
+                                                                {
+                                                                    <li><a href="@Url.Action("AddInStock", "GridStock")">Add Inward Stocks</a></li>
+                                                                }
+                                                            </ul>
+                                                        </li>
+                                                        <li class="divider"></li>
+                                                    }
 
+                                                    @if (objSession.RoleFeatures["OutwardLanding"] || objSession.RoleFeatures["OUT_Add"])
+                                                    {
+                                                        <li>
+                                                            <a href="javascript:void(0);">Outward Stocks <b class="caret-right"></b></a>
+                                                            <ul class="dropdown-menu">
+                                                                @if (objSession.RoleFeatures["OutwardLanding"])
+                                                                {
+
+                                                                    <li><a href="@Url.Action("OutwardStock", "GridStock")">Outward Stocks list</a></li>
+                                                                }
+                                                                @if (objSession.RoleFeatures["OUT_Add"])
+                                                                {
+
+                                                                    <li><a href="@Url.Action("AddOutStock", "GridStock")">Add Outward Stocks</a></li>
+                                                                }
+                                                            </ul>
+                                                        </li>
+                                                    }
 
                                                 </ul>
                                             </li>
+                                        }
 
+                                        @if (objSession.RoleFeatures["StockTransferLanding"])
+                                        {
                                             <li class="dropdown">
                                                 <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-retweet icon-white"></i> Transfer <b class="caret"></b></a>
                                                 <ul class="dropdown-menu">
-                                                    <li>
-                                                        <a href="@Url.Action("StockTransfer", "GridStock")">Stock</a>
-
-                                                    </li>
-
+                                                    @if (objSession.RoleFeatures["StockTransferLanding"])
+                                                    {
+                                                        <li> <a href="@Url.Action("StockTransfer", "GridStock")">Stock Transfer List</a> </li>
+                                                    }
+                                                    @if (objSession.RoleFeatures["STR_Add"])
+                                                    {
+                                                        <li><a href="@Url.Action("AddStockTransfer", "GridStock")">Add Stock Transfer</a></li>
+                                                    }
                                                 </ul>
                                             </li>
-
                                         }
 
-                                        <li class="dropdown">
-                                            <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-th icon-white"></i> Reports <b class="caret"></b></a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/GridStock/GetQuickStockReport">Quick Report</a></li>
-                                                <li><a href="/GridStock/GetStockReport">Detailed Report</a></li>
-                                                <li><a href="/GridStock/GetConsolidateStockReport">Consolidated Report</a></li>
-                                            </ul>
-                                        </li>
+                                        @if (objSession.RoleFeatures["Reports"])
+                                        {
+                                            <li class="dropdown">
+                                                <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-th icon-white"></i> Reports <b class="caret"></b></a>
+                                                <ul class="dropdown-menu">
+                                                    @if (objSession.RoleFeatures["QuickReports"])
+                                                    {
+                                                        <li><a href="@Url.Action("GetQuickStockReport", "GridStock")">Quick Report</a></li>
+                                                    }
+                                                    @if (objSession.RoleFeatures["DetailedReport"])
+                                                    {
+                                                        <li><a href="@Url.Action("GetStockReport", "GridStock")">Detailed Report</a></li>
+                                                    }
+                                                    @if (objSession.RoleFeatures["ConsolidatedReport"])
+                                                    {
+                                                        <li><a href="@Url.Action("GetConsolidateStockReport", "GridStock")">Consolidated Report</a></li>
+                                                    }
+                                                </ul>
+                                            </li>
+                                        }
 
+                                        @if (objSession.RoleFeatures["Cusotmization"])
+                                        {
+                                            <li class="dropdown">
+                                                <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-th icon-white"></i> Customization <b class="caret"></b></a>
+                                                <ul class="dropdown-menu">
+                                                    @if (objSession.RoleFeatures["ListViewCusotmization"])
+                                                    {
+                                                        <li><a href="@Url.Action("ListViewCustomization", "Admin")">List views</a></li>
+                                                    }
 
-                                        <li class="dropdown">
-                                            <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);"><i class="icon-th icon-white"></i> Customization <b class="caret"></b></a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="@Url.Action("ListViewCustomization", "Admin")">List views</a></li>
-                                                <li><a href="@Url.Action("GridViewCustomization", "Admin")">Grid views</a></li>
-                                                <li><a href="@Url.Action("Roles", "Admin")">Roles</a></li>
-                                            </ul>
-                                        </li>
-                                      
+                                                    @if (objSession.RoleFeatures["GridViewCustomization"])
+                                                    {
+                                                        <li><a href="@Url.Action("GridViewCustomization", "Admin")">Grid views</a></li>
+                                                    }
+
+                                                    @if (objSession.RoleFeatures["RolesCustomization"])
+                                                    {
+                                                        <li><a href="@Url.Action("Roles", "Admin")">Roles</a></li>
+                                                    }
+                                                </ul>
+                                            </li>
+                                        }
                                     </ul>
                                 </div>
                             </nav>
@@ -231,12 +305,12 @@
         </div>
 
         @*<footer style="margin-left: 43%;">
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p>&copy; @DateTime.Now.Year -&copy; MAPTech Inventory</p>
+                <div class="content-wrapper">
+                    <div class="float-left">
+                        <p>&copy; @DateTime.Now.Year -&copy; MAPTech Inventory</p>
+                    </div>
                 </div>
-            </div>
-        </footer>*@
+            </footer>*@
 
         <!-- sidebar -->
         <a href="javascript:void(0)" class="sidebar_switch on_switch ttip_r" title="Hide Sidebar">Sidebar switch</a>
@@ -466,14 +540,14 @@
                 }
                 else {
                     $("#ajaxLoadingImg").hide();
-                } 
+                }
             }
 
 
             $(document).ajaxComplete(function (event, xhr, settings) {
                 debugger
-                    console.log("Triggered ajaxComplete handler. The result is " +
-                      xhr.responseText); 
+                console.log("Triggered ajaxComplete handler. The result is " +
+                  xhr.responseText);
             });
 
         </script>

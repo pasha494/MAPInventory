@@ -31,9 +31,9 @@ namespace MAP.Inventory.Web.Models
             else if (HttpContext.Current.Session != null && HttpContext.Current.Session["SessionManager"] != null)
             {
 
-                SessionManager objSession = (SessionManager)HttpContext.Current.Session["SessionManager"];  
+                SessionManager objSession = (SessionManager)HttpContext.Current.Session["SessionManager"];
 
-                if (FeatureKey!=null && (objSession.RoleFeatures==null || !objSession.RoleFeatures.ContainsKey(FeatureKey) || !objSession.RoleFeatures[FeatureKey]))
+                if (FeatureKey != null && (objSession.RoleFeatures == null || !objSession.RoleFeatures.ContainsKey(FeatureKey) || !objSession.RoleFeatures[FeatureKey]) && objSession.RoleID != 1)
                 {
                     if (RequestType == 1)// for page calls
                     {

@@ -17,13 +17,13 @@ namespace MAP.Inventory.Web.Controllers
 {
 
     public class HomeController : Controller
-    { 
+    {
 
-//        select top 7 OS.DocNo, SUM(OM.Quantity) Quantity ,SUM(OM.TotalPrice)  TotalPrice
-//        from OpeningStockMaster OS
-//Inner join OpeningMasterData OM on OS.DocNo=OM.DocNo
-//group by OS.DocNo
-//order by OS.DocNo desc
+        //        select top 7 OS.DocNo, SUM(OM.Quantity) Quantity ,SUM(OM.TotalPrice)  TotalPrice
+        //        from OpeningStockMaster OS
+        //Inner join OpeningMasterData OM on OS.DocNo=OM.DocNo
+        //group by OS.DocNo
+        //order by OS.DocNo desc
 
 
 
@@ -101,13 +101,14 @@ namespace MAP.Inventory.Web.Controllers
             return Content(Flg.ToString());
         }
 
-        
+
+        [SessionExpire(FeatureKey = "HomeLanding", RequestType = 1)]
         public ActionResult Index()
         {
             return View();
         }
 
-        
+
 
         [HttpPost]
         public ActionResult Save(string contentType, string base64, string fileName)
@@ -154,7 +155,7 @@ namespace MAP.Inventory.Web.Controllers
 
 
         public ActionResult UnAuthorizedFeature()
-        { 
+        {
 
             return Content("-493");
         }

@@ -79,7 +79,7 @@ namespace MAP.Inventory.ModelImple
                 if (tree != null && tree.Length > 0)
                 {
                    
-                    LoadRoleFeatureActions(tree[0], ref roleFeatureActions);
+                    LoadRoleFeatureActions(tree[0], ref roleFeatureActions, objSession);
 
                 }
             }
@@ -92,16 +92,16 @@ namespace MAP.Inventory.ModelImple
         }
 
 
-        void LoadRoleFeatureActions(MapTree tree, ref Dictionary<string, bool> FeatureActions)
+        void LoadRoleFeatureActions(MapTree tree, ref Dictionary<string, bool> FeatureActions, SessionManager objSession)
         {
             if (!FeatureActions.ContainsKey(tree.field))
-                FeatureActions.Add(tree.field, (tree.@checked || tree.indeterminate));
+                FeatureActions.Add(tree.field, (tree.@checked || tree.indeterminate || objSession.RoleID==1));
 
             if (tree.children != null && tree.children.Count > 0)
             {
                 for (int i = 0; i < tree.children.Count; i++)
                 {
-                    LoadRoleFeatureActions(tree.children[i], ref FeatureActions);
+                    LoadRoleFeatureActions(tree.children[i], ref FeatureActions, objSession);
                 }
             }
 
