@@ -1,9 +1,12 @@
-﻿@model MAP.Inventory.Web.Models.OutwardDocumentImple
-@using System.Data;
-@using MAP.Inventory.Web.Models;
+﻿@model MAP.Inventory.Web.Models.OutwardDocumentImple 
+@using MAP.Inventory.Model;
 @{
- 
-   
+    SessionManager objSession = null;
+    if (Session["SessionManager"] != null)
+    {
+        objSession = (SessionManager)Session["SessionManager"];
+    }
+
 }
 
 <link rel="stylesheet" href="~/Content/SlickGrid/slick.grid.css" type="text/css" />
@@ -36,11 +39,30 @@
             }
 
             <div class="pull-right">
-                <a id="btnSave" class="btn btn-default">Save</a>
-                <a id="btnNew" class="btn btn-default">New</a>
-                <a id="btnPrev" class="btn btn-default">Previous</a>
-                <a id="btnNext" class="btn btn-default">Next</a>
-                <a id="btnBack" class="btn btn-default">Back to Documents</a>
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("OUT_Save") && objSession.RoleFeatures["OUT_Save"])
+                {
+                    <a id="btnSave" class="btn btn-default">Save</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("OUT_New") && objSession.RoleFeatures["OUT_New"])
+                {
+                    <a id="btnNew" class="btn btn-default">New</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("OUT_Previous") && objSession.RoleFeatures["OUT_Previous"])
+                {
+                    <a id="btnPrev" class="btn btn-default">Previous</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("OUT_Next") && objSession.RoleFeatures["OUT_Next"])
+                {
+                    <a id="btnNext" class="btn btn-default">Next</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("OUT_BackToDocuments") && objSession.RoleFeatures["OUT_BackToDocuments"])
+                {
+                    <a id="btnBack" class="btn btn-default">Back to Documents</a>
+                }
             </div>
         </div>
     </div>

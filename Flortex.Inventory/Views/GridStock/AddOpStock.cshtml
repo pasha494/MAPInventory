@@ -1,6 +1,11 @@
 ﻿@model MAP.Inventory.ModelImple.OpeningStockImple
+@using MAP.Inventory.Model;
 @{
-
+    SessionManager objSession = null;
+    if (Session["SessionManager"] != null)
+    {
+        objSession = (SessionManager)Session["SessionManager"];
+    }
 }
 <link rel="stylesheet" href="~/Content/SlickGrid/slick.grid.css" type="text/css" />
 <link rel="stylesheet" href="~/Content/SlickGrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" />
@@ -31,13 +36,33 @@
                 <h2 class="pull-left">Update Opening Stocks</h2>
             }
             <div class="pull-right">
-                <a id="btnSave" class="btn btn-default">Save</a>
-                <a id="btnNew" class="btn btn-default">New</a>
-                <a id="btnPrev" class="btn btn-default">Previous</a>
-                <a id="btnNext" class="btn btn-default">Next</a>
-                <a id="btnBack" class="btn btn-default">Back to Documents</a>
-            </div>
 
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("OPS_Save") && objSession.RoleFeatures["OPS_Save"])
+                {
+                    <a id="btnSave" class="btn btn-default">Save</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("OPS_New") && objSession.RoleFeatures["OPS_New"])
+                {
+                    <a id="btnNew" class="btn btn-default">New</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("OPS_Previous") && objSession.RoleFeatures["OPS_Previous"])
+                {
+                    <a id="btnPrev" class="btn btn-default">Previous</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("OPS_Next") && objSession.RoleFeatures["OPS_Next"])
+                {
+                    <a id="btnNext" class="btn btn-default">Next</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("OPS_BackToDocuments") && objSession.RoleFeatures["OPS_BackToDocuments"])
+                {
+                    <a id="btnBack" class="btn btn-default">Back to Documents</a>
+                } 
+               
+            </div> 
         </div>
     </div>
 

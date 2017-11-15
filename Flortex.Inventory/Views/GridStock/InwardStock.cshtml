@@ -1,8 +1,15 @@
-﻿@{
+﻿@using MAP.Inventory.Model;
+@{
     ViewBag.Title = "InwardStock";
+    SessionManager objSession = null;
+    if (Session["SessionManager"] != null)
+    {
+        objSession = (SessionManager)Session["SessionManager"];
+    }
 }
 
 <script src="http://cdn.kendostatic.com/2014.3.1029/js/jszip.min.js"></script>
+
 <form class="cmxform" role="search">
     <div class="row-fluid heading">
         <div class="span12">
@@ -16,10 +23,16 @@
     </div>
 </form>
 <script id="template" type="text/x-kendo-template">
-    <a class="k-button" onclick="return toolbar_click()">ADD NEW ENTRY</a>
+    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("INW_Add") && objSession.RoleFeatures["INW_Add"])
+    {
+        <a class="k-button" onclick="return toolbar_click()">ADD NEW ENTRY</a>
+    }
 </script>
 <script id="template1" type="text/x-kendo-template">
-   <a class="k-button k-button-icontext k-grid-excel"  id="btnExcelExport"><span class="k-icon k-i-excel"></span>Export to Excel</a>
+    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("INW_ExportToExcel") && objSession.RoleFeatures["INW_ExportToExcel"])
+    {
+        <a class="k-button k-button-icontext k-grid-excel" id="btnExcelExport"><span class="k-icon k-i-excel"></span>Export to Excel</a>
+    }
 </script>
 
 <script type="text/javascript">
@@ -94,51 +107,57 @@
                         }
                         else { return "No"; }
                     }
-                },
-               { command: { text: "Edit", name: "edit", click: onEdit }, title: " ", width: "100px" },
-               {
-                   command: {
-                       name: "Delete ", click: function (e) {
-                           e.preventDefault();
-                           var self = this;
+                }
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("INW_Edit") && objSession.RoleFeatures["INW_Edit"])
+                    {
+                        <text>, { command: { text: "Edit", name: "edit", click: onEdit }, title: " ", width: "100px" } </text>
+                    }
+                  @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("INW_Delete") && objSession.RoleFeatures["INW_Delete"])
+                  {
+                      <text>, {
+                      command: {
+                          name: "Delete ", click: function (e) {
+                              e.preventDefault();
+                              var self = this;
 
-                           smoke.confirm("Are you sure, Do you want to delete.?", function (ev) {
-                               if (ev) {
+                              smoke.confirm("Are you sure, Do you want to delete.?", function (ev) {
+                                  if (ev) {
 
-                                   var tr = $(e.target).closest("tr");
-                                   var data = self.dataItem(tr);
-                                   $.ajax({
-                                       url: '/GridStock/DeleteInStock',
-                                       type: 'POST',
-                                       data: { "DocID": data.DocNo },
-                                       beforeSend: function () {
-                                           $("#ajaxLoadingImg").show();
-                                       },
-                                       complete: function () { $("#ajaxLoadingImg").hide(); },
-                                       success: function (res) { 
-                                           if (res == 1 || res == "1") {
-                                               customAlert('Deleted Successfully.', 'alert');
-                                               Documents = getDocs();
-                                               var dataSource = new kendo.data.DataSource({ data: Documents });
-                                               var grid = $('#grid').data("kendoGrid");
-                                               dataSource.read();
-                                               grid.setDataSource(dataSource);
-                                           }
-                                       },
-                                       error: function (e) { alert("error in Operation"); }
-                                   });
+                                      var tr = $(e.target).closest("tr");
+                                      var data = self.dataItem(tr);
+                                      $.ajax({
+                                          url: '/GridStock/DeleteInStock',
+                                          type: 'POST',
+                                          data: { "DocID": data.DocNo },
+                                          beforeSend: function () {
+                                              $("#ajaxLoadingImg").show();
+                                          },
+                                          complete: function () { $("#ajaxLoadingImg").hide(); },
+                                          success: function (res) {
+                                              if (res == 1 || res == "1") {
+                                                  customAlert('Deleted Successfully.', 'alert');
+                                                  Documents = getDocs();
+                                                  var dataSource = new kendo.data.DataSource({ data: Documents });
+                                                  var grid = $('#grid').data("kendoGrid");
+                                                  dataSource.read();
+                                                  grid.setDataSource(dataSource);
+                                              }
+                                          },
+                                          error: function (e) { alert("error in Operation"); }
+                                      });
 
 
-                               }
-                           }, {
-                               ok: "Yep",
-                               cancel: "Nope",
-                               classname: "custom-class",
-                               reverseButtons: true
-                           });
-                       }
-                   }, title: " ", width: "100px"
-               }
+                                  }
+                              }, {
+                                  ok: "Yep",
+                                  cancel: "Nope",
+                                  classname: "custom-class",
+                                  reverseButtons: true
+                              });
+                          }
+                      }, title: " ", width: "100px"
+                  }</text>
+            }
             ],
             editable: true,
             filterable: {

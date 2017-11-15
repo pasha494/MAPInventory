@@ -1,8 +1,12 @@
 ﻿@model MAP.Inventory.ModelImple.InwardDocumentImple
 @using System.Data;
-@using MAP.Inventory.Web.Models;
+@using MAP.Inventory.Model;
 @{
-
+    SessionManager objSession = null;
+    if (Session["SessionManager"] != null)
+    {
+        objSession = (SessionManager)Session["SessionManager"];
+    }
 
 }
 
@@ -37,11 +41,32 @@
             }
 
             <div class="pull-right">
-                <a id="btnSave" class="btn btn-default">Save</a>
-                <a id="btnNew" class="btn btn-default">New</a>
-                <a id="btnPrev" class="btn btn-default">Previous</a>
-                <a id="btnNext" class="btn btn-default">Next</a>
-                <a id="btnBack" class="btn btn-default">Back to Documents</a>
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("INW_Save") && objSession.RoleFeatures["INW_Save"])
+                {
+                    <a id="btnSave" class="btn btn-default">Save</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("INW_New") && objSession.RoleFeatures["INW_New"])
+                {
+                    <a id="btnNew" class="btn btn-default">New</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("INW_Previous") && objSession.RoleFeatures["INW_Previous"])
+                {
+                    <a id="btnPrev" class="btn btn-default">Previous</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("INW_Next") && objSession.RoleFeatures["INW_Next"])
+                {
+                    <a id="btnNext" class="btn btn-default">Next</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("INW_BackToDocuments") && objSession.RoleFeatures["INW_BackToDocuments"])
+                {
+                    <a id="btnBack" class="btn btn-default">Back to Documents</a>
+                }
+
             </div>
 
         </div>
