@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using MAP.Inventory.Common.Controls;
 using MAP.Inventory.ModelImple;
 using MAP.Inventory.Model;
+using MAP.Inventory.Web.Models;
 
 namespace MAP.Inventory.Web.Controllers
 {
@@ -14,7 +15,7 @@ namespace MAP.Inventory.Web.Controllers
     {
         //
         // GET: /Admin/
-
+        [SessionExpire(FeatureKey = "ListViewCusotmization", RequestType = 1)]
         public ActionResult ListViewCustomization()
         {
             // Pass the feature id as zero in the below constructor
@@ -23,8 +24,8 @@ namespace MAP.Inventory.Web.Controllers
             string x = JsonConvert.SerializeObject(objListViewsInfo[0]);
             return View(objListViewsInfo);
         }
-
-
+         
+        [SessionExpire(FeatureKey = "Listview_Save", RequestType = 2)]
         public ActionResult SaveListViewCutomization(string model)
         {
             long result = 0;
@@ -44,13 +45,14 @@ namespace MAP.Inventory.Web.Controllers
         }
 
 
+        [SessionExpire(FeatureKey = "GridViewCustomization", RequestType = 1)]
         public ActionResult GridViewCustomization()
         {
 
 
             return View();
         }
-
+         
         public ActionResult GetGridViewCustomizationData(int FeatureId)
         {
             MapGridViewImple objGridView = new MapGridViewImple(FeatureId);
@@ -60,6 +62,7 @@ namespace MAP.Inventory.Web.Controllers
 
         }
 
+        [SessionExpire(FeatureKey = "Gridview_Save", RequestType = 2)]
         public ActionResult SaveGridViewCustomization(string model)
         {
             long result = 0;
@@ -81,6 +84,7 @@ namespace MAP.Inventory.Web.Controllers
 
 
         #region Roles
+        [SessionExpire(FeatureKey = "RolesCustomization", RequestType = 1)]
         public ActionResult Roles()
         {
             List<RolesModel> objModel = null;
@@ -92,6 +96,7 @@ namespace MAP.Inventory.Web.Controllers
         }
 
         [HttpPost]
+        [SessionExpire(FeatureKey = "Roles_SaveRole", RequestType = 2)]
         public ActionResult SaveRoleData(int RoleId, string RoleName, string RoleData)
         {
             long result = 0;
@@ -109,7 +114,8 @@ namespace MAP.Inventory.Web.Controllers
 
             return Content(result.ToString());
         }
-         
+
+        [SessionExpire(FeatureKey = "Roles_DeleteRole", RequestType = 2)]
         public ActionResult DeleteRole(int RoleId)
         {
             long result = 0;
@@ -128,6 +134,7 @@ namespace MAP.Inventory.Web.Controllers
             return Content(result.ToString());
         }
 
+        [SessionExpire(FeatureKey = "RolesCustomization", RequestType = 2)]
         public ActionResult RefreshRoles()
         {
             List<RolesModel> objModel = null;
@@ -136,6 +143,7 @@ namespace MAP.Inventory.Web.Controllers
             return Content(JsonConvert.SerializeObject(objModel));
         }
 
+        [SessionExpire(FeatureKey = "Roles_EditRole", RequestType = 2)]
         public ActionResult EditRole(int id)
         {
             RolesModel _RolesModel = new RolesModel();
