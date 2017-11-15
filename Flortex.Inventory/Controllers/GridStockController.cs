@@ -292,6 +292,7 @@ namespace MAP.Inventory.Web.Controllers
             return Json(str, JsonRequestBehavior.AllowGet);
         }
 
+        [SessionExpire(FeatureKey = "DetailedReport", RequestType = 1)]
         public ActionResult GetStockReport()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >GetStockReport()");
@@ -309,6 +310,7 @@ namespace MAP.Inventory.Web.Controllers
             return View(objModel);
         }
 
+        [SessionExpire(FeatureKey = "ConsolidatedReport", RequestType = 1)]
         public ActionResult GetConsolidateStockReport()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >GetConsolidateStockReport()");
@@ -325,6 +327,8 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("END::Controller > GridStock, Method > GetConsolidateStockReport()");
             return View(objModel);
         }
+
+        [SessionExpire(FeatureKey = "QuickReports", RequestType = 1)]
         public ActionResult GetQuickStockReport()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >GetStockReport()");
@@ -342,12 +346,16 @@ namespace MAP.Inventory.Web.Controllers
             return View(objModel);
         }
 
+
+
         #region Opening Stocks
 
         /// <summary>
         /// Loat the opening stocks grid landing page screen
         /// </summary>
         /// <returns></returns>
+        /// 
+        [SessionExpire(FeatureKey = "OpeningStocksLanding", RequestType = 1)]
         public ActionResult OpeningStock()
         {
             return View();
@@ -357,6 +365,8 @@ namespace MAP.Inventory.Web.Controllers
         /// Gets the Grid data for the OpeningStock landing page screen
         /// </summary>
         /// <returns></returns>
+        /// 
+        [SessionExpire(FeatureKey = "OpeningStocksLanding", RequestType = 1)]
         public string LoadOpeningStockDocuments()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >LoadOpeningStockDocuments()");
@@ -392,6 +402,8 @@ namespace MAP.Inventory.Web.Controllers
         /// Opens the Opening masters Data entry screen.
         /// </summary>
         /// <returns></returns>
+        /// 
+        [SessionExpire(FeatureKey = "OPS_Add", RequestType = 1)]
         public ActionResult AddOpStock()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >AddOpStock()");
@@ -413,6 +425,8 @@ namespace MAP.Inventory.Web.Controllers
         /// </summary>
         /// <param name="DocID"></param>
         /// <returns></returns>
+        /// 
+        [SessionExpire(FeatureKey = "OPS_Edit", RequestType = 1)]
         public ActionResult UpDateOpStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >UpDateOpStock(string DocID)");
@@ -440,6 +454,7 @@ namespace MAP.Inventory.Web.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateInput(false)]
+        [SessionExpire(FeatureKey = "OPS_Save", RequestType = 2)]
         public string SaveDocumentOP(string Data)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >SaveDocumentOP(string Data):::" + Data);
@@ -469,6 +484,8 @@ namespace MAP.Inventory.Web.Controllers
         /// </summary>
         /// <param name="DocID"></param>
         /// <returns></returns>
+        /// 
+        [SessionExpire(FeatureKey = "OPS_Delete", RequestType = 2)]
         public ActionResult DeleteOpStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >DeleteOpStock(string DocID)");
@@ -493,7 +510,7 @@ namespace MAP.Inventory.Web.Controllers
         #endregion
 
         #region Inward Stock Documents
-
+        [SessionExpire(FeatureKey = "InwardLanding", RequestType = 1)]
         public ActionResult InwardStock()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >InwardStock()");
@@ -501,6 +518,7 @@ namespace MAP.Inventory.Web.Controllers
             return View();
         }
 
+        [SessionExpire(FeatureKey = "InwardLanding", RequestType = 1)]
         public string LoadInwardStockDocuments()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >LoadInwardStockDocuments()");
@@ -533,6 +551,7 @@ namespace MAP.Inventory.Web.Controllers
             return serializer.Serialize(rows);
         }
 
+        [SessionExpire(FeatureKey = "INW_Add    ", RequestType = 1)]
         public ActionResult AddInStock()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >AddInStock()");
@@ -549,6 +568,7 @@ namespace MAP.Inventory.Web.Controllers
             return View(objModel);
         }
 
+        [SessionExpire(FeatureKey = "INW_Edit", RequestType = 1)]
         public ActionResult UpDateInStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >UpDateInStock(string DocID)");
@@ -570,6 +590,7 @@ namespace MAP.Inventory.Web.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
+        [SessionExpire(FeatureKey = "INW_Save", RequestType = 2)]
         public string SaveDocumentIN(string Data)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >SaveDocumentIN(string Data):::" + Data);
@@ -599,6 +620,7 @@ namespace MAP.Inventory.Web.Controllers
             return DocName;
         }
 
+        [SessionExpire(FeatureKey = "INW_Delete", RequestType = 2)]
         public ActionResult DeleteInStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >DeleteInStock(string DocID)");
@@ -623,6 +645,7 @@ namespace MAP.Inventory.Web.Controllers
 
         #region OutWard strock Documents
 
+        [SessionExpire(FeatureKey = "OutwardLanding", RequestType = 1)]
         public ActionResult OutwardStock()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >OutwardStock()");
@@ -630,6 +653,7 @@ namespace MAP.Inventory.Web.Controllers
             return View();
         }
 
+        [SessionExpire(FeatureKey = "OutwardLanding", RequestType = 1)]
         public string LoadOutwardStockDocuments()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >LoadOutwardStockDocuments()");
@@ -661,6 +685,7 @@ namespace MAP.Inventory.Web.Controllers
             return serializer.Serialize(rows);
         }
 
+        [SessionExpire(FeatureKey = "OUT_Add", RequestType = 1)]
         public ActionResult AddOutStock()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >AddOutStock()");
@@ -677,6 +702,7 @@ namespace MAP.Inventory.Web.Controllers
             return View(objModel);
         }
 
+        [SessionExpire(FeatureKey = "OUT_Edit", RequestType = 1)]
         public ActionResult UpdateOutStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >UpdateOutStock(string DocID)");
@@ -698,6 +724,7 @@ namespace MAP.Inventory.Web.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
+        [SessionExpire(FeatureKey = "OUT_Save", RequestType = 2)]
         public string SaveDocumentOUT(string Data)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method > SaveDocumentOUT(string Data):::" + Data);
@@ -728,6 +755,7 @@ namespace MAP.Inventory.Web.Controllers
             return DocName;
         }
 
+        [SessionExpire(FeatureKey = "OUT_Delete", RequestType = 2)]
         public ActionResult DeleteOutStock(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >  DeleteOutStock(string DocID)");
@@ -752,12 +780,13 @@ namespace MAP.Inventory.Web.Controllers
         #endregion
 
         #region Stock Transfer
-
+        [SessionExpire(FeatureKey = "StockTransferLanding", RequestType = 1)]
         public ActionResult StockTransfer()
         {
             return View();
         }
 
+        [SessionExpire(FeatureKey = "StockTransferLanding", RequestType = 1)]
         public string LoadStockTransferDocuments()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method > LoadStockTransferDocuments()");
@@ -794,6 +823,8 @@ namespace MAP.Inventory.Web.Controllers
         /// Opens the StockTransfer Data entry screen.
         /// </summary>
         /// <returns></returns>
+        /// 
+        [SessionExpire(FeatureKey = "STR_Add", RequestType = 1)]
         public ActionResult AddStockTransfer()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method > AddStockTransfer()");
@@ -815,6 +846,8 @@ namespace MAP.Inventory.Web.Controllers
         /// </summary>
         /// <param name="DocID"></param>
         /// <returns></returns>
+        /// 
+        [SessionExpire(FeatureKey = "STR_Edit", RequestType = 1)]
         public ActionResult UpDateStockTransfer(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method > UpDateStockTransfer(string DocID)");
@@ -841,6 +874,7 @@ namespace MAP.Inventory.Web.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateInput(false)]
+        [SessionExpire(FeatureKey = "STR_Save", RequestType = 2)]
         public string SaveStockTransfer(string Data)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >SaveStockTransfer(string Data):::" + Data);
@@ -870,6 +904,8 @@ namespace MAP.Inventory.Web.Controllers
         /// </summary>
         /// <param name="DocID"></param>
         /// <returns></returns>
+        /// 
+        [SessionExpire(FeatureKey = "STR_Delete", RequestType = 2)]
         public ActionResult DeleteStockTransfer(string DocID)
         {
             PLog.Info("BEGIN::Controller > GridStock, Method > DeleteStockTransfer(string DocID)");
