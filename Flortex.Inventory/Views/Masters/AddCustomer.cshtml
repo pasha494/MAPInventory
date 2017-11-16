@@ -1,7 +1,12 @@
 ﻿@model MAP.Inventory.Model.CustomerModel
+@using MAP.Inventory.Model;
 @{
     ViewBag.Title = "Products";
-
+    SessionManager objSession = null;
+    if (Session["SessionManager"] != null)
+    {
+        objSession = (SessionManager)Session["SessionManager"];
+    }
 
     string json = Newtonsoft.Json.JsonConvert.SerializeObject(Model);
 }
@@ -17,9 +22,20 @@
             <div class="span12">
                 <h2 class="pull-left">Edit Customer</h2>
                 <div class="pull-right">
-                    <a id="btnSave" class="btn btn-default">Save</a>
-                    <a id="btnClear" class="btn btn-default">Clear</a>
-                    <a id="btnBack" class="btn btn-default">Back to Documents</a>
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("SaveCustomers") && objSession.RoleFeatures["SaveCustomers"])
+                    { 
+                        <a id="btnSave" class="btn btn-default">Save</a>
+                    }
+
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("ClearCustomers") && objSession.RoleFeatures["ClearCustomers"])
+                    {
+                        <a id="btnClear" class="btn btn-default">Clear</a>
+                    }    
+                    
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("CancelCustomers") && objSession.RoleFeatures["CancelCustomers"])
+                    {
+                        <a id="btnBack" class="btn btn-default">Back to Documents</a>
+                    }
                 </div>
             </div>
         </div>
@@ -30,9 +46,20 @@
             <div class="span12">
                 <h2 class="pull-left">Add Customer</h2>
                 <div class="pull-right">
-                    <a id="btnSave" class="btn btn-default">Save</a>
-                    <a id="btnClear" class="btn btn-default">Clear</a>
-                    <a id="btnBack" class="btn btn-default">Back to Documents</a>
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("SaveCustomers") && objSession.RoleFeatures["SaveCustomers"])
+                    {
+                        <a id="btnSave" class="btn btn-default">Save</a>
+                    }
+
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("ClearCustomers") && objSession.RoleFeatures["ClearCustomers"])
+                    {
+                        <a id="btnClear" class="btn btn-default">Clear</a>
+                    }
+
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("CancelCustomers") && objSession.RoleFeatures["CancelCustomers"])
+                    {
+                        <a id="btnBack" class="btn btn-default">Back to Documents</a>
+                    }
                 </div>
             </div>
         </div>
@@ -103,7 +130,7 @@
                 <div class="row-fluid">
                     <div class="span6">
                         <label>Address</label>
-                        <textarea name="txtAddress" id="txtAddress" rows="4" cols="40" class="span6" placeholder="Add Door No, Street, LandMark" >@Model.Address</textarea>
+                        <textarea name="txtAddress" id="txtAddress" rows="4" cols="40" class="span6" placeholder="Add Door No, Street, LandMark">@Model.Address</textarea>
                     </div>
                     <div class="span6">
                         <label>Phone No</label>
@@ -273,23 +300,23 @@
             $.extend(true, model, staticModel);
             $("input[name='uni_r']").removeAttr("checked");
             $("#chkCustomer").attr("checked", "checked");
-            
+
             $("#CustomerId").val('0');
             $("#txtFirstName").val('');
             $("#txtLastName").val('');
             $("#txtEmailId").val('');
             $("#txtMobileNo").val('');
-             
+
 
             $("#txtAddress").val('');
             $("#txtPhoneNo").val('');
-            $("#txtCity").val(''); 
+            $("#txtCity").val('');
             $("#txtPincode").val('');
 
             $("#txtPANNumber").val('');
             $("#txtGSTIN").val('');
             $("#txtAdharNumber").val('');
-             
+
             $("#txtExtra1").val('');
             $("#txtExtra2").val('');
             $("#txtExtra3").val('');
@@ -307,7 +334,7 @@
             e.preventDefault();
             window.location.href = '@Url.Action("CustomersList", "Masters")';
         });
- 
+
         Mousetrap.bind(['ctrl+s', 'command+s'], function (e) {
             e.preventDefault();
             _saveProducts();

@@ -1,6 +1,13 @@
 ﻿@model MAP.Inventory.Model.UsersModel
+
+@using MAP.Inventory.Model;
 @{
     ViewBag.Title = "UserCreation";
+    SessionManager objSession = null;
+    if (Session["SessionManager"] != null)
+    {
+        objSession = (SessionManager)Session["SessionManager"];
+    }
 }
 
 
@@ -11,15 +18,15 @@
     {
         <div class="row-fluid heading">
             <div class="span12">
-                <h2  >Create User</h2>
+                <h2>Create User</h2>
             </div>
-        </div> 
+        </div>
     }
     else
-    {         
+    {
         <div class="row-fluid heading">
             <div class="span12">
-                <h2  >Edit User</h2>
+                <h2>Edit User</h2>
             </div>
         </div>
     }
@@ -28,7 +35,7 @@
             <label for="txtName" class="label">Name</label>
         </div>
         <div class="span8">
-            <input type="text" class="form-control mousetrap" style="width: 250px" name="txtName" id="txtName" placeholder="Name.."  value="@Model.Name">
+            <input type="text" class="form-control mousetrap" style="width: 250px" name="txtName" id="txtName" placeholder="Name.." value="@Model.Name">
         </div>
     </div>
 
@@ -37,7 +44,7 @@
             <label for="txtEmail" class="label">Email</label>
         </div>
         <div class="span8">
-            <input type="text" class="form-control mousetrap" style="width: 250px" name="txtEmail" id="txtEmail" placeholder="Email.."  value="@Model.Email">
+            <input type="text" class="form-control mousetrap" style="width: 250px" name="txtEmail" id="txtEmail" placeholder="Email.." value="@Model.Email">
         </div>
     </div>
 
@@ -46,7 +53,7 @@
             <label for="txtEmail" class="label">Password</label>
         </div>
         <div class="span8">
-            <input type="password" class="form-control mousetrap" style="width: 250px" name="txtPassword" id="txtPassword" placeholder="Password.."  value="@Model.Email">
+            <input type="password" class="form-control mousetrap" style="width: 250px" name="txtPassword" id="txtPassword" placeholder="Password.." value="@Model.Email">
         </div>
     </div>
 
@@ -56,17 +63,17 @@
         </div>
         <div class="span8">
             @*          @if (Model.IsAdmin)
-            {
-                <span class="label">Is Admin ?</span><input class="mousetrap" checked="checked" type="checkbox" id="chkAdmin" name="chkAdmin">
-            }
-            else
-            {
-                <span class="label">Is Admin ?</span><input class="mousetrap" type="checkbox" id="chkAdmin" name="chkAdmin">
-            }*@
+                {
+                    <span class="label">Is Admin ?</span><input class="mousetrap" checked="checked" type="checkbox" id="chkAdmin" name="chkAdmin">
+                }
+                else
+                {
+                    <span class="label">Is Admin ?</span><input class="mousetrap" type="checkbox" id="chkAdmin" name="chkAdmin">
+                }*@
 
             @if (Model.RoleID > 0)
             {
-                <input id="drpRole" value="@Model.RoleID"  class="form-control mousetrap" style="width: 250px" />
+                <input id="drpRole" value="@Model.RoleID" class="form-control mousetrap" style="width: 250px" />
             }
             else
             {
@@ -81,12 +88,22 @@
         <div class="span2">
         </div>
         <div class="span8">
-            <button type="submit" class="btn btn-default" id="btnCreateUser">
-                Submit
-            </button>
+            @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("SaveUsers") && objSession.RoleFeatures["SaveUsers"])
+            {
+                <button type="submit" class="btn btn-default" id="btnCreateUser">
+                    Submit
+                </button>
+            }
 
-            <button class="btn btn-default" id="btnClear">Reset</button>
-            <a class="btn btn-default" href="@Url.Action("Index", "Home")">Cancel</a>
+            @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("ClearUsers") && objSession.RoleFeatures["ClearUsers"])
+            {
+
+                <button class="btn btn-default" id="btnClear">Reset</button>
+            }
+            @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("CancelUsers") && objSession.RoleFeatures["CancelUsers"])
+            {
+                <a class="btn btn-default" href="@Url.Action("Index", "Home")">Cancel</a>
+            }
         </div>
 
     </div>
@@ -175,7 +192,7 @@
         var createUser = function () {
 
             _IsAdmin = false;
-             
+
             var obj = {
                 UserID: $("#UserID").val(),
                 Name: $("#txtName").val(),

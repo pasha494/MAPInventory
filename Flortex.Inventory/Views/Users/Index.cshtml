@@ -1,4 +1,5 @@
-﻿@{
+﻿@using MAP.Inventory.Model;
+@{
     ViewBag.Title = "OpeningStock";
     string Data = "[]";
 
@@ -6,13 +7,19 @@
     {
         Data = ViewBag.Data;
     }
+
+    SessionManager objSession = null;
+    if (Session["SessionManager"] != null)
+    {
+        objSession = (SessionManager)Session["SessionManager"];
+    }
 }
 
 
 <form class="cmxform" role="search">
     <div class="row-fluid heading">
         <div class="span12">
-            <h2 >List of Users</h2>
+            <h2>List of Users</h2>
         </div>
     </div>
     <div class="row-fluid">
@@ -23,7 +30,10 @@
 </form>
 
 <script id="template" type="text/x-kendo-template">
-    <a class="k-button" onclick="return toolbar_click()">ADD NEW USER</a>
+    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("AddUsers") && objSession.RoleFeatures["AddUsers"])
+    {
+        <a class="k-button" onclick="return toolbar_click()">ADD NEW USER</a>
+    }
 </script>
 
 <script type="text/javascript">
@@ -92,51 +102,58 @@
                         }
                         else { return "No"; }
                     }
-                },
-               { command: { text: "Edit", name: "edit", click: onEdit }, title: " ", width: "100px" },
-               {
-                   command: {
-                       name: "Delete ", click: function (e) {
-                           e.preventDefault();
-                           var self = this;
+                }
+                                  @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("EditUsers") && objSession.RoleFeatures["EditUsers"])
+                                  {
+                 <text>, { command: { text: "Edit", name: "edit", click: onEdit }, title: " ", width: "100px" }  </text>
+                                  }
 
-                           smoke.confirm("Are you sure, Do you want to delete.?", function (ev) {
-                               if (ev) {
-                                   var tr = $(e.target).closest("tr");
-                                   var data = self.dataItem(tr);
-                                   $.ajax({
-                                       url: '/Users/DeleteUser',
-                                       type: 'POST',
-                                       data: { "ID": data.id },
-                                       beforeSend: function () {
-                                           $("#ajaxLoadingImg").show();
-                                       },
-                                       complete: function () { $("#ajaxLoadingImg").hide(); },
-                                       success: function (res) {
-                                           if (res > 0) {
-                                               $("#message").append("<span class='message-success'>Deleted Successfully</span>").show();
-                                               var _Documents = getDocs();
-                                               var dataSource = new kendo.data.DataSource({ data: _Documents });
-                                               var grid = $('#grid').data("kendoGrid");
-                                               dataSource.read();
-                                               grid.setDataSource(dataSource);
-                                           }
-                                       },
-                                       error: function (e) { alert("error in Operation"); }
-                                   });
+                                                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("DeleteUsers") && objSession.RoleFeatures["DeleteUsers"])
+                                                    {
+                 <text>, {
+                                                        command: {
+                                                            name: "Delete ", click: function (e) {
+                                                                e.preventDefault();
+                                                                var self = this;
 
-                               } else {
+                                                                smoke.confirm("Are you sure, Do you want to delete.?", function (ev) {
+                                                                    if (ev) {
+                                                                        var tr = $(e.target).closest("tr");
+                                                                        var data = self.dataItem(tr);
+                                                                        $.ajax({
+                                                                            url: '/Users/DeleteUser',
+                                                                            type: 'POST',
+                                                                            data: { "ID": data.id },
+                                                                            beforeSend: function () {
+                                                                                $("#ajaxLoadingImg").show();
+                                                                            },
+                                                                            complete: function () { $("#ajaxLoadingImg").hide(); },
+                                                                            success: function (res) {
+                                                                                if (res > 0) {
+                                                                                    $("#message").append("<span class='message-success'>Deleted Successfully</span>").show();
+                                                                                    var _Documents = getDocs();
+                                                                                    var dataSource = new kendo.data.DataSource({ data: _Documents });
+                                                                                    var grid = $('#grid').data("kendoGrid");
+                                                                                    dataSource.read();
+                                                                                    grid.setDataSource(dataSource);
+                                                                                }
+                                                                            },
+                                                                            error: function (e) { alert("error in Operation"); }
+                                                                        });
 
-                               }
-                           }, {
-                               ok: "Yep",
-                               cancel: "Nope",
-                               classname: "custom-class",
-                               reverseButtons: true
-                           });
-                       }
-                   }, title: " ", width: "100px"
-               }
+                                                                    } else {
+
+                                                                    }
+                                                                }, {
+                                                                    ok: "Yep",
+                                                                    cancel: "Nope",
+                                                                    classname: "custom-class",
+                                                                    reverseButtons: true
+                                                                });
+                                                            }
+                                                        }, title: " ", width: "100px"
+                                                    } </text>
+                                                        }
             ],
             editable: true,
             filterable: {

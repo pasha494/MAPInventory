@@ -1,15 +1,20 @@
-﻿
+﻿@using MAP.Inventory.Model;
 @{
     ViewBag.Title = "Products Category";
 
     string Data = "[]";
-    
-    if(ViewBag.Data !="")
+
+    if (ViewBag.Data != "")
     {
         Data = ViewBag.Data;
     }
-        
-} 
+    SessionManager objSession = null;
+    if (Session["SessionManager"] != null)
+    {
+        objSession = (SessionManager)Session["SessionManager"];
+    }
+
+}
 
 <form class="cmxform" role="search">
     <div class="row-fluid heading">
@@ -24,13 +29,16 @@
     </div>
 </form>
 <script id="template" type="text/x-kendo-template">
-    <a class="btn btn-default k-button" onclick="return toolbar_click()">ADD NEW PRODUCT CATEGORY</a>
+    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("AddProductsCategory") && objSession.RoleFeatures["AddProductsCategory"])
+    {
+        <a class="btn btn-default k-button" onclick="return toolbar_click()">ADD NEW PRODUCT CATEGORY</a>
+    }
 </script>
 
 <script type="text/javascript">
-    
+
     $(document).ready(function () {
-         
+
         var Documents = @Html.Raw(Data)
         //var Documents = '@Html.Raw(Data)';
         //Documents = getDocs();
@@ -49,15 +57,15 @@
         }
 
         var dataSource = new kendo.data.DataSource({
-           
+
             data: Documents,
             autoSync: true,
             schema: {
                 model: {
                     fields: {
                         SNo: { editable: false },
-                        id: { editable: false }, 
-                        name: { type: "string", editable: false } 
+                        id: { editable: false },
+                        name: { type: "string", editable: false }
                     }
                 }
             }
@@ -84,54 +92,60 @@
             ],
             columns: [
                { field: "SNo", title: "SNo", width: "80px" },
-                 { field: "name", title: "Product Category", width: "150px" },
-              
-               { command: { text: "Edit", name: "edit", click: onEdit }, title: " ", width: "80px" },
-               {
-                   command: {
-                       name: "Delete ", click: function (eve) {
-                           eve.preventDefault();
-                           var self = this; 
-                           smoke.confirm("Are you sure, Do you want to delete.?", function (e) {
-                               if (e) {
-                                   var tr = $(eve.target).closest("tr");
-                                   var data = self.dataItem(tr);
-                                   $.ajax({
-                                       url: '/Masters/DeleteProductsCategory',
-                                       type: 'POST',
-                                       data: { "ID": data.id },
-                                       beforeSend: function () {
-                                           $("#ajaxLoadingImg").show();
-                                       },
-                                       complete: function () { $("#ajaxLoadingImg").hide(); },
-                                       success: function (res) {
-                                           if (res > 0) {
-                                                
-                                               customAlert('Deleted Successfully.', 'alert');
-                                               var _Documents = getDocs();
-                                               var dataSource = new kendo.data.DataSource({ data: _Documents });
-                                               var grid = $('#grid').data("kendoGrid");
-                                               dataSource.read();
-                                               grid.setDataSource(dataSource);
-                                           }
-                                           else if (res == -494)
-                                           {
-                                               customAlert('Product Category is mapped with products. So Product Category not deleted.', 'alert');
-                                           }
+                 { field: "name", title: "Product Category", width: "150px" }
 
-                                       },
-                                       error: function (e) { customAlert('Error in Operation.', 'alert'); }
-                                   });//end ajax
-                               } 
-                           }, {
-                               ok: "Yes",
-                               cancel: "No",
-                               classname: "custom-class",
-                               reverseButtons: true
-                           }); 
-                       }
-                   }, title: " ", width: "100px"
-               }
+                                  @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("EditProductsCategory") && objSession.RoleFeatures["EditProductsCategory"])
+                                  {
+                 <text>, { command: { text: "Edit", name: "edit", click: onEdit }, title: " ", width: "80px" } </text>
+                                  }
+
+                                                   @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("DeleteProductsCategory") && objSession.RoleFeatures["DeleteProductsCategory"])
+                                                   {
+                 <text>, {
+                                                       command: {
+                                                           name: "Delete ", click: function (eve) {
+                                                               eve.preventDefault();
+                                                               var self = this;
+                                                               smoke.confirm("Are you sure, Do you want to delete.?", function (e) {
+                                                                   if (e) {
+                                                                       var tr = $(eve.target).closest("tr");
+                                                                       var data = self.dataItem(tr);
+                                                                       $.ajax({
+                                                                           url: '/Masters/DeleteProductsCategory',
+                                                                           type: 'POST',
+                                                                           data: { "ID": data.id },
+                                                                           beforeSend: function () {
+                                                                               $("#ajaxLoadingImg").show();
+                                                                           },
+                                                                           complete: function () { $("#ajaxLoadingImg").hide(); },
+                                                                           success: function (res) {
+                                                                               if (res > 0) {
+
+                                                                                   customAlert('Deleted Successfully.', 'alert');
+                                                                                   var _Documents = getDocs();
+                                                                                   var dataSource = new kendo.data.DataSource({ data: _Documents });
+                                                                                   var grid = $('#grid').data("kendoGrid");
+                                                                                   dataSource.read();
+                                                                                   grid.setDataSource(dataSource);
+                                                                               }
+                                                                               else if (res == -494) {
+                                                                                   customAlert('Product Category is mapped with products. So Product Category not deleted.', 'alert');
+                                                                               }
+
+                                                                           },
+                                                                           error: function (e) { customAlert('Error in Operation.', 'alert'); }
+                                                                       });//end ajax
+                                                                   }
+                                                               }, {
+                                                                   ok: "Yes",
+                                                                   cancel: "No",
+                                                                   classname: "custom-class",
+                                                                   reverseButtons: true
+                                                               });
+                                                           }
+                                                       }, title: " ", width: "100px"
+                                                   } </text>
+                                                       }
             ],
             editable: true,
             filterable: {
@@ -163,7 +177,6 @@
         var data = this.dataItem(tr);
         window.location.href = "/Masters/UpdateProductsCategory?ID=" + data.id;
     }
- 
+
 
 </script>
-

@@ -1,7 +1,14 @@
 ﻿@model List<MAP.Inventory.Model.RolesModel>
+@using MAP.Inventory.Model;
 @{
     ViewBag.Title = "Roles";
     string mainTreeData = ViewBag.MainTreeData;
+
+    SessionManager objSession = null;
+    if (Session["SessionManager"] != null)
+    {
+        objSession = (SessionManager)Session["SessionManager"];
+    }
 }
 <link href="~/Content/EasyUi/easyui.css" rel="stylesheet" />
 <link href="~/Content/EasyUi/icon.css" rel="stylesheet" />
@@ -14,7 +21,10 @@
             <div class="span12">
                 <h2 class="pull-left">Roles</h2>
                 <div class="pull-right">
-                    <a id="btnAddNewRole" class="btn btn-default">Add New Role</a>
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("Roles_AddRole") && objSession.RoleFeatures["Roles_AddRole"])
+                    {
+                        <a id="btnAddNewRole" class="btn btn-default">Add New Role</a>
+                    }
                 </div>
             </div>
         </div>
@@ -37,8 +47,25 @@
                                 <td> @(Model[i].RoleName)</td>
                                 @if (!Model[i].IsSystemRole)
                                 {
-                                    <td><a class="btnEdit btn btn-default">Edit Role</a> </td>
-                                    <td><a class="btnDelete btn btn-default">Delete Role</a> </td>
+                                    <td>
+                                        @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("Roles_EditRole") && objSession.RoleFeatures["Roles_EditRole"])
+                                        {
+                                            <a class="btnEdit btn btn-default">Edit Role</a>
+
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("Roles_DeleteRole") && objSession.RoleFeatures["Roles_DeleteRole"])
+                                        {
+                                            <a class="btnDelete btn btn-default">Delete Role</a>
+
+                                        }
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                    <td></td>
                                 }
                             </tr>
                         }
@@ -55,9 +82,20 @@
                 <h2 class="pull-left">Roles</h2>
 
                 <div class="pull-right">
-                    <a id="btnSaveRole" class="btn btn-default">Save</a>
-                    <a id="btnClear" class="btn btn-default">Clear &amp; New </a>
-                    <a id="btnBackToRoles" class="btn btn-default">Back to Roles</a>
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("Roles_SaveRole") && objSession.RoleFeatures["Roles_SaveRole"])
+                    {
+                        <a id="btnSaveRole" class="btn btn-default">Save</a>
+                    }
+
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("Roles_ClearRole") && objSession.RoleFeatures["Roles_ClearRole"])
+                    {
+                        <a id="btnClear" class="btn btn-default">Clear &amp; New </a>
+                    }
+
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("Roles_BackToRoles") && objSession.RoleFeatures["Roles_BackToRoles"])
+                    {
+                        <a id="btnBackToRoles" class="btn btn-default">Back to Roles</a>
+                    }
                 </div>
             </div>
         </div>
@@ -65,14 +103,14 @@
 
         <div class="row-fluid">
             <div class="span12">
-                <label for="txtRoleName" class="label">Role Name</label>
+                <label for="txtRoleName" class="label1">Role Name</label>
                 <input type="text" class="form-control mousetrap" name="txtRoleName" id="txtRoleName" placeholder="Role Name">
             </div>
         </div>
 
         <div class="row-fluid">
             <div class="span12">
-                <label for="roleTree" class="label">Role Features</label>
+                <label for="roleTree" class="label1">Role Features</label>
                 <div id="divRoleAddEdit">
                     <ul id="roleTree" class="easyui-tree" data-options="animate:true,checkbox:true,width:500"></ul>
                 </div>
@@ -115,7 +153,7 @@
             });
 
             $("#tblRoles").on('click','a.btnEdit',function(e){
-                
+
                 e.preventDefault();
                 var id= parseInt( $(this).parents('tr').attr('data-roleid'));
                 if(id>0) {
@@ -123,7 +161,7 @@
                 }
             });
             $("#tblRoles").on('click','a.btnDelete',function(e){
-                 
+
                 e.preventDefault();
                 var id= parseInt( $(this).parents('tr').attr('data-roleid'));
                 if(id>0) {
@@ -144,11 +182,11 @@
 
 
             $("#btnSaveRole").on('click',function(e){
-                
+
                 e.preventDefault();
                 if($("#frmRoles").valid() && validateData()){
                     model.roleName= $("#txtRoleName").val().trim();
-                    model.roleData= JSON.stringify( [_createRoleData($.extend(true,{},mainTreeData[0],$('#roleTree').tree('getData',$('#roleTree').tree('getRoot').target)))]);                    
+                    model.roleData= JSON.stringify( [_createRoleData($.extend(true,{},mainTreeData[0],$('#roleTree').tree('getData',$('#roleTree').tree('getRoot').target)))]);
 
                     $.ajax({
                         url: '/Admin/SaveRoleData',
@@ -240,7 +278,7 @@
                     },
                     complete: function () { $("#ajaxLoadingImg").hide(); },
                     success: function (data) {
-                        
+
                         if(data && data.length>0)  {
                             $("#tblRoles>tbody").empty();
                             var tr='';

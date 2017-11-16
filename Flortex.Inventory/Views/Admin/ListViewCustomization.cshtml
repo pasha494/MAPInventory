@@ -1,17 +1,28 @@
 ﻿@model List<MAP.Inventory.Model.ListViewCustomization>
-
+@using MAP.Inventory.Model;
 @{
     ViewBag.Title = "ListViewCustomization";
+    SessionManager objSession = null;
+    if (Session["SessionManager"] != null)
+    {
+        objSession = (SessionManager)Session["SessionManager"];
+    }
 }
- 
+
 <form role="search" id="frmListViewsCustomization" class="cmxform">
     <div class="row-fluid heading">
         <div class="span12">
             <h2 class="pull-left">List views</h2>
 
             <div class="pull-right">
-                <a id="btnSave" class="btn btn-default">Save</a>
-                <a id="btnClear" class="btn btn-default">Clear</a>
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("Listview_Save") && objSession.RoleFeatures["Listview_Save"])
+                {
+                    <a id="btnSave" class="btn btn-default">Save</a>
+                }
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("Listview_Clear") && objSession.RoleFeatures["Listview_Clear"])
+                {
+                    <a id="btnClear" class="btn btn-default">Clear</a>
+                }
             </div>
         </div>
     </div>
@@ -111,8 +122,8 @@
 
             // dropdown change logic
             $("#drpListViews").on('change',function(e){
-              
-                    loadAjaxImg(true);
+
+                loadAjaxImg(true);
                 e.preventDefault();
                 clearControls(true);
                 _item= _.findWhere(model, {FeatureId: parseInt(this.value) });
@@ -124,7 +135,7 @@
 
             $("#btnSave").on('click',function(e){
                 e.preventDefault();
-                saveData(); 
+                saveData();
 
             });
 
@@ -225,7 +236,7 @@
                         type: 'POST',
                         data: { model: JSON.stringify(_item) },
                         success: function (res) {
-                             
+
                             if (res != "-494") {
                                 customAlert('Data saved successfully', 'alert', function () { $("#drpListViews").focus(); });
                                 clearControls();
@@ -234,7 +245,7 @@
                                 customAlert('Error occured while saving. Please contact administrator.');
                         },
                         beforeSend: function () {
-                            loadAjaxImg(true); 
+                            loadAjaxImg(true);
                         },
                         complete: function () {  loadAjaxImg(false);  },
                         error: function (e) {
@@ -264,7 +275,7 @@
 
             //build the data
             var buildData=function(){
-                 
+
                 // header fields
                 _item.TotalRows= $("#txtTotalRows").val()? parseInt( $("#txtTotalRows").val()):20 ;
                 _options.panelWidth= $("#txtPanelWidth").val()?parseInt($("#txtPanelWidth").val()):500 ;

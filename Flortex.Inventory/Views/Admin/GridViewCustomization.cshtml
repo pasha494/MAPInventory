@@ -1,11 +1,17 @@
 ﻿@using MAP.Inventory.ModelImple;
-
+@using MAP.Inventory.Model;
 @{
     ViewBag.Title = "GridViewCustomization";
 
     MapGridViewImple objGridView = new MapGridViewImple(0);
     Dictionary<int, string> items = objGridView.GetGridViewNames();
     int[] keys = items.Keys.ToArray();
+
+    SessionManager objSession = null;
+    if (Session["SessionManager"] != null)
+    {
+        objSession = (SessionManager)Session["SessionManager"];
+    }
 }
 
 <form role="search" id="frmGridViewsCustomization" class="cmxform">
@@ -14,9 +20,20 @@
             <h2 class="pull-left">Grid Views</h2>
 
             <div class="pull-right">
-                <a id="btnSave" class="btn btn-default">Save</a>
-                <a id="btnClear" class="btn btn-default">Clear</a>
-                <a id="btnAddRow" class="btn btn-default pull-right">Add</a>
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("Gridview_Save") && objSession.RoleFeatures["Gridview_Save"])
+                {
+                    <a id="btnSave" class="btn btn-default">Save</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("Gridview_Clear") && objSession.RoleFeatures["Gridview_Clear"])
+                {
+                    <a id="btnClear" class="btn btn-default">Clear</a>
+                }
+
+                @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("Gridview_Add") && objSession.RoleFeatures["Gridview_Add"])
+                {
+                    <a id="btnAddRow" class="btn btn-default pull-right">Add</a>
+                }
             </div>
         </div>
     </div>
@@ -33,7 +50,7 @@
                     for (int i = 0; i < keys.Length; i++)
                     {
 
-                        <option value="@keys[i].ToString()"> @items[keys[i]]</option>
+                <option value="@keys[i].ToString()"> @items[keys[i]]</option>
                     }
                 }
 
@@ -73,7 +90,7 @@
     </div>
 
     <script type="text/javascript">
-       
+
         $(function () {
             var originalModel = {};
             var originalData = [];
@@ -85,7 +102,7 @@
 
                 e.preventDefault();
                 clearControls();
-                getScreenData(); 
+                getScreenData();
             });
 
             // load the data with the controls
@@ -143,7 +160,7 @@
                                 tr += ' <td>' + gridData[i].field + '</td>';
                             }
 
-                            
+
 
 
                             // second cell
@@ -202,7 +219,7 @@
                             tr += ' </tr>';
                         }
 
-                        $("#tblGridData>tbody").empty().append(tr); 
+                        $("#tblGridData>tbody").empty().append(tr);
                     }
                 }
             }
@@ -244,7 +261,7 @@
                 $("#txtTotalRows").val("");
                 $("#txtHeight").val("");
                 $("#tblGridData>tbody").empty();
-               
+
 
             }
 
@@ -291,7 +308,7 @@
                     url: '/Admin/SaveGridViewCustomization',
                     type: 'POST',
                     data: { model: JSON.stringify(originalModel) },
-                    success: function (res) { 
+                    success: function (res) {
                         if (res != "-494") {
                             customAlert('Data saved successfully', 'alert', function () { $("#drpGridViews").focus(); });
                             $("#btnClear").trigger("click");
