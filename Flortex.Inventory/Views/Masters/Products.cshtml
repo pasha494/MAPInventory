@@ -67,13 +67,13 @@
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        if (Model.ProductCategory != 0 && Model.ProductCategory == Convert.ToInt32(dt.Rows[i]["NodeNo"].ToString()))
+                        if (Model.ProductCategory != 0 && Model.ProductCategory == Convert.ToInt32(dt.Rows[i]["id"].ToString()))
                         {
-                            <option selected="selected" value="@dt.Rows[i]["NodeNo"].ToString()">@dt.Rows[i]["Name"].ToString()</option>
+                            <option selected="selected" value="@dt.Rows[i]["id"].ToString()">@dt.Rows[i]["Name"].ToString()</option>
                         }
                         else
                         {
-                            <option value="@dt.Rows[i]["NodeNo"].ToString()">@dt.Rows[i]["Name"].ToString()</option>
+                            <option value="@dt.Rows[i]["id"].ToString()">@dt.Rows[i]["Name"].ToString()</option>
                         }
                     }
                 }

@@ -12,13 +12,25 @@
     {
         UserName = _UserName.Value.ToString();
     }
+    else
+    {
+        UserName = "pasha@gmail.com";
+    }
     if (_Password != null)
     {
         Password = MAP.Inventory.Common.Crypto.Decrypt(_Password.Value.ToString(), true);
     }
+    else
+    {
+        Password = "pasha@gmail.com";
+    }
     if (_RememberMe != null)
     {
         RememberMe = Convert.ToInt32(_RememberMe.Value.ToString());
+    }
+    else
+    {
+        RememberMe = 1;
     }
 
 }

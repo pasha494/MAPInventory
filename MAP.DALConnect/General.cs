@@ -145,7 +145,7 @@ namespace MAP.Inventory.DAL
                 {
                     SQLDBResult dbResult = SQLAdapter.Execute(SPName, param, SQLAdapter.GetConnection(CompanyIndex));
                     ReturnValue = Convert.ToInt64(dbResult.Parameters[(object)"@RETURN_VALUE"]);
-                    //this.LogException(param, SPName, CompanyIndex, dbResult, "", ReturnValue);
+                    this.LogException(param, SPName, CompanyIndex, dbResult, "", ReturnValue);
                     return dbResult.Contents;
                 }
             }
@@ -163,6 +163,7 @@ namespace MAP.Inventory.DAL
 
         private void LogException(ArrayList param, string SPName, int CompanyIndex, SQLDBResult dbResult, string Message, long ReturnValue)
         {
+            PLog.Info(this.GetParamString(param) + " : SPName:" + SPName);
             //PLog.Error(this.GetParamString(param) +""+,);
             //if (dbResult != null)
             //{
@@ -217,7 +218,7 @@ namespace MAP.Inventory.DAL
 
         public string HealthCheckConnection()
         {
-            string flag = "Success";
+            string flag = "";
             SqlConnection connection = null;
             try
             {

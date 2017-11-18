@@ -148,9 +148,7 @@ namespace MAP.Inventory.DAL
                 str = "Data Source=" + ConfigurationManager.AppSettings["DBServer"] + ";Trusted_Connection=Yes;";
             return str;
         }
-
-       
-
+ 
         public static string GetConnection(int CompanyIndex)
         {
             string str = CompanyIndex == 0 ? "" : CompanyIndex.ToString();

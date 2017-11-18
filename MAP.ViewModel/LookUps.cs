@@ -19,7 +19,7 @@ namespace MAP.Inventory.ModelImple
             try
             {
                 DataSet ds = new DataSet();
-               // ds = DAL.GetDataSet(" Select * from ProductCategory");
+                ds = _General.Get(new ArrayList() { }, "sp_GetProductsCategoryData", 0);
                 if (ds != null && ds.Tables.Count > 0)
                     dt = ds.Tables[0];
             }
