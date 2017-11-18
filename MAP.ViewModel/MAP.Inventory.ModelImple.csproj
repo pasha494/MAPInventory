@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomerImple.cs" />
+    <Compile Include="HealthCheckImple.cs" />
     <Compile Include="InwardDocumentImple.cs" />
     <Compile Include="LoginImple.cs" />
     <Compile Include="LookUps.cs" />

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using MAP.Inventory.Logging;
+using System;
 using System.Collections;
 using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace MAP.Inventory.DAL
 {
@@ -17,7 +19,7 @@ namespace MAP.Inventory.DAL
             //General.DataBase = ConfigurationManager.AppSettings["DBTYPE"];
         }
 
-        public DataSet Get(ArrayList param, string SPName, int CompanyIndex=0)
+        public DataSet Get(ArrayList param, string SPName, int CompanyIndex = 0)
         {
             DataSet dataSet = new DataSet();
             long ReturnValue = 0L;
@@ -28,12 +30,14 @@ namespace MAP.Inventory.DAL
                     SQLDBResult dbResult = SQLAdapter.Execute(SPName, param, SQLAdapter.GetConnection(CompanyIndex));
                     dataSet = dbResult.Contents;
                     ReturnValue = Convert.ToInt64(dbResult.Parameters[(object)"@RETURN_VALUE"]);
+                    //if (SPName == "sp_GetUserDetails")
+                    //    throw new Exception();
                     this.LogException(param, SPName, CompanyIndex, dbResult, "", ReturnValue);
                 }
             }
             catch (Exception ex)
             {
-                this.LogException(param, SPName, CompanyIndex, (SQLDBResult)null, ex.Message, ReturnValue);
+                this.LogException(param, SPName, CompanyIndex, (SQLDBResult)null, ex, ReturnValue);
             }
             return dataSet;
         }
@@ -61,7 +65,7 @@ namespace MAP.Inventory.DAL
             return "";
         }
 
-        public DataSet Get( ArrayList param, string SPName, out long ReturnValue, int CompanyIndex = 0)
+        public DataSet Get(ArrayList param, string SPName, out long ReturnValue, int CompanyIndex = 0)
         {
             DataSet dataSet = new DataSet();
             ReturnValue = 0L;
@@ -100,7 +104,7 @@ namespace MAP.Inventory.DAL
             return str;
         }
 
-        public string Set( ArrayList param, string SPName, out long ReturnValue,int CompanyIndex=0)
+        public string Set(ArrayList param, string SPName, out long ReturnValue, int CompanyIndex = 0)
         {
             ReturnValue = 0L;
             try
@@ -141,7 +145,7 @@ namespace MAP.Inventory.DAL
                 {
                     SQLDBResult dbResult = SQLAdapter.Execute(SPName, param, SQLAdapter.GetConnection(CompanyIndex));
                     ReturnValue = Convert.ToInt64(dbResult.Parameters[(object)"@RETURN_VALUE"]);
-                    this.LogException(param, SPName, CompanyIndex, dbResult, "", ReturnValue);
+                    //this.LogException(param, SPName, CompanyIndex, dbResult, "", ReturnValue);
                     return dbResult.Contents;
                 }
             }
@@ -152,8 +156,14 @@ namespace MAP.Inventory.DAL
             return new DataSet();
         }
 
+        private void LogException(ArrayList param, string SPName, int CompanyIndex, SQLDBResult dbResult, Exception ex, long ReturnValue)
+        {
+            PLog.Error(this.GetParamString(param) + " : SPName:" + SPName, ex);
+        }
+
         private void LogException(ArrayList param, string SPName, int CompanyIndex, SQLDBResult dbResult, string Message, long ReturnValue)
         {
+            //PLog.Error(this.GetParamString(param) +""+,);
             //if (dbResult != null)
             //{
             //    if (dbResult.Contents.Tables.Count > 0 && dbResult.Contents.Tables[dbResult.Contents.Tables.Count - 1].Columns.Contains("ServerMessage") && dbResult.Contents.Tables[dbResult.Contents.Tables.Count - 1].Rows.Count > 0)
@@ -187,7 +197,7 @@ namespace MAP.Inventory.DAL
             //    Logger.ErrorLog("General Service", ":: Set CompanyIndex:" + CompanyIndex.ToString() + " SpName:" + SPName + "Parameters :" + this.GetParamString(param), Message);
         }
 
-        public int ExecuteScript(string Query, int CompanyIndex=0)
+        public int ExecuteScript(string Query, int CompanyIndex = 0)
         {
             return SQLAdapter.Execute(Query, SQLAdapter.GetConnection(CompanyIndex));
         }
@@ -205,6 +215,31 @@ namespace MAP.Inventory.DAL
             }
         }
 
+        public string HealthCheckConnection()
+        {
+            string flag = "Success";
+            SqlConnection connection = null;
+            try
+            {
+                connection = new SqlConnection(SQLAdapter.GetConnection());
+                connection.Open();
+                flag = "Success";
+            }
+            catch (Exception ex)
+            {
+                flag = "Error:" + ex.ToString();
+                PLog.Error("HealthCheck", ex, 0, "");
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+
+            }
+            return flag;
+        }
         //public bool CreateDatabase(string dbName, string FilePath)
         //{
         //    return SQLAdapter.Execute("CREATE DATABASE " + dbName + " ON  PRIMARY ( NAME = 'PACT2C', FILENAME ='" + FilePath + dbName + ".mdf' )" + " LOG ON ( NAME = 'PACT2C_log', FILENAME = '" + FilePath + dbName + "_log.ldf')", SQLAdapter.GetConnection()) > 0;

@@ -149,15 +149,17 @@ namespace MAP.Inventory.DAL
             return str;
         }
 
+       
+
         public static string GetConnection(int CompanyIndex)
         {
             string str = CompanyIndex == 0 ? "" : CompanyIndex.ToString();
             if (!SQLAdapter.ConnectionCache.ContainsKey(CompanyIndex))
             {
                 if (ConfigurationManager.AppSettings["DBAuthentication"] == "SQLServer")
-                    SQLAdapter.ConnectionCache.Add(CompanyIndex, "Data Source=" + ConfigurationManager.AppSettings["DBServer"] + ";Initial Catalog=" + DBName + str + ";Persist Security Info=True;User ID=" + ConfigurationManager.AppSettings["DBUserID"] + ";Password=" + ConfigurationManager.AppSettings["DBPassword"]);
+                    SQLAdapter.ConnectionCache.Add(CompanyIndex, "Data Source=" + ConfigurationManager.AppSettings["DBServer"] + ";Initial Catalog=" + ConfigurationManager.AppSettings["DBName"] + str + ";Persist Security Info=True;User ID=" + ConfigurationManager.AppSettings["DBUserID"] + ";Password=" + ConfigurationManager.AppSettings["DBPassword"]);
                 else
-                    SQLAdapter.ConnectionCache.Add(CompanyIndex, "Data Source=" + ConfigurationManager.AppSettings["DBServer"] + ";Initial Catalog=" + DBName + str + ";Trusted_Connection=Yes;");
+                    SQLAdapter.ConnectionCache.Add(CompanyIndex, "Data Source=" + ConfigurationManager.AppSettings["DBServer"] + ";Initial Catalog=" + ConfigurationManager.AppSettings["DBName"] + str + ";Trusted_Connection=Yes;");
             }
             return SQLAdapter.ConnectionCache[CompanyIndex];
         }

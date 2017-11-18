@@ -46,6 +46,12 @@
     <Compile Include="SQLAdapter.cs" />
     <Compile Include="SQLDBResult.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MAP.Logging\MAP.Inventory.Logging.csproj">
+      <Project>{8f31a987-2047-41ee-a5c0-e4bf7bd839df}</Project>
+      <Name>MAP.Inventory.Logging</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

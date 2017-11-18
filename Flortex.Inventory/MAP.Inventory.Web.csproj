@@ -1553,6 +1553,7 @@
     <Content Include="Content\Gebo\lib\stepy\README.markdown" />
     <Content Include="Content\Gebo\lib\uniform\README.textile" />
     <None Include="Properties\PublishProfiles\FlortexInv.pubxml" />
+    <None Include="Properties\PublishProfiles\MAP_AzureFTP.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Images\access.jpg" />
     <Content Include="Images\homepageimg.jpg" />
@@ -1587,6 +1588,7 @@
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Scripts\_references.js" />
     <Content Include="Images\bullet.png" />
@@ -1595,7 +1597,9 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Shared\_LayoutMenuHeader.cshtml" />
     <Content Include="Views\Users\UserCreation.cshtml" />
@@ -1629,6 +1633,7 @@
     <Content Include="Views\Masters\AddCustomer.cshtml" />
     <Content Include="Views\Masters\CustomersList.cshtml" />
     <Content Include="Views\Admin\Roles.cshtml" />
+    <Content Include="Views\Home\HealthCheck.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

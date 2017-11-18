@@ -160,6 +160,12 @@ namespace MAP.Inventory.Web.Controllers
             return Content("-493");
         }
 
+        public ActionResult HealthCheck()
+        {
+
+            return PartialView(new HealthCheckImple());
+        }
+
 
     }
 
