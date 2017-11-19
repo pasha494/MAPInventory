@@ -1,5 +1,5 @@
 ﻿@model MAP.Inventory.Model.UsersModel
-
+@using MAP.Inventory.ModelImple;
 @using MAP.Inventory.Model;
 @{
     ViewBag.Title = "UserCreation";
@@ -8,6 +8,9 @@
     {
         objSession = (SessionManager)Session["SessionManager"];
     }
+
+    RolesImple _RolesImple = new RolesImple();
+    List<RolesModel> listRoles = _RolesImple.GetRolesData();
 }
 
 
@@ -35,7 +38,7 @@
             <label for="txtName" class="label">Name</label>
         </div>
         <div class="span8">
-            <input type="text" class="form-control mousetrap" style="width: 250px" name="txtName" id="txtName" placeholder="Name.." value="@Model.Name">
+            <input type="text" class="form-control mousetrap" name="txtName" id="txtName" placeholder="Name.." value="@Model.Name">
         </div>
     </div>
 
@@ -44,7 +47,7 @@
             <label for="txtEmail" class="label">Email</label>
         </div>
         <div class="span8">
-            <input type="text" class="form-control mousetrap" style="width: 250px" name="txtEmail" id="txtEmail" placeholder="Email.." value="@Model.Email">
+            <input type="text" class="form-control mousetrap" name="txtEmail" id="txtEmail" placeholder="Email.." value="@Model.Email">
         </div>
     </div>
 
@@ -53,7 +56,7 @@
             <label for="txtEmail" class="label">Password</label>
         </div>
         <div class="span8">
-            <input type="password" class="form-control mousetrap" style="width: 250px" name="txtPassword" id="txtPassword" placeholder="Password.." value="@Model.Email">
+            <input type="password" class="form-control mousetrap" name="txtPassword" id="txtPassword" placeholder="Password.." value="@Model.Password">
         </div>
     </div>
 
@@ -62,24 +65,24 @@
             <label for="drpRole" class="label">Role</label>
         </div>
         <div class="span8">
-            @*          @if (Model.IsAdmin)
+            <select id="drpRole"  name="drpRole" class="form-control mousetrap">
+                <option value="">----------------Select Role-------------------</option>
+                @if (listRoles != null && listRoles.Count > 0)
                 {
-                    <span class="label">Is Admin ?</span><input class="mousetrap" checked="checked" type="checkbox" id="chkAdmin" name="chkAdmin">
+                    for (int i = 0; i < listRoles.Count; i++)
+                    {
+
+                        if (Model.RoleID != 0 && Model.RoleID == listRoles[i].RoleId)
+                        {
+                            <option selected="selected" value="@listRoles[i].RoleId">@listRoles[i].RoleName</option>
+                        }
+                        else
+                        {
+                            <option value="@listRoles[i].RoleId">@listRoles[i].RoleName</option>
+                        }
+                    }
                 }
-                else
-                {
-                    <span class="label">Is Admin ?</span><input class="mousetrap" type="checkbox" id="chkAdmin" name="chkAdmin">
-                }*@
-
-            @if (Model.RoleID > 0)
-            {
-                <input id="drpRole" value="@Model.RoleID" class="form-control mousetrap" style="width: 250px" />
-            }
-            else
-            {
-                <input id="drpRole" class="form-control mousetrap" style="width: 250px" />
-            }
-
+            </select>
 
         </div>
     </div>
@@ -113,22 +116,6 @@
 <script type="text/javascript">
 
     $(function () {
-
-        var data = [
-                      { text: "-----------Select Role------------", value: "0" },
-                      { text: "Admin", value: "1" },
-                      { text: "Salesman", value: "2" },
-                      { text: "Data Operator", value: "3" }
-        ];
-
-        // create DropDownList from input HTML element
-        $("#drpRole").kendoDropDownList({
-            dataTextField: "text",
-            dataValueField: "value",
-            dataSource: data,
-            index: 0
-        });
-
 
         $("#btnCreateUser").on("click", function (e) {
             e.preventDefault();
@@ -168,8 +155,7 @@
                 txtEmail: { required: true, email: true },
                 txtPassword: { required: true },
                 drpRole: {
-                    required: true,
-                    greaterThanZero: true
+                    required: true 
                 },
             },
             messages: {
@@ -187,6 +173,7 @@
             $("#txtName").val('');
             $("#chkAdmin").removeAttr("checked");
             $("#txtName").focus();
+            $("#drpRole").val('');
         };
 
         var createUser = function () {
