@@ -1,4 +1,4 @@
-﻿@model MAP.Inventory.Web.Models.StockReport
+﻿@model MAP.Inventory.ModelImple.StockReportImple
 @using Newtonsoft.Json;
 @{
     ViewBag.Title = "GetStockReport";
@@ -38,25 +38,36 @@
 </style>
 <script src="http://cdn.kendostatic.com/2014.3.1029/js/jszip.min.js"></script>
 <form class="cmxform" role="search" id="searchForm">
-    <div class="row-fluid">
+    <div class="row-fluid heading">
         <div class="span12">
-            <h2 class="subtitle">Stock Report</h2>
+            <h2 class="pull-left">Stock Report</h2> 
         </div>
-        
+
     </div>
     <div class="row-fluid">
         <div class="span12 onloadhide">
             <div class="row-fluid">
                 <div class="span4">
-                    <label style="color: white; margin-right: 10px;" class="pull-left">Search By : </label>
-                    <label style="color: white; margin-right: 10px;" class="pull-left">
-                        <input type="radio" id="rdbProductCode" name="filter" value="1" checked="checked" class="rdbFilter" />
-                        Product code
-                    </label>
-                    <label style="color: white; margin-right: 10px;" class="pull-left">
-                        <input type="radio" id="rdbCategory" name="filter" value="2" class="rdbFilter " />
-                        Category
-                    </label>
+                    <div class="pull-right">
+                        <label class="label1">Search By : </label>
+                        @*<label style="color: white; margin-right: 10px;" class="pull-left">
+                                <input type="radio" id="rdbProductCode" name="filter" value="1" checked="checked" class="rdbFilter" />
+                                Product code
+                            </label>
+                            <label style="color: white; margin-right: 10px;" class="pull-left">
+                                <input type="radio" id="rdbCategory" name="filter" value="2" class="rdbFilter " />
+                                Category
+                            </label>*@
+
+                        <label class="uni-radio radio inline">
+                            <input type="radio" checked="checked" value="1" id="rdbProductCode" name="uni_r" class="uni_style rdbFilter" />
+                            Product code
+                        </label>
+                        <label class="uni-radio radio inline">
+                            <input type="radio" value="2" id="rdbCategory" name="uni_r" class="uni_style rdbFilter" />
+                            Category
+                        </label>
+                    </div>
                 </div>
                 <div class="span4">
                     <input id="drpProductCodes" style="width: 450px;" class="mousetrap pull-left" />
@@ -90,9 +101,9 @@
                     </div>
                 </div>
                 @* <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>*@
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>*@
             </div>
             <!-- /.modal-content -->
         </div>
@@ -109,7 +120,7 @@
     var grid=null;
     $(function () {
         $(".onloadhide").hide();
-        //Product code list view control 
+        //Product code list view control
         function getProductsByCode() {
             $.ajax({
                 url: '/GridStock/ProductsByCode',
@@ -124,10 +135,10 @@
                     var productCodes = JSON.parse(res);
                     $("#drpProductCodes").kendoComboBox({
                         filter: "contains",
-                        dataSource: productCodes, 
-                        placeholder: "Select Product Code...", 
+                        dataSource: productCodes,
+                        placeholder: "Select Product Code...",
                         dataTextField: "code",
-                        dataValueField: "code", 
+                        dataValueField: "code",
                         autobind: false,
                         minLength: 1
 
@@ -136,12 +147,12 @@
                 },
                 error: function (e) { customAlert('error', 'alert'); }
             });
-            
-        } 
-         
+
+        }
+
         getProductsByCode();
 
-         
+
         function getProductCategory() {
             $.ajax({
                 url: '/GridStock/GetProductCategory',
@@ -155,10 +166,10 @@
                     var productCodes = JSON.parse(res);
                     $("#drpProductCategory").kendoComboBox({
                         filter: "contains",
-                        dataSource: productCodes, 
-                        placeholder: "Select Product category...", 
+                        dataSource: productCodes,
+                        placeholder: "Select Product category...",
                         dataTextField: "name",
-                        dataValueField: "name", 
+                        dataValueField: "name",
                         autobind: false,
                         minLength: 1
 
@@ -167,8 +178,8 @@
                 },
                 error: function (e) { customAlert('error', 'alert'); }
             });
-            
-        } 
+
+        }
         getProductCategory();
 
 
@@ -210,7 +221,7 @@
         var _BlckcCols = [];
         var _ReOrdCols = [];
 
-         
+
         for (var i = 0; i < locations.length; i++) {
 
             //-------fill Actual qauntity columns
@@ -244,7 +255,7 @@
         _columns = [{
             field: "ProductCode",
             title: "Product Code",
-           
+
             //locked: true,
             //lockable: false,
             width: 250
@@ -252,28 +263,28 @@
             field: "ProductName",
             title: "Product Name",
             template:'#=ProductName# <br/> <span class="colSpecification">#=Spec#</span> ',
-            
+
             //locked: true,
             //lockable: false,
             width: 300
         },{
             field: "CategoryName",
             title: "Product Category",
-            hidden: true, 
+            hidden: true,
             //locked: true,
             //lockable: false,
             width: 250
         },{
             field: "Spec",
-            title: "Specifications", 
-            hidden: true, 
+            title: "Specifications",
+            hidden: true,
             lockable: false,
             width: 250
         },
                         {
                             title: "Actual Qty",
                             lockable: false,
-                            columns: _ActCols 
+                            columns: _ActCols
                         },
                         {
                             title: "Blocked Qty",
@@ -297,21 +308,21 @@
                             title: "Re-Order Plan / Incoming Cargo",
                             lockable: false,
                             columns: _ReOrdCols
-                        } 
+                        }
 
         ];
-        
-          
+
+
 
         $("#grid").kendoGrid({
             dataSource: {
                 data: _data,
                 autoSync: true ,
-                group: { field: "CategoryName" } 
+                group: { field: "CategoryName" }
             },
             excel:{
                 fileName:"FlortexInventoryReport.xlsx",
-                allPages:true, 
+                allPages:true,
                 filterable:true,
                 proxyURL: '@Url.Action("Home", "Save")'
             },
@@ -349,20 +360,20 @@
         });
 
         $("#btnSearch").click(function (e) {
-             
+
             e.preventDefault();
             $("#ajaxLoadingImg").show();
             var $filter = new Array();
- 
+
             var  $val = "";
- 
-            if ($("#rdbProductCode").is(":checked")) {  
+
+            if ($("#rdbProductCode").is(":checked")) {
                 var combobox = $("#drpProductCodes").data("kendoComboBox");
                 $val=combobox.text();
                 if($val)
                     $filter.push({ field: "ProductCode", operator: "contains", value: $val });
             }
-            else if ($("#rdbCategory").is(":checked")) { 
+            else if ($("#rdbCategory").is(":checked")) {
                 var combobox = $("#drpProductCategory").data("kendoComboBox");
                 $val=combobox.text();
                 if($val)
@@ -371,28 +382,28 @@
 
             grid.dataSource.filter($filter);
             $("#ajaxLoadingImg").hide();
- 
+
         });
 
         $("#btnExcelExport").on("click", function(e){
             e.preventDefault();
             $("#ajaxLoadingImg").show();
-            $("#grid").getKendoGrid().saveAsExcel(); 
+            $("#grid").getKendoGrid().saveAsExcel();
             $("#ajaxLoadingImg").hide();
         });
- 
+
         $("#btnClear").click(function (e) {
-             
+
             e.preventDefault();
             $("#ajaxLoadingImg").show();
-            var $filter = new Array(); 
+            var $filter = new Array();
             var combobox = $("#drpProductCodes").data("kendoComboBox");
             combobox.text('');
             var combobox1 = $("#drpProductCategory").data("kendoComboBox");
             combobox1.text('');
             grid.dataSource.filter($filter);
             $("#ajaxLoadingImg").hide();
- 
+
         });
 
         $("#searchForm").submit(function() {
@@ -402,25 +413,25 @@
             //}
             return false;
         });
-        
+
 
         $("input.rdbFilter").on("click",function(e){
-            //e.preventDefault(); 
+            //e.preventDefault();
             if($(this).val()==2)
             {
                 var combobox = $("#drpProductCodes").data("kendoComboBox");
                 combobox.text('');
                 $("#drpProductCategory").closest(".k-widget").show();
-                $("#drpProductCodes").closest(".k-widget").hide(); 
+                $("#drpProductCodes").closest(".k-widget").hide();
                 //$("#txtSearch").attr("placeholder","Enter Product category to search..");
             }
             else
-            {                      
+            {
                 var combobox1 = $("#drpProductCategory").data("kendoComboBox");
                 combobox1.text('');
                 $("#drpProductCategory").closest(".k-widget").hide();
-                $("#drpProductCodes").closest(".k-widget").show();  
-                //$("#txtSearch").attr("placeholder","Enter Product code to search.."); 
+                $("#drpProductCodes").closest(".k-widget").show();
+                //$("#txtSearch").attr("placeholder","Enter Product code to search..");
             }
         });
 
@@ -491,13 +502,13 @@
 
 
     function showName(ele){
-         
+
         var _prodid=$(ele).attr("data-prodid");
         var _locationid=$(ele).attr("data-locationid");
         var _type=$(ele).attr("data-type");
 
         var createTable=function(data,type){
-             
+
             if(type=="inward")
             {
                 var str ="<table class='table table-bordered'> <thead><tr><th>S.No</th><th>DocName</th> <th>Vendor</th> <th>Quantity</th> <th>Expected Date</th> </tr> </thead> <tbody> ";
@@ -536,7 +547,7 @@
                     {
                         createTable(JSON.parse(data),_type);
                     }
-                }, 
+                },
                 error: function (e) { customAlert('Error occured', 'alert'); }
             });
         }

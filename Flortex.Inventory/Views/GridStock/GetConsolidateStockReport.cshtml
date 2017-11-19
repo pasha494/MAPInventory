@@ -1,588 +1,591 @@
-﻿@model MAP.Inventory.Web.Models.StockReport
-@using Newtonsoft.Json;
-@{
-    ViewBag.Title = "GetStockReport";
-    string WareHouses = JsonConvert.SerializeObject(Model.ds.Tables[0]);
-    string Data = JsonConvert.SerializeObject(Model.dt);
-}
-<style type="text/css">
-    .k-grid-header, .k-grid-header .k-header, .k-pager-wrap, .k-pager-numbers .k-state-selected, .k-grid-footer, .k-grid-footer td, .k-scheduler-header, .km-pane-wrapper .k-grid-header .k-header {
-        text-transform: uppercase;
+﻿@model MAP.Inventory.ModelImple.StockReportImple
+    @using Newtonsoft.Json;
+    @{
+        ViewBag.Title = "GetStockReport";
+        string WareHouses = JsonConvert.SerializeObject(Model.ds.Tables[0]);
+        string Data = JsonConvert.SerializeObject(Model.dt);
     }
+    <style type="text/css">
+        .k-grid-header, .k-grid-header .k-header, .k-pager-wrap, .k-pager-numbers .k-state-selected, .k-grid-footer, .k-grid-footer td, .k-scheduler-header, .km-pane-wrapper .k-grid-header .k-header {
+            text-transform: uppercase;
+        }
 
-    .k-header {
-    }
+        .k-header {
+        }
 
-    .k-grouping-row td {
-        background-color: rgb(57, 147, 186);
-        color: white;
-    }
+        .k-grouping-row td {
+            background-color: rgb(57, 147, 186);
+            color: white;
+        }
 
-    .k-grid .k-alt {
-        background-color: rgb(236, 230, 230); /* specify the alternate background-color */
-    }
+        .k-grid .k-alt {
+            background-color: rgb(236, 230, 230); /* specify the alternate background-color */
+        }
 
-    .k-grid td {
-        padding: 2px 1.286em;
-    }
+        .k-grid td {
+            padding: 2px 1.286em;
+        }
 
-    .colSpecification {
-        font-style: italic;
-        font-size: 10px;
-    }
+        .colSpecification {
+            font-style: italic;
+            font-size: 10px;
+        }
 
-    .textGrid {
-        font-size: 12px;
-    }
+        .textGrid {
+            font-size: 12px;
+        }
 
-    .cellStyles {
-        border-right: 1px solid rgb(229, 229, 229);
-    }
+        .cellStyles {
+            border-right: 1px solid rgb(229, 229, 229);
+        }
 
-    .onloadhide {
-        display: none;
-    }
-</style>
-<script src="http://cdn.kendostatic.com/2014.3.1029/js/jszip.min.js"></script>
-<form class="cmxform" role="search" id="searchForm">
-    <div class="row-fluid">
-        <div class="span12">
-            <h2 class="subtitle">Stock Report</h2>
-        </div>
-
-    </div>
-    <div class="row-fluid">
-        <div class="span12 onloadhide">
-            <div class="row-fluid">
-                <div class="span4">
-                    <label style="color: white; margin-right: 10px;" class="pull-left">Search By : </label>
-                    <label style="color: white; margin-right: 10px;" class="pull-left">
-                        <input type="radio" id="rdbProductCode" name="filter" value="1" checked="checked" class="rdbFilter" />
-                        Product code
-                    </label>
-                    <label style="color: white; margin-right: 10px;" class="pull-left">
-                        <input type="radio" id="rdbCategory" name="filter" value="2" class="rdbFilter " />
-                        Category
-                    </label>
-                </div>
-                <div class="span4">
-                    <input id="drpProductCodes" style="width: 450px;" class="mousetrap pull-left" />
-                    <input id="drpProductCategory" style="width: 450px;" class="mousetrap pull-left" />
-                </div>
-                <div class="span4">
-                    <a id="btnSearch" class="btn btn-default pull-left" style="margin-right: 5px; margin-left: 5px;">Search</a>
-                    <a id="btnClear" class="btn btn-default pull-left" style="margin-right: 15px; margin-left: 5px;">Reset</a>
-                    <a id="btnExcelExport" class="btn btn-default pull-left" style="margin-right: 5px;">Export to Excel</a>
-                </div>
-                @*<a id="btnPrint" class="btn btn-default pull-left" style="margin-right: 5px;">Print</a>*@
-
+        .onloadhide {
+            display: none;
+        }
+    </style>
+    <script src="http://cdn.kendostatic.com/2014.3.1029/js/jszip.min.js"></script>
+    <form class="cmxform" role="search" id="searchForm">
+        <div class="row-fluid heading">
+            <div class="span12">
+                <h2 class="pull-left">Stock Report</h2>
             </div>
-        </div>
-    </div>
-    <div class="row-fluid">
-        <div class="col-lg-12 span12">
-            <div id="grid" class="textGrid"></div>
-        </div>
-    </div>
 
-    <div class="modal fade" id="myModal" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="gridSystemModalLabel">Product Details</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid" id="modelContainer">
+        </div>
+        <div class="row-fluid">
+            <div class="span12 onloadhide">
+                <div class="row-fluid">
+                    <div class="span4">
+                        <div class="pull-right">
+                            <label class="label1">Search By : </label>
+
+                            <label class="uni-radio radio inline">
+                                <input type="radio" checked="checked" value="1" id="rdbProductCode" name="uni_r" class="uni_style rdbFilter" />
+                                Product code
+                            </label>
+                            <label class="uni-radio radio inline">
+                                <input type="radio" value="2" id="rdbCategory" name="uni_r" class="uni_style rdbFilter" />
+                                Category
+                            </label>
+                        </div>
                     </div>
+                    <div class="span4">
+                        <input id="drpProductCodes" style="width: 450px;" class="mousetrap pull-left" />
+                        <input id="drpProductCategory" style="width: 450px;" class="mousetrap pull-left" />
+                    </div>
+                    <div class="span4">
+                        <a id="btnSearch" class="btn btn-default pull-left" style="margin-right: 5px; margin-left: 5px;">Search</a>
+                        <a id="btnClear" class="btn btn-default pull-left" style="margin-right: 15px; margin-left: 5px;">Reset</a>
+                        <a id="btnExcelExport" class="btn btn-default pull-left" style="margin-right: 5px;">Export to Excel</a>
+                    </div>
+                    @*<a id="btnPrint" class="btn btn-default pull-left" style="margin-right: 5px;">Print</a>*@
+
                 </div>
-                @* <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>*@
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
+        <div class="row-fluid">
+            <div class="col-lg-12 span12">
+                <div id="grid" class="textGrid"></div>
+            </div>
+        </div>
 
-</form>
+        <div class="modal fade" id="myModal" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="gridSystemModalLabel">Product Details</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid" id="modelContainer">
+                        </div>
+                    </div>
+                    @* <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>*@
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
 
-<script type="text/javascript">
-    var _columns = null;
-    var _data=@Html.Raw(Data) ;
-    var locations= @Html.Raw(WareHouses);
-    var grid=null;
-    $(function () {
-        $(".onloadhide").hide();
-        //Product code list view control 
-        function getProductsByCode() {
-            $.ajax({
-                url: '/GridStock/ProductsByCode',
-                type: 'Get',
-                async: false,
-                beforeSend: function () {
-                    $("#ajaxLoadingImg").show();
+    </form>
+
+    <script type="text/javascript">
+        var _columns = null;
+        var _data=@Html.Raw(Data) ;
+        var locations= @Html.Raw(WareHouses);
+        var grid=null;
+        $(function () {
+            $(".onloadhide").hide();
+            //Product code list view control
+            function getProductsByCode() {
+                $.ajax({
+                    url: '/GridStock/ProductsByCode',
+                    type: 'Get',
+                    async: false,
+                    beforeSend: function () {
+                        $("#ajaxLoadingImg").show();
+                    },
+                    complete: function () { $("#ajaxLoadingImg").hide(); },
+                    success: function (res) {
+                        debugger
+                        var productCodes = JSON.parse(res);
+                        $("#drpProductCodes").kendoComboBox({
+                            filter: "contains",
+                            dataSource: productCodes,
+                            placeholder: "Select Product Code...",
+                            dataTextField: "code",
+                            dataValueField: "code",
+                            autobind: false,
+                            minLength: 1
+
+                        });
+
+                    },
+                    error: function (e) { customAlert('error', 'alert'); }
+                });
+
+            }
+
+            getProductsByCode();
+
+
+            function getProductCategory() {
+                $.ajax({
+                    url: '/GridStock/GetProductCategory',
+                    type: 'Get',
+                    async: false,
+                    beforeSend: function () {
+                        $("#ajaxLoadingImg").show();
+                    },
+                    complete: function () { $("#ajaxLoadingImg").hide(); },
+                    success: function (res) {
+                        var productCodes = JSON.parse(res);
+                        $("#drpProductCategory").kendoComboBox({
+                            filter: "contains",
+                            dataSource: productCodes,
+                            placeholder: "Select Product category...",
+                            dataTextField: "name",
+                            dataValueField: "name",
+                            autobind: false,
+                            minLength: 1
+
+                        });
+
+                    },
+                    error: function (e) { customAlert('error', 'alert'); }
+                });
+
+            }
+            getProductCategory();
+
+
+            var obj2 = {
+                title: "",
+                width:270,
+                columns: [{
+                    field: "",
+                    title: "QTY",
+                    attributes: {
+                        // style:'border-right: 1px solid rgb(229, 229, 229);'
+                    },
+                    width: 70
                 },
-                complete: function () { $("#ajaxLoadingImg").hide(); },
-                success: function (res) {
-                    debugger
-                    var productCodes = JSON.parse(res);
-                    $("#drpProductCodes").kendoComboBox({
-                        filter: "contains",
-                        dataSource: productCodes, 
-                        placeholder: "Select Product Code...", 
-                        dataTextField: "code",
-                        dataValueField: "code", 
-                        autobind: false,
-                        minLength: 1
+                {
+                    field: "",
+                    title: "Expected Date",
+                    attributes: {
+                        // style:'border-right: 1px solid rgb(229, 229, 229);'
+                    },
+                    width: 100
+                }]
+            };
 
-                    });
-
+            var obj3={
+                title: "",
+                width:300,
+                columns: [{
+                    field: "",
+                    attributes: {
+                        // style:'background-color:rgb(243, 247, 129);border-right: 1px solid rgb(229, 229, 229);'
+                    },
+                    width: 100
                 },
-                error: function (e) { customAlert('error', 'alert'); }
+                {
+                    field: "",
+                    attributes: {
+                        //style:'background-color:rgb(243, 247, 129);border-right: 1px solid rgb(229, 229, 229);'
+                    },
+                    width: 100
+                },
+                {
+                    field: "",
+                    attributes: {
+                        style:'background-color:rgb(155, 110, 59);border-right: 1px solid rgb(229, 229, 229);font-weight:bold;color:white;'
+                    },
+                    width: 100
+                }]
+            }
+
+            var colors=['rgb(243, 247, 129)','rgb(232, 181, 151)','rgb(142, 247, 129)',];
+
+
+            var _locs=[];
+
+            var _ReOrdCols = [];
+
+            debugger
+            for (var i = 0; i < locations.length; i++) {
+
+                var _obj={};
+                //-------fill Actual qauntity columns
+                $.extend(true, _obj,obj3);
+                _obj.title = locations[i].name +' Stocks';
+                _obj.columns[0].field = "Act_Qty_" + locations[i].id;
+                _obj.columns[0].title="STOCK IN HAND";
+                _obj.columns[0].attributes={
+                    style:'background-color:'+colors[i]+';border-right: 1px solid rgb(229, 229, 229);'
+                };
+
+                _obj.columns[1].field = "Blck_Qty_" + locations[i].id;
+                _obj.columns[1].title="BLOCK QTY";
+                _obj.columns[1].template='# if( '+_obj.columns[1].field +'!=null && Blck_Qty_Exp_'+locations[i].id+'==1) {#<a style="color:red;" data-prodid="#=ProductID#" data-type="outward" data-locationid="'+locations[i].id +'" href="javascript:void(0);" onclick="showName(this);">#='+_obj.columns[1].field +'#</a># } else {# #='+_obj.columns[1].field +'##} #';
+                _obj.columns[1].attributes={
+                    style:'background-color:'+colors[i]+';border-right: 1px solid rgb(229, 229, 229);'
+                };
+
+                _obj.columns[2].field="Total_Qty_" + locations[i].id;
+                _obj.columns[2].title="TOT BAL QTY";
+
+
+                _locs.push(_obj);
+
+                //-------fill Re-Order Plan columns
+                var _reOrd ={};
+                $.extend(true,_reOrd, obj2);
+                _reOrd.title = locations[i].name;
+                _reOrd.columns[0].field = "ReOrd_Qty_" + locations[i].id;
+                _reOrd.columns[0].attributes={
+                    style:'background-color:'+colors[i]+';border-right: 1px solid rgb(229, 229, 229);'
+                };
+
+
+                _reOrd.columns[1].field = "ReOrd_ExpDt_" + locations[i].id;
+                ///_reOrd.columns[1].template="#if(ReOrd_ExpDt_" + locations[i].id+"!=null && ReOrd_ExpDt_" + locations[i].id+".length>10 ){#<a href='javascript:void(0);'  onclick='showName();'>#:  ReOrd_ExpDt_" + locations[i].id+"#</a># }else {#: ReOrd_ExpDt_" + locations[i].id+"#}"
+                _reOrd.columns[1].template='# if( '+_reOrd.columns[1].field +'!=null && '+_reOrd.columns[1].field +'.length>10) {#<a style="color:red;" data-prodid="#=ProductID#" data-type="inward" data-locationid="'+locations[i].id +'" href="javascript:void(0);" onclick="showName(this);">#='+_reOrd.columns[1].field +'#</a># } else {# #='+_reOrd.columns[1].field +'##} #';
+
+                _reOrd.columns[1].attributes={
+                    style:'background-color:'+colors[i]+';border-right: 1px solid rgb(229, 229, 229);'
+                };
+
+                _ReOrdCols.push(_reOrd);
+            }
+
+
+
+            _columns = [{
+                field: "ProductCode",
+                title: "Product Code",
+
+                //locked: true,
+                //lockable: false,
+                width: 250
+            },{
+                field: "ProductName",
+                title: "Product Name",
+                template:'#=ProductName# <br/> <span class="colSpecification">#=Spec#</span> ',
+
+                //locked: true,
+                //lockable: false,
+                width: 300
+            },{
+                field: "CategoryName",
+                title: "Product Category",
+                hidden: true,
+                //locked: true,
+                //lockable: false,
+                width: 250
+            },{
+                field: "Spec",
+                title: "Specifications",
+                hidden: true,
+                lockable: false,
+                width: 250
+            }
+
+
+            ];
+
+
+
+            for (var i = 0; i < _locs.length; i++) {
+                _columns.push(_locs[i]);
+            }
+
+
+            _columns.push(
+            {
+                title: "Total Qty Ava.",
+                lockable: false,
+
+                columns: [{
+                    field: "Total_Qty",
+                    title: "TOTAL",
+                    attributes: {
+                        style:"background-color:rgba(23, 155, 119, 1);font-weight:bold;color:white;"
+                    },
+                    width: 100
+                }]
+
             });
-            
-        } 
-         
-        getProductsByCode();
 
-         
-        function getProductCategory() {
-            $.ajax({
-                url: '/GridStock/GetProductCategory',
-                type: 'Get',
-                async: false,
-                beforeSend: function () {
-                    $("#ajaxLoadingImg").show();
+
+            _columns.push( {
+                title: "Re-Order Plan / Incoming Cargo",
+                lockable: false,
+                columns: _ReOrdCols
+            } );
+
+            $("#grid").kendoGrid({
+                dataSource: {
+                    data: _data,
+                    autoSync: true ,
+                    group: { field: "CategoryName" }
                 },
-                complete: function () { $("#ajaxLoadingImg").hide(); },
-                success: function (res) {
-                    var productCodes = JSON.parse(res);
-                    $("#drpProductCategory").kendoComboBox({
-                        filter: "contains",
-                        dataSource: productCodes, 
-                        placeholder: "Select Product category...", 
-                        dataTextField: "name",
-                        dataValueField: "name", 
-                        autobind: false,
-                        minLength: 1
-
-                    });
-
+                excel:{
+                    fileName:"FlortexInventoryReport.xlsx",
+                    allPages:true,
+                    filterable:true,
+                    proxyURL: '@Url.Action("Home", "Save")'
                 },
-                error: function (e) { customAlert('error', 'alert'); }
+                height: 550,
+                filterable: true,
+                groupable: false,
+                sortable: true,
+                columnMenu: true,
+                resizable: true,
+                columns: _columns
             });
-            
-        } 
-        getProductCategory();
+            grid=$("#grid").data("kendoGrid");
 
-         
-        var obj2 = {
-            title: "",
-            width:270,
-            columns: [{
-                field: "",
-                title: "QTY",
-                attributes: {
-                   // style:'border-right: 1px solid rgb(229, 229, 229);'
-                },
-                width: 70
-            },
-            {
-                field: "",
-                title: "Expected Date",
-                attributes: {
-                   // style:'border-right: 1px solid rgb(229, 229, 229);'
-                },
-                width: 100
-            }]
-        };
+            grid.thead.kendoTooltip({
+                filter: "th",
+                content: function (e) {
+                    var target = e.target; // element for which the tooltip is shown
+                    return $(target).text();
+                }
+            });
 
-        var obj3={
-            title: "",
-            width:300,
-            columns: [{
-                field: "", 
-                attributes: {
-                    // style:'background-color:rgb(243, 247, 129);border-right: 1px solid rgb(229, 229, 229);'
-                },
-                width: 100
-            },
-            {
-                field: "", 
-                attributes: {
-                    //style:'background-color:rgb(243, 247, 129);border-right: 1px solid rgb(229, 229, 229);'
-                },
-                width: 100
-            },
-            {
-                field: "", 
-                attributes: {
-                    style:'background-color:rgb(155, 110, 59);border-right: 1px solid rgb(229, 229, 229);font-weight:bold;color:white;'
-                },
-                width: 100
-            }]
-        }
+            Mousetrap.bind(['ctrl+enter', 'command+enter'], function (e) {
+                e.preventDefault();
+                $("#btnSearch").click();
+            });
 
-        var colors=['rgb(243, 247, 129)','rgb(232, 181, 151)','rgb(142, 247, 129)',];
-        
+            Mousetrap.bind(['ctrl+r', 'command+r'], function (e) {
+                e.preventDefault();
+                $("#btnClear").click();
+            });
 
-        var _locs=[];
-         
-        var _ReOrdCols = [];
+            Mousetrap.bind(['ctrl+e', 'command+e'], function (e) {
+                e.preventDefault();
+                $("#btnExcelExport").click();
+            });
 
-        debugger
-        for (var i = 0; i < locations.length; i++) {
+            $("#btnSearch").click(function (e) {
 
-            var _obj={}; 
-            //-------fill Actual qauntity columns 
-            $.extend(true, _obj,obj3);
-            _obj.title = locations[i].name +' Stocks';
-            _obj.columns[0].field = "Act_Qty_" + locations[i].id; 
-            _obj.columns[0].title="STOCK IN HAND";
-            _obj.columns[0].attributes={
-                style:'background-color:'+colors[i]+';border-right: 1px solid rgb(229, 229, 229);'
-            };
+                e.preventDefault();
+                $("#ajaxLoadingImg").show();
+                var $filter = new Array();
 
-            _obj.columns[1].field = "Blck_Qty_" + locations[i].id;
-            _obj.columns[1].title="BLOCK QTY";
-            _obj.columns[1].template='# if( '+_obj.columns[1].field +'!=null && Blck_Qty_Exp_'+locations[i].id+'==1) {#<a style="color:red;" data-prodid="#=ProductID#" data-type="outward" data-locationid="'+locations[i].id +'" href="javascript:void(0);" onclick="showName(this);">#='+_obj.columns[1].field +'#</a># } else {# #='+_obj.columns[1].field +'##} #';
-            _obj.columns[1].attributes={
-                style:'background-color:'+colors[i]+';border-right: 1px solid rgb(229, 229, 229);'
-            };
+                var  $val = "";
 
-            _obj.columns[2].field="Total_Qty_" + locations[i].id;
-            _obj.columns[2].title="TOT BAL QTY";
+                if ($("#rdbProductCode").is(":checked")) {
+                    var combobox = $("#drpProductCodes").data("kendoComboBox");
+                    $val=combobox.text();
+                    if($val)
+                        $filter.push({ field: "ProductCode", operator: "contains", value: $val });
+                }
+                else if ($("#rdbCategory").is(":checked")) {
+                    var combobox = $("#drpProductCategory").data("kendoComboBox");
+                    $val=combobox.text();
+                    if($val)
+                        $filter.push({ field: "CategoryName", operator: "contains", value: $val });
+                }
 
+                grid.dataSource.filter($filter);
+                $("#ajaxLoadingImg").hide();
 
-            _locs.push(_obj);
+            });
 
-            //-------fill Re-Order Plan columns
-            var _reOrd ={};
-            $.extend(true,_reOrd, obj2);
-            _reOrd.title = locations[i].name;
-            _reOrd.columns[0].field = "ReOrd_Qty_" + locations[i].id;
-            _reOrd.columns[0].attributes={
-                style:'background-color:'+colors[i]+';border-right: 1px solid rgb(229, 229, 229);'
-            };
-             
+            $("#btnExcelExport").on("click", function(e){
+                e.preventDefault();
+                $("#ajaxLoadingImg").show();
+                $("#grid").getKendoGrid().saveAsExcel();
+                $("#ajaxLoadingImg").hide();
+            });
 
-            _reOrd.columns[1].field = "ReOrd_ExpDt_" + locations[i].id;
-            ///_reOrd.columns[1].template="#if(ReOrd_ExpDt_" + locations[i].id+"!=null && ReOrd_ExpDt_" + locations[i].id+".length>10 ){#<a href='javascript:void(0);'  onclick='showName();'>#:  ReOrd_ExpDt_" + locations[i].id+"#</a># }else {#: ReOrd_ExpDt_" + locations[i].id+"#}"
-            _reOrd.columns[1].template='# if( '+_reOrd.columns[1].field +'!=null && '+_reOrd.columns[1].field +'.length>10) {#<a style="color:red;" data-prodid="#=ProductID#" data-type="inward" data-locationid="'+locations[i].id +'" href="javascript:void(0);" onclick="showName(this);">#='+_reOrd.columns[1].field +'#</a># } else {# #='+_reOrd.columns[1].field +'##} #';
+            $("#btnClear").click(function (e) {
 
-            _reOrd.columns[1].attributes={
-                style:'background-color:'+colors[i]+';border-right: 1px solid rgb(229, 229, 229);'
-            };
-
-            _ReOrdCols.push(_reOrd);
-        }
-
-
-
-        _columns = [{
-            field: "ProductCode",
-            title: "Product Code",
-           
-            //locked: true,
-            //lockable: false,
-            width: 250
-        },{
-            field: "ProductName",
-            title: "Product Name",
-            template:'#=ProductName# <br/> <span class="colSpecification">#=Spec#</span> ',
-            
-            //locked: true,
-            //lockable: false,
-            width: 300
-        },{
-            field: "CategoryName",
-            title: "Product Category",
-            hidden: true, 
-            //locked: true,
-            //lockable: false,
-            width: 250
-        },{
-            field: "Spec",
-            title: "Specifications", 
-            hidden: true, 
-            lockable: false,
-            width: 250
-        }
-                          
-
-        ];
-        
-          
-
-        for (var i = 0; i < _locs.length; i++) {
-            _columns.push(_locs[i]);
-        }
-
-
-        _columns.push(
-        {
-            title: "Total Qty Ava.",
-            lockable: false,
-         
-            columns: [{
-                field: "Total_Qty",
-                title: "TOTAL",
-                attributes: {
-                    style:"background-color:rgba(23, 155, 119, 1);font-weight:bold;color:white;"
-                },
-                width: 100
-            }]
-            
-        });
-        
-        
-        _columns.push( {
-            title: "Re-Order Plan / Incoming Cargo",
-            lockable: false,
-            columns: _ReOrdCols
-        } );
-
-        $("#grid").kendoGrid({
-            dataSource: {
-                data: _data,
-                autoSync: true ,
-                group: { field: "CategoryName" } 
-            },
-            excel:{
-                fileName:"FlortexInventoryReport.xlsx",
-                allPages:true, 
-                filterable:true,
-                proxyURL: '@Url.Action("Home", "Save")'
-            },
-            height: 550,
-            filterable: true,
-            groupable: false,
-            sortable: true,
-            columnMenu: true,
-            resizable: true,
-            columns: _columns
-        });
-        grid=$("#grid").data("kendoGrid");
-
-        grid.thead.kendoTooltip({
-            filter: "th",
-            content: function (e) {
-                var target = e.target; // element for which the tooltip is shown
-                return $(target).text();
-            }
-        });
-
-        Mousetrap.bind(['ctrl+enter', 'command+enter'], function (e) {
-            e.preventDefault();
-            $("#btnSearch").click();
-        });
-
-        Mousetrap.bind(['ctrl+r', 'command+r'], function (e) {
-            e.preventDefault();
-            $("#btnClear").click();
-        });
-
-        Mousetrap.bind(['ctrl+e', 'command+e'], function (e) {
-            e.preventDefault();
-            $("#btnExcelExport").click();
-        });
-
-        $("#btnSearch").click(function (e) {
-             
-            e.preventDefault();
-            $("#ajaxLoadingImg").show();
-            var $filter = new Array();
- 
-            var  $val = "";
- 
-            if ($("#rdbProductCode").is(":checked")) {  
-                var combobox = $("#drpProductCodes").data("kendoComboBox");
-                $val=combobox.text();
-                if($val)
-                    $filter.push({ field: "ProductCode", operator: "contains", value: $val });
-            }
-            else if ($("#rdbCategory").is(":checked")) { 
-                var combobox = $("#drpProductCategory").data("kendoComboBox");
-                $val=combobox.text();
-                if($val)
-                    $filter.push({ field: "CategoryName", operator: "contains", value: $val });
-            }
-
-            grid.dataSource.filter($filter);
-            $("#ajaxLoadingImg").hide();
- 
-        });
-
-        $("#btnExcelExport").on("click", function(e){
-            e.preventDefault();
-            $("#ajaxLoadingImg").show();
-            $("#grid").getKendoGrid().saveAsExcel(); 
-            $("#ajaxLoadingImg").hide();
-        });
- 
-        $("#btnClear").click(function (e) {
-             
-            e.preventDefault();
-            $("#ajaxLoadingImg").show();
-            var $filter = new Array(); 
-            var combobox = $("#drpProductCodes").data("kendoComboBox");
-            combobox.text('');
-            var combobox1 = $("#drpProductCategory").data("kendoComboBox");
-            combobox1.text('');
-            grid.dataSource.filter($filter);
-            $("#ajaxLoadingImg").hide();
- 
-        });
-
-        $("#searchForm").submit(function() {
-            //if($("#txtSearch").val())
-            //{
-            //    $("#btnSearch").click();
-            //}
-            return false;
-        });
-        
-
-        $("input.rdbFilter").on("click",function(e){
-            //e.preventDefault(); 
-            if($(this).val()==2)
-            {
+                e.preventDefault();
+                $("#ajaxLoadingImg").show();
+                var $filter = new Array();
                 var combobox = $("#drpProductCodes").data("kendoComboBox");
                 combobox.text('');
-                $("#drpProductCategory").closest(".k-widget").show();
-                $("#drpProductCodes").closest(".k-widget").hide(); 
-                //$("#txtSearch").attr("placeholder","Enter Product category to search..");
-            }
-            else
-            {                      
                 var combobox1 = $("#drpProductCategory").data("kendoComboBox");
                 combobox1.text('');
-                $("#drpProductCategory").closest(".k-widget").hide();
-                $("#drpProductCodes").closest(".k-widget").show();  
-                //$("#txtSearch").attr("placeholder","Enter Product code to search.."); 
-            }
+                grid.dataSource.filter($filter);
+                $("#ajaxLoadingImg").hide();
+
+            });
+
+            $("#searchForm").submit(function() {
+                //if($("#txtSearch").val())
+                //{
+                //    $("#btnSearch").click();
+                //}
+                return false;
+            });
+
+
+            $("input.rdbFilter").on("click",function(e){
+                //e.preventDefault();
+                if($(this).val()==2)
+                {
+                    var combobox = $("#drpProductCodes").data("kendoComboBox");
+                    combobox.text('');
+                    $("#drpProductCategory").closest(".k-widget").show();
+                    $("#drpProductCodes").closest(".k-widget").hide();
+                    //$("#txtSearch").attr("placeholder","Enter Product category to search..");
+                }
+                else
+                {
+                    var combobox1 = $("#drpProductCategory").data("kendoComboBox");
+                    combobox1.text('');
+                    $("#drpProductCategory").closest(".k-widget").hide();
+                    $("#drpProductCodes").closest(".k-widget").show();
+                    //$("#txtSearch").attr("placeholder","Enter Product code to search..");
+                }
+            });
+
+            $("#btnPrint").on("click",function(e){
+                e.preventDefault();
+                printGrid();
+            });
+
+            $("#drpProductCategory").closest(".k-widget").hide();
+            $("#drpProductCodes").closest(".k-widget").show();
+            $(".onloadhide").show();
         });
 
-        $("#btnPrint").on("click",function(e){
-            e.preventDefault();
-            printGrid();
-        });
-
-        $("#drpProductCategory").closest(".k-widget").hide();
-        $("#drpProductCodes").closest(".k-widget").show();
-        $(".onloadhide").show();
-    });
 
 
+        function printGrid() {
+            var gridElement = $('#grid'),
+                printableContent = '',
+                win = window.open('', '', 'width=800, height=500'),
+                doc = win.document.open();
 
-    function printGrid() {
-        var gridElement = $('#grid'),
-            printableContent = '',
-            win = window.open('', '', 'width=800, height=500'),
-            doc = win.document.open();
+            var htmlStart =
+                    '<!DOCTYPE html>' +
+                    '<html>' +
+                    '<head>' +
+                    '<meta charset="utf-8" />' +
+                    '<title>Kendo UI Grid</title>' +
+                    '<link href="~/Content/kendo.material.min.css" rel="stylesheet" /> ' +
+                    '<style>' +
+                    'html { font: 11pt sans-serif; }' +
+                    '.k-grid { border-top-width: 0; }' +
+                    '.k-grid, .k-grid-content { height: auto !important; }' +
+                    '.k-grid-content { overflow: visible !important; }' +
+                    'div.k-grid table { table-layout: auto; width: 100% !important; }' +
+                    '.k-grid .k-grid-header th { border-top: 1px solid; }' +
+                    '.k-grid-toolbar, .k-grid-pager > .k-link { display: none; }' +
+                    '</style>' +
+                    '</head>' +
+                    '<body>';
 
-        var htmlStart =
-                '<!DOCTYPE html>' +
-                '<html>' +
-                '<head>' +
-                '<meta charset="utf-8" />' +
-                '<title>Kendo UI Grid</title>' +
-                '<link href="~/Content/kendo.material.min.css" rel="stylesheet" /> ' +
-                '<style>' +
-                'html { font: 11pt sans-serif; }' +
-                '.k-grid { border-top-width: 0; }' +
-                '.k-grid, .k-grid-content { height: auto !important; }' +
-                '.k-grid-content { overflow: visible !important; }' +
-                'div.k-grid table { table-layout: auto; width: 100% !important; }' +
-                '.k-grid .k-grid-header th { border-top: 1px solid; }' +
-                '.k-grid-toolbar, .k-grid-pager > .k-link { display: none; }' +
-                '</style>' +
-                '</head>' +
-                '<body>';
+            var htmlEnd =
+                    '</body>' +
+                    '</html>';
 
-        var htmlEnd =
-                '</body>' +
-                '</html>';
-
-        var gridHeader = gridElement.children('.k-grid-header');
-        if (gridHeader[0]) {
-            var thead = gridHeader.find('thead').clone().addClass('k-grid-header');
-            printableContent = gridElement
-                .clone()
-                    .children('.k-grid-header').remove()
-                .end()
-                    .children('.k-grid-content')
-                        .find('table')
-                            .first()
-                                .children('tbody').before(thead)
+            var gridHeader = gridElement.children('.k-grid-header');
+            if (gridHeader[0]) {
+                var thead = gridHeader.find('thead').clone().addClass('k-grid-header');
+                printableContent = gridElement
+                    .clone()
+                        .children('.k-grid-header').remove()
+                    .end()
+                        .children('.k-grid-content')
+                            .find('table')
+                                .first()
+                                    .children('tbody').before(thead)
+                                .end()
                             .end()
                         .end()
-                    .end()
-                .end()[0].outerHTML;
-        } else {
-            printableContent = gridElement.clone()[0].outerHTML;
+                    .end()[0].outerHTML;
+            } else {
+                printableContent = gridElement.clone()[0].outerHTML;
+            }
+
+            doc.write(htmlStart + printableContent + htmlEnd);
+            doc.close();
+            win.print();
         }
 
-        doc.write(htmlStart + printableContent + htmlEnd);
-        doc.close();
-        win.print();
-    }
 
+        function showName(ele){
 
-    function showName(ele){
-         
-        var _prodid=$(ele).attr("data-prodid");
-        var _locationid=$(ele).attr("data-locationid");
-        var _type=$(ele).attr("data-type");
+            var _prodid=$(ele).attr("data-prodid");
+            var _locationid=$(ele).attr("data-locationid");
+            var _type=$(ele).attr("data-type");
 
-        var createTable=function(data,type){
-             
-            if(type=="inward")
-            {
-                var str ="<table class='table table-bordered'> <thead><tr><th>S.No</th><th>DocName</th> <th>Vendor</th> <th>Quantity</th> <th>Expected Date</th> </tr> </thead> <tbody> ";
-                for (var i = 0; i < data.length;i++) {
-                    str +="<tr><td>"+(i+1)+"</td><td><a href='/GridStock/UpdateInStock?DocID="+data[i].DocNo+"'>"+data[i].DocName+" </a></td><td>"+data[i].Vendor+"</td><td>"+data[i].Quantity+"</td><td>"+data[i].efDate+"</td></tr>";
-                }
-                str+="</tbody></table>";
-                $("#modelContainer").empty().append(str);
-                $("#myModal").modal('show');
-            }
-            else if(type=="outward")
-            {
-                var str ="<table class='table table-bordered'> <thead><tr><th>S.No</th><th>DocName</th> <th>Customer</th> <th>Quantity</th> <th>Expected Date</th> </tr> </thead> <tbody> ";
-                for (var i = 0; i < data.length;i++) {
-                    str +="<tr><td>"+(i+1)+"</td><td><a href='/GridStock/UpdateOutStock?DocID="+data[i].DocNo+"' >"+data[i].DocName+" </a></td><td>"+data[i].Customer+"</td><td>"+data[i].Quantity+"</td><td>"+data[i].efDate+"</td></tr>";
-                }
-                str+="</tbody></table>";
-                $("#modelContainer").empty().append(str);
-                $("#myModal").modal('show');
-            }
+            var createTable=function(data,type){
 
-        };
-
-        if(_prodid && _locationid && _type){
-            $.ajax({
-                url: '/GridStock/GetReOrdQtyHistory',
-                type: 'get',
-                data: { "ProductID": _prodid,"WarehouseID":_locationid,"Type":_type },
-                beforeSend: function () {
-                    $("#ajaxLoadingImg").show();
-
-                },
-                complete: function () { $("#ajaxLoadingImg").hide(); },
-                success: function (data) {
-                    if(data)
-                    {
-                        createTable(JSON.parse(data),_type);
+                if(type=="inward")
+                {
+                    var str ="<table class='table table-bordered'> <thead><tr><th>S.No</th><th>DocName</th> <th>Vendor</th> <th>Quantity</th> <th>Expected Date</th> </tr> </thead> <tbody> ";
+                    for (var i = 0; i < data.length;i++) {
+                        str +="<tr><td>"+(i+1)+"</td><td><a href='/GridStock/UpdateInStock?DocID="+data[i].DocNo+"'>"+data[i].DocName+" </a></td><td>"+data[i].Vendor+"</td><td>"+data[i].Quantity+"</td><td>"+data[i].efDate+"</td></tr>";
                     }
-                }, 
-                error: function (e) { customAlert('Error occured', 'alert'); }
-            });
+                    str+="</tbody></table>";
+                    $("#modelContainer").empty().append(str);
+                    $("#myModal").modal('show');
+                }
+                else if(type=="outward")
+                {
+                    var str ="<table class='table table-bordered'> <thead><tr><th>S.No</th><th>DocName</th> <th>Customer</th> <th>Quantity</th> <th>Expected Date</th> </tr> </thead> <tbody> ";
+                    for (var i = 0; i < data.length;i++) {
+                        str +="<tr><td>"+(i+1)+"</td><td><a href='/GridStock/UpdateOutStock?DocID="+data[i].DocNo+"' >"+data[i].DocName+" </a></td><td>"+data[i].Customer+"</td><td>"+data[i].Quantity+"</td><td>"+data[i].efDate+"</td></tr>";
+                    }
+                    str+="</tbody></table>";
+                    $("#modelContainer").empty().append(str);
+                    $("#myModal").modal('show');
+                }
+
+            };
+
+            if(_prodid && _locationid && _type){
+                $.ajax({
+                    url: '/GridStock/GetReOrdQtyHistory',
+                    type: 'get',
+                    data: { "ProductID": _prodid,"WarehouseID":_locationid,"Type":_type },
+                    beforeSend: function () {
+                        $("#ajaxLoadingImg").show();
+
+                    },
+                    complete: function () { $("#ajaxLoadingImg").hide(); },
+                    success: function (data) {
+                        if(data)
+                        {
+                            createTable(JSON.parse(data),_type);
+                        }
+                    },
+                    error: function (e) { customAlert('Error occured', 'alert'); }
+                });
+            }
+
         }
 
-    }
-
-</script>
+    </script>

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonImple.cs" />
     <Compile Include="CustomerImple.cs" />
     <Compile Include="HealthCheckImple.cs" />
     <Compile Include="InwardDocumentImple.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="ProductsImple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RolesImple.cs" />
+    <Compile Include="StockReportImple.cs" />
     <Compile Include="StockTransferImple.cs" />
     <Compile Include="UsersImple.cs" />
     <Compile Include="WareHouseImple.cs" />

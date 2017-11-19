@@ -1,4 +1,5 @@
-﻿using MAP.Inventory.Logging;
+﻿using MAP.Inventory.DAL;
+using MAP.Inventory.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,16 +7,16 @@ using System.Data;
 using System.Linq;
 using System.Web;
 
-namespace MAP.Inventory.Web.Models
+namespace MAP.Inventory.ModelImple
 {
-    public class StockReport
+    public class StockReportImple
     {
-
+        General _General = new General();
         public DataSet ds { get; set; }
 
         public DataTable dt { get; set; }
 
-        public StockReport()
+        public StockReportImple()
         {
 
         }
@@ -26,7 +27,7 @@ namespace MAP.Inventory.Web.Models
         {
             try
             {
-                this.ds = DAL.GetDataSet("Sp_GetStockReportData", new List<string>(), new System.Collections.ArrayList());
+                this.ds = _General.Get(new ArrayList(), "Sp_GetStockReportData", 0);
             }
             catch (Exception ex)
             {
@@ -176,13 +177,11 @@ namespace MAP.Inventory.Web.Models
             {
                 List<string> list = new List<string>();
                 ArrayList al = new ArrayList();
-
-                list.Add("@ProductID");
-                list.Add("@WarehouseID");
+                 
                 al.Add(ProductID);
                 al.Add(WarehouseID);
 
-                ds = DAL.GetDataSet("sp_GetReorderHistory", list, al);
+                ds = _General.Get(al, "sp_GetReorderHistory", 0); 
             }
             catch (Exception ex)
             {
@@ -198,13 +197,11 @@ namespace MAP.Inventory.Web.Models
             {
                 List<string> list = new List<string>();
                 ArrayList al = new ArrayList();
-
-                list.Add("@ProductID");
-                list.Add("@WarehouseID");
+                 
                 al.Add(ProductID);
                 al.Add(WarehouseID);
 
-                ds = DAL.GetDataSet("sp_GetBlockedQtyHistory", list, al);
+                ds = _General.Get(al, "sp_GetBlockedQtyHistory", 0); 
             }
             catch (Exception ex)
             {

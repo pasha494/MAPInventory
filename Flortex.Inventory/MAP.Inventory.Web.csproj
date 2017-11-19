@@ -211,12 +211,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Models\StockReport.cs" />
     <Compile Include="Models\SessionExpireAttribute.cs" />
-    <Compile Include="Models\DAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\custom_styles.css" />
     <Content Include="Content\EasyUi\easyui.css" />
     <Content Include="Content\EasyUi\icon.css" />
     <Content Include="Content\EasyUi\icons\back.png" />

@@ -1,9 +1,17 @@
-﻿@model MAP.Inventory.Web.Models.StockReport
+﻿@model MAP.Inventory.ModelImple.StockReportImple
 @using Newtonsoft.Json;
 @{
     ViewBag.Title = "GetStockReport";
-    string WareHouses = JsonConvert.SerializeObject(Model.ds.Tables[0]);
-    string Data = JsonConvert.SerializeObject(Model.dt);
+    string WareHouses = string.Empty;
+    if (Model != null && Model.ds != null && Model.ds.Tables.Count > 0)
+    {
+        WareHouses = JsonConvert.SerializeObject(Model.ds.Tables[0]);
+    }
+    string Data = "";
+    if (Model != null && Model.dt != null)
+    {
+        Data = JsonConvert.SerializeObject(Model.dt);
+    }
 }
 
 <style>
@@ -41,24 +49,27 @@
     }
 </style>
 <form class="cmxform" role="search" id="searchForm">
-    <div class="row-fluid">
+    <div class="row-fluid heading">
         <div class="span12">
-            <h2 class="subtitle">Quick Stock Report</h2>
+            <h2 class="pull-left">Quick Stock Report</h2>
         </div>
     </div>
     <div class="row-fluid">
         <div class="span12 onloadhide">
             <div class="row-fluid">
                 <div class="span4">
-                    <label style="color: white; margin-right: 10px;" class="pull-left">Search By : </label>
-                    <label style="color: white; margin-right: 10px;" class="pull-left">
-                        <input type="radio" id="rdbProductCode" name="filter" value="1" checked="checked" class="rdbFilter" />
-                        Product code
-                    </label>
-                    <label style="color: white; margin-right: 10px;" class="pull-left">
-                        <input type="radio" id="rdbCategory" name="filter" value="2" class="rdbFilter " />
-                        Category
-                    </label>
+                    <div class="pull-right">
+                        <label class="label1">Search By : </label>
+
+                        <label class="uni-radio radio inline">
+                            <input type="radio" checked="checked" value="1" id="rdbProductCode" name="uni_r" class="uni_style rdbFilter" />
+                            Product code
+                        </label>
+                        <label class="uni-radio radio inline">
+                            <input type="radio" value="2" id="rdbCategory" name="uni_r" class="uni_style rdbFilter" />
+                            Category
+                        </label>
+                    </div>
                 </div>
                 <div class="span5">
                     <input id="drpProductCodes" style="width: 450px;" class="mousetrap pull-left" />
@@ -79,15 +90,15 @@
             <table class="table" id="tblGrid" style="display: none; background-color: white">
                 <caption id="tblGridCaption">
                     <span style="font-size: 16px; color: white;">Product Details </span>
-                    <button id="btnBack" style="width: 100px;" class="btn btn-info pull-right">Back</button></caption>
+                    <button id="btnBack" style="width: 100px;" class="btn btn-info pull-right">Back</button>
+                </caption>
                 <thead>
                     <tr>
                         <th>Specifications</th>
                         <th>Details</th>
                     </tr>
                 </thead>
-                <tbody>
-                </tbody>
+                <tbody></tbody>
             </table>
 
         </div>
@@ -105,8 +116,7 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                </tbody>
+                <tbody></tbody>
             </table>
 
         </div>
@@ -158,7 +168,7 @@
             value:''
         },{
             field: "Spec",
-            title: "Specifications", 
+            title: "Specifications",
             value:''
         }
         ]
@@ -200,14 +210,14 @@
             obj4.field= "ReOrd_ExpDt_" + locations[i].id;
             obj4.title="Re-Order Plan Date ("  + locations[i].name +")";
             obj4.tag= locations[i].id;
-            obj4.value=''; 
+            obj4.value='';
             _columns.push(obj4);
         }
 
 
 
         $(".onloadhide").hide();
-        //Product code list view control 
+        //Product code list view control
         function getProductsByCode() {
             $.ajax({
                 url: '/GridStock/ProductsByCode',
@@ -218,14 +228,14 @@
                 },
                 complete: function () { $("#ajaxLoadingImg").hide(); },
                 success: function (res) {
-                     
+
                     var productCodes = JSON.parse(res);
                     $("#drpProductCodes").kendoComboBox({
                         filter: "contains",
-                        dataSource: productCodes, 
-                        placeholder: "Select Product Code...", 
+                        dataSource: productCodes,
+                        placeholder: "Select Product Code...",
                         dataTextField: "code",
-                        dataValueField: "id", 
+                        dataValueField: "id",
                         autobind: false,
                         minLength: 1
 
@@ -234,12 +244,12 @@
                 },
                 error: function (e) { customAlert('error', 'alert'); }
             });
-            
-        } 
-         
+
+        }
+
         getProductsByCode();
 
-         
+
         function getProductCategory() {
             $.ajax({
                 url: '/GridStock/GetProductCategory',
@@ -253,10 +263,10 @@
                     var productCodes = JSON.parse(res);
                     $("#drpProductCategory").kendoComboBox({
                         filter: "contains",
-                        dataSource: productCodes, 
-                        placeholder: "Select Product category...", 
+                        dataSource: productCodes,
+                        placeholder: "Select Product category...",
                         dataTextField: "name",
-                        dataValueField: "id", 
+                        dataValueField: "id",
                         autobind: false,
                         minLength: 1
 
@@ -265,11 +275,11 @@
                 },
                 error: function (e) { customAlert('error', 'alert'); }
             });
-            
-        } 
+
+        }
         getProductCategory();
 
-               
+
 
         Mousetrap.bind(['ctrl+enter', 'command+enter'], function (e) {
             e.preventDefault();
@@ -287,63 +297,63 @@
         });
 
         $("#btnSearch").click(function (e) {
-             
+
             e.preventDefault();
             $("#ajaxLoadingImg").show();
             $("#tblCategoryGrid").hide();
             $("#tblGrid").hide();
-            var $filter = {}; 
+            var $filter = {};
             var  $val = "";
- 
-            if ($("#rdbProductCode").is(":checked")) {  
+
+            if ($("#rdbProductCode").is(":checked")) {
                 var combobox = $("#drpProductCodes").data("kendoComboBox");
                 $val=combobox.value();
-                 
+
                 $filter.field= "ProductID";
                 $filter.value=$val;
 
                 if($filter){
-                    var retItem=_.find(_data,function(item){  
+                    var retItem=_.find(_data,function(item){
                         if(item[$filter.field]==$filter.value)
-                            return item;   
+                            return item;
                     });
                     $("#tblGridCaption").hide();
                     _fillGrid(retItem);
 
                 }
             }
-            else if ($("#rdbCategory").is(":checked")) { 
+            else if ($("#rdbCategory").is(":checked")) {
 
                 var combobox = $("#drpProductCategory").data("kendoComboBox");
                 $val=combobox.value();
 
                 $filter.field= "CategoryID";
-                $filter.value=$val; 
+                $filter.value=$val;
 
-                var _productsArr=_.filter(_data,function(item){  
+                var _productsArr=_.filter(_data,function(item){
                     if(item[$filter.field]==$filter.value)
-                        return item;   
+                        return item;
                 });
 
                 $("#tblGrid").hide();
                 //tblGridCaption
-               
+
                 _fillProductsGrid(_productsArr);
-            } 
-           
+            }
+
             $("#ajaxLoadingImg").hide();
- 
+
         });
 
         var _fillProductsGrid=function(item){
-             
+
             var str='';
             if(item && item.length>0){
                 for (var i = 0; i < item.length; i++) {
 
                     if(item[i].ProductCode && item[i].ProductName && item[i].ProductID)
-                    { 
-                        str +='<tr>'; 
+                    {
+                        str +='<tr>';
                         str +='<td>'+item[i].ProductCode+'</td>';
                         str +='<td>'+item[i].ProductName+'</td>';
                         str +='<td><a href="javascript:void(0);" class="viewProductDetails" data-id="'+item[i].ProductID+'">View</a></td>';
@@ -359,10 +369,10 @@
         var _fillGrid=function(retItem){
             debugger
             if(retItem)
-            { 
+            {
                 var str='';
                 for (var i = 0; i < _columns.length; i++) {
-                    
+
                     str +='<tr';
 
                     if(_columns[i].field=="Total_Qty")
@@ -385,85 +395,85 @@
                         str +='<td>'+retItem[_columns[i].field]+'</td>';
 
                     str +=' </tr>';
-                   
+
                 }
                 $("#tblCategoryGrid").hide();
                 $("#tblGrid>tbody").empty().append(str);
                 $("#tblGrid").fadeIn(2000);
-            }  
+            }
         };
 
         $("#tblCategoryGrid").on('click','a.viewProductDetails',function(e){
-             
-            var $val=parseInt($(this).attr("data-id")); 
+
+            var $val=parseInt($(this).attr("data-id"));
             if($val)
             {
-                var retItem=_.find(_data,function(item){  
+                var retItem=_.find(_data,function(item){
                     if(item['ProductID']==$val)
-                        return item;   
+                        return item;
                 });
                 $("#tblGridCaption").show();
                 //tblGridCaption
                 _fillGrid(retItem);
             }
-             
+
         });
 
-        $("#btnBack").click(function (e) { 
+        $("#btnBack").click(function (e) {
             e.preventDefault();
             $("#tblCategoryGrid").show();
             $("#tblGrid").hide();
 
         });
         $("#btnClear").click(function (e) {
-             
+
             e.preventDefault();
             $("#ajaxLoadingImg").show();
-            var $filter = new Array(); 
+            var $filter = new Array();
             var combobox = $("#drpProductCodes").data("kendoComboBox");
             combobox.text('');
             var combobox1 = $("#drpProductCategory").data("kendoComboBox");
             combobox1.text('');
             grid.dataSource.filter($filter);
             $("#ajaxLoadingImg").hide();
- 
+
         });
 
-        
+
         $("input.rdbFilter").on("click",function(e){
-            //e.preventDefault(); 
+            //e.preventDefault();
             if($(this).val()==2)
             {
                 var combobox = $("#drpProductCodes").data("kendoComboBox");
                 combobox.text('');
                 $("#drpProductCategory").closest(".k-widget").show();
-                $("#drpProductCodes").closest(".k-widget").hide(); 
+                $("#drpProductCodes").closest(".k-widget").hide();
                 //$("#txtSearch").attr("placeholder","Enter Product category to search..");
             }
             else
-            {                      
+            {
                 var combobox1 = $("#drpProductCategory").data("kendoComboBox");
                 combobox1.text('');
                 $("#drpProductCategory").closest(".k-widget").hide();
-                $("#drpProductCodes").closest(".k-widget").show();  
-                //$("#txtSearch").attr("placeholder","Enter Product code to search.."); 
+                $("#drpProductCodes").closest(".k-widget").show();
+                //$("#txtSearch").attr("placeholder","Enter Product code to search..");
             }
         });
-         
+
         $("#drpProductCategory").closest(".k-widget").hide();
         $("#drpProductCodes").closest(".k-widget").show();
         $(".onloadhide").show();
 
     });
-    
+
     function showName(ele){
-         
+
         var _prodid=$(ele).attr("data-prodid");
         var _locationid=$(ele).attr("data-locationid");
         var _type=$(ele).attr("data-type");
 
         var createTable=function(data,type){
-             
+
             if(type=="inward")
             {
                 var str ="<table class='table table-bordered'> <thead><tr><th>S.No</th><th>DocName</th> <th>Vendor</th> <th>Quantity</th> <th>Expected Date</th> </tr> </thead> <tbody> ";
@@ -502,11 +512,11 @@
                     {
                         createTable(JSON.parse(data),_type);
                     }
-                }, 
+                },
                 error: function (e) { customAlert('Error occured', 'alert'); }
             });
         }
 
     }
-     
+
 </script>

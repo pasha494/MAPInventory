@@ -10,6 +10,7 @@ using MAP.Inventory.Web.Models;
 using Newtonsoft.Json;
 using MAP.Inventory.Logging;
 using MAP.Inventory.ModelImple;
+using MAP.Inventory.Interface;
 
 namespace MAP.Inventory.Web.Controllers
 {
@@ -42,13 +43,10 @@ namespace MAP.Inventory.Web.Controllers
             Dictionary<string, object> row;
 
             try
-            {
-                DataSet ds = new DataSet();
-                ds = DAL.GetDataSet(" SELECT * FROM [Warehouses] where status=1 ");
-                DataTable dt = new DataTable();
-                dt = ds.Tables[0];
-
-
+            { 
+                IWareHouseImple oWareHouse = new WareHouseImple();
+                DataTable dt = oWareHouse.GetGridData(0); //0 will gets all the WareHouse data   
+  
                 foreach (DataRow dr in dt.Rows)
                 {
                     row = new Dictionary<string, object>();
@@ -75,12 +73,9 @@ namespace MAP.Inventory.Web.Controllers
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             try
             {
-
-                DataSet ds = new DataSet();
-                ds = DAL.GetDataSet(" SELECT [id],[code] FROM [Products]  where status=1 ");
-                DataTable dt = new DataTable();
-                dt = ds.Tables[0];
-
+                IProductsImple oProductsImple = new ProductsImple(); 
+                DataTable dt = oProductsImple.GetGridData(0); //0 will gets all the products data
+  
                 Dictionary<string, object> row;
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -108,10 +103,8 @@ namespace MAP.Inventory.Web.Controllers
             try
             {
 
-                DataSet ds = new DataSet();
-                ds = DAL.GetDataSet(" select NodeNo as id,name from ProductCategory ");
-                DataTable dt = new DataTable();
-                dt = ds.Tables[0];
+                IProductsCategoryImple oProducts = new ProductsCategoryImple(); 
+                DataTable dt = oProducts.GetGridData(0); //0 will gets all the products data
 
                 Dictionary<string, object> row;
                 foreach (DataRow dr in dt.Rows)
@@ -140,10 +133,8 @@ namespace MAP.Inventory.Web.Controllers
             try
             {
 
-                DataSet ds = new DataSet();
-                ds = DAL.GetDataSet(" SELECT [id],[name] FROM [Products]  where status=1 ");
-                DataTable dt = new DataTable();
-                dt = ds.Tables[0];
+                IProductsImple oProductsImple = new ProductsImple();
+                DataTable dt = oProductsImple.GetGridData(0); //0 will gets all the products data
 
                 Dictionary<string, object> row;
                 foreach (DataRow dr in dt.Rows)
@@ -166,12 +157,11 @@ namespace MAP.Inventory.Web.Controllers
 
         public ActionResult GetNextPrevDoc(string _Action, int DocType, int DocNo)
         {
-            PLog.Info("BEGIN::Controller > GridStock, Method > GetNextPrevDoc");
-            string str = "";
-
+            PLog.Info("BEGIN::Controller > GridStock, Method > GetNextPrevDoc"); 
+            CommonImple _CommonImple = new CommonImple();
             if (DocType == 1)//opening stocks
             {
-                DataSet ds = DAL.GetDataSet("select * from OpeningStockMaster where IsDeleted=0 order by DocNo asc");
+                DataSet ds = _CommonImple.GetNextPrevDocData(DocType);
                 int x = GetDocNo(ds, DocNo, _Action);
                 if (x == 0)
                     return RedirectToAction("AddOpStock");
@@ -180,7 +170,7 @@ namespace MAP.Inventory.Web.Controllers
             }
             else if (DocType == 2)
             {
-                DataSet ds = DAL.GetDataSet("select * from InwardStockMaster where IsDeleted=0 order by DocNo asc");
+                DataSet ds = _CommonImple.GetNextPrevDocData(DocType);
                 int x = GetDocNo(ds, DocNo, _Action);
                 if (x == 0)
                     return RedirectToAction("AddInStock");
@@ -189,7 +179,7 @@ namespace MAP.Inventory.Web.Controllers
             }
             else if (DocType == 3)
             {
-                DataSet ds = DAL.GetDataSet("select * from OutwardStockMaster where IsDeleted=0 order by DocNo asc");
+                DataSet ds = _CommonImple.GetNextPrevDocData(DocType);
                 int x = GetDocNo(ds, DocNo, _Action);
                 if (x == 0)
                     return RedirectToAction("AddOutStock");
@@ -198,7 +188,7 @@ namespace MAP.Inventory.Web.Controllers
             }
             else if (DocType == 4)
             {
-                DataSet ds = DAL.GetDataSet("select * from StockTransferMaster where IsDeleted=0 order by DocNo asc");
+                DataSet ds = _CommonImple.GetNextPrevDocData(DocType);
                 int x = GetDocNo(ds, DocNo, _Action);
                 if (x == 0)
                     return RedirectToAction("AddStockTransfer");
@@ -260,7 +250,7 @@ namespace MAP.Inventory.Web.Controllers
 
                 if (!string.IsNullOrEmpty(ProductID) && !string.IsNullOrEmpty(WarehouseID))
                 {
-                    StockReport objModel = new StockReport();
+                    StockReportImple objModel = new StockReportImple();
                     if (Type.ToLower() == "inward")
                     {
 
@@ -296,7 +286,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult GetStockReport()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >GetStockReport()");
-            StockReport objModel = new StockReport();
+            StockReportImple objModel = new StockReportImple();
             try
             {
                 objModel.GetStockReportData();
@@ -314,7 +304,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult GetConsolidateStockReport()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >GetConsolidateStockReport()");
-            StockReport objModel = new StockReport();
+            StockReportImple objModel = new StockReportImple();
             try
             {
                 objModel.GetStockReportData();
@@ -332,7 +322,7 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult GetQuickStockReport()
         {
             PLog.Info("BEGIN::Controller > GridStock, Method >GetStockReport()");
-            StockReport objModel = new StockReport();
+            StockReportImple objModel = new StockReportImple();
             try
             {
                 objModel.GetStockReportData();
