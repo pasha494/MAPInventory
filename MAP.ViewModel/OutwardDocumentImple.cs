@@ -80,7 +80,7 @@ namespace MAP.Inventory.Web.Models
 
         public void GetDocumentsGridViewOptions()
         {
-            MapGridViewImple _productsListView = new MapGridViewImple((int)EnumGridView.InwardStock);
+            MapGridViewImple _productsListView = new MapGridViewImple((int)EnumGridView.OutwardStock);
             this.GridView = _productsListView.GetGridViewsCustomizationInfo(DocID);
         }
 
