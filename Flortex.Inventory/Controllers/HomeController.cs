@@ -51,9 +51,9 @@ namespace MAP.Inventory.Web.Controllers
         }
 
 
-        string CreateLoginCookies(int IsCreate, string email, string password)
+        void CreateLoginCookies(int IsCreate, string email, string password)
         {
-            string Pass = "";
+           
             if (IsCreate == 1)
             {
                 var cookieRemeberMe = new HttpCookie("RemeberMe", IsCreate.ToString());
@@ -73,8 +73,7 @@ namespace MAP.Inventory.Web.Controllers
                 HttpContext.Response.Cookies["RemeberMe"].Expires = DateTime.Now.AddDays(-1);
                 HttpContext.Response.Cookies["UserName"].Expires = DateTime.Now.AddDays(-1);
                 HttpContext.Response.Cookies["Password"].Expires = DateTime.Now.AddDays(-1);
-            }
-            return Pass;
+            } 
         }
 
 
@@ -83,7 +82,7 @@ namespace MAP.Inventory.Web.Controllers
             PLog.Info("BEGIN::Controller > Home, Method > LoginSubmit(string email, string password)");
             int Flg = 0;
 
-            string _Password = CreateLoginCookies(RememberMe, email, password);
+           
             try
             {
                 // str = Convert.ToInt32(str).ToString();
@@ -91,6 +90,8 @@ namespace MAP.Inventory.Web.Controllers
                 {
                     LoginImple obj = new LoginImple();
                     Flg = obj.CheckLogin(email, password);
+                    if (Flg > 0)
+                        CreateLoginCookies(RememberMe, email, password);
                 }
             }
             catch (Exception ex)
