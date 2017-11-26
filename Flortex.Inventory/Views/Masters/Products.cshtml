@@ -22,7 +22,26 @@
     {
         <div class="row-fluid heading">
             <div class="span12">
-                <h2>Edit Product</h2>
+                <h2 class="pull-left">Edit Product</h2>
+
+                <div class="pull-right">
+
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("SaveProduct") && objSession.RoleFeatures["SaveProduct"])
+                    {
+                        <button type="submit" class="btn btn-default" id="btnSaveProduct">  Save </button>
+                    }
+
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("ClearProduct") && objSession.RoleFeatures["ClearProduct"])
+                    {
+                        <button class="btn btn-default" id="btnClear">Reset</button>
+                    }
+
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("CancelProduct") && objSession.RoleFeatures["CancelProduct"])
+                    {
+                        <a class="btn btn-default" href="@Url.Action("Index", "Home")">Cancel</a>
+                    }
+
+                </div>
             </div>
         </div>
     }
@@ -30,7 +49,26 @@
     {
         <div class="row-fluid heading">
             <div class="span12">
-                <h2>Add Product</h2>
+                <h2 class="pull-left">Add Product</h2>
+
+                <div class="pull-right">
+
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("SaveProduct") && objSession.RoleFeatures["SaveProduct"])
+                    {
+                        <button type="submit" class="btn btn-default" id="btnSaveProduct">  Save </button>
+                    }
+
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("ClearProduct") && objSession.RoleFeatures["ClearProduct"])
+                    {
+                        <button class="btn btn-default" id="btnClear">Reset</button>
+                    }
+
+                    @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("CancelProduct") && objSession.RoleFeatures["CancelProduct"])
+                    {
+                        <a class="btn btn-default" href="@Url.Action("Index", "Home")">Cancel</a>
+                    }
+
+                </div>
             </div>
         </div>
     }
@@ -39,29 +77,20 @@
     @Html.HiddenFor(m => m.ProductID)
 
     <div class="row-fluid">
-        <div class="span2">
+
+        <div class="span4">
             <label for="txtCode" class="label1">Product Code</label>
+            <input type="text" class="span12 form-control mousetrap" name="txtCode" id="txtCode" placeholder="Product Code.." value="@Model.Code">
         </div>
-        <div class="span8">
-            <input type="text" class="form-control mousetrap" style="width: 300px" name="txtCode" id="txtCode" placeholder="Product Code" value="@Model.Code">
-        </div>
-    </div>
 
-    <div class="row-fluid">
-        <div class="span2">
+        <div class="span4">
             <label for="txtName" class="label1">Product Name</label>
+            <input type="text" class="span12 form-control mousetrap" name="txtName" id="txtName" placeholder="Product Name.." value="@Model.Name">
         </div>
-        <div class="span8">
-            <input type="text" class="form-control mousetrap" style="width: 300px" name="txtName" id="txtName" placeholder="Product Name" value="@Model.Name">
-        </div>
-    </div>
 
-    <div class="row-fluid">
-        <div class="span2">
+        <div class="span4">
             <label for="drpCategory" class="label1">Category</label>
-        </div>
-        <div class="span8">
-            <select class="form-control mousetrap" style="width: 300px" name="drpCategory" id="drpCategory">
+            <select class="span12 form-control mousetrap" name="drpCategory" id="drpCategory">
                 <option value="0">------Select category------</option>
                 @if (dt != null && dt.Rows.Count > 0)
                 {
@@ -79,22 +108,26 @@
                 }
             </select>
         </div>
-    </div>
-    <div class="row-fluid">
-        <div class="span2">
-            <label for="txtSpec" class="label1">Specification</label>
-        </div>
-        <div class="span8">
-            <input type="text" class="form-control mousetrap" style="width: 300px" name="txtSpec" id="txtSpec" placeholder="Specification.." value="@Model.Spec">
-        </div>
+
     </div>
 
+
     <div class="row-fluid">
-        <div class="span2">
-            <label class="label1" for="drpStatus">Status</label>
+
+        <div class="span4">
+            <label for="txtPrice" class="label1">Price</label>
+            <input type="text" class="span12 form-control mousetrap" name="txtPrice" id="txtPrice" placeholder="Product Price.." value="@Model.Price">
         </div>
-        <div class="span8">
-            <select class="form-control mousetrap " style="width: 300px" name="drpStatus" id="drpStatus">
+
+        <div class="span4">
+            <label for="txtSpec" class="label1">Specification</label>
+            <input type="text" class="span12 form-control mousetrap" name="txtSpec" id="txtSpec" placeholder="Specification.." value="@Model.Spec">
+        </div>
+
+        <div class="span4">
+            <label class="label1" for="drpStatus">Status</label>
+
+            <select class="span12 form-control mousetrap " name="drpStatus" id="drpStatus">
                 @if (dtStatus != null && dtStatus.Rows.Count > 0)
                 {
                     for (int i = 0; i < dtStatus.Rows.Count; i++)
@@ -114,38 +147,64 @@
         </div>
     </div>
 
-    <div class="row-fluid" style="display: none" id="divEffectiveDate">
-        <div class="span2">
-            <label class="label1" for="dtEDate">Effective Date</label>
-        </div>
-        <div class="span8">
-            <input placeholder="Effective Date" class="mousetrap" name="dtEDate" id="dtEDate">
-            <
-        </div>
-    </div>
-
     <div class="row-fluid">
-        <div class="span2">
+        <div class="span4" >
+            <div style="display: none" id="divEffectiveDate">
+                <label class="label1" for="dtEDate">Effective Date</label>
+                <input placeholder="Effective Date" class="span12 mousetrap" name="dtEDate" id="dtEDate">
+            </div>
         </div>
-        <div class="span8">
-            @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("SaveProduct") && objSession.RoleFeatures["SaveProduct"])
-            {
-                <button type="submit" class="btn btn-default" id="btnSaveProduct">  Save </button>
-            }
-
-            @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("ClearProduct") && objSession.RoleFeatures["ClearProduct"])
-            {
-                <button class="btn btn-default" id="btnClear">Reset</button>
-            }
-
-            @if (objSession.RoleFeatures != null && objSession.RoleFeatures.ContainsKey("CancelProduct") && objSession.RoleFeatures["CancelProduct"])
-            { 
-                <a class="btn btn-default" href="@Url.Action("Index", "Home")">Cancel</a>
-            }
-        </div>
-
     </div>
+    <div class="row-fluid">
+        <div class="tabbable tabbable-bordered">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_br1" data-toggle="tab">Price Mapping</a></li>
+                @*<li><a href="#tab_br3" data-toggle="tab">Additional Fields</a></li>*@
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_br1">
+                    <div class="row-fluid">
+                        <div class="span6">
+                            this is price mapping section
+                        </div>
+                    </div>
 
+                </div>
+
+                @*<div class="tab-pane" id="tab_br3">
+                        <div class="row-fluid">
+                            <div class="span6">
+                                <label for="txtAdharNumber">Extra 1</label>
+                                <input type="text" class="span6 form-control mousetrap" name="txtExtra1" id="txtExtra1" placeholder="Extra Field" value="@Model.Extra1">
+                            </div>
+                            <div class="span6">
+                                <label for="txtAdharNumber">Extra 2</label>
+                                <input type="text" class="span6 form-control mousetrap" name="txtExtra2" id="txtExtra2" placeholder="Extra Field" value="@Model.Extra2">
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <div class="span6">
+                                <label for="txtAdharNumber">Extra 3</label>
+                                <input type="text" class="span6 form-control mousetrap" name="txtExtra3" id="txtExtra3" placeholder="Extra Field" value="@Model.Extra3">
+                            </div>
+                            <div class="span6">
+                                <label for="txtAdharNumber">Extra 4</label>
+                                <input type="text" class="span6 form-control mousetrap" name="txtExtra4" id="txtExtra4" placeholder="Extra Field" value="@Model.Extra4">
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <div class="span6">
+                                <label for="txtAdharNumber">Extra 5</label>
+                                <input type="text" class="span6 form-control mousetrap" name="txtExtra5" id="txtExtra5" placeholder="Extra Field" value="@Model.Extra5">
+                            </div>
+                        </div>
+
+                    </div>*@
+            </div>
+        </div>
+    </div>
 </form>
 
 
@@ -163,8 +222,7 @@
             var date = new Date();
             return date.getDate() + "-" + parseInt(date.getMonth() + 1) + "-" + date.getFullYear()
         }
-
-        $(".k-datepicker").css("width", "300px");
+         
 
         $("#drpStatus").on("change", function (e) {
             var selected = $(this).val();

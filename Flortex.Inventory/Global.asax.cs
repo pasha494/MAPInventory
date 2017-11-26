@@ -1,4 +1,5 @@
 ﻿using log4net.Config;
+using MAP.Inventory.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,9 @@ namespace MAP.Inventory
             AuthConfig.RegisterAuth();
             //-----------Initiate Log4net 
             XmlConfigurator.Configure();
+
+            //
+            AppPreferences.DateFormat = "dd-MM-yyyy";
         }
     }
 }
