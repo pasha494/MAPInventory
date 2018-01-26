@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MAP.Inventory.ModelImple
 {
-    public class ProductsImple : IProductsImple
+    public class ProductPriceMapImple : IProductsImple
     {
         General _General = new General();
 

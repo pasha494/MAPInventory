@@ -46,6 +46,7 @@
     <Compile Include="IMapGridViewImple.cs" />
     <Compile Include="IMapListViewImple.cs" />
     <Compile Include="IProductsCategoryImple.cs" />
+    <Compile Include="IProductPriceMapImple.cs" />
     <Compile Include="IProductsImple.cs" />
     <Compile Include="IUsersImple.cs" />
     <Compile Include="IWareHouseImple.cs" />

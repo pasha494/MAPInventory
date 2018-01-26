@@ -47,6 +47,8 @@ namespace MAP.Inventory.Model
 
         public DateTime EffectiveDate { get; set; }
 
-        public DateTime ExpiryDate { get; set; }
+        public DateTime ExpiryDate { get; set; }         
+
+        public string WareHouseOptions { get; set; }
     }
 }
