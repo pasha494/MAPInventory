@@ -14,11 +14,7 @@ namespace MAP.Inventory.Web.Controllers
     {
         //
         // GET: /Generic/
-
-        public ActionResult Index()
-        {
-            return View();
-        }
+         
 
         public string GetProductsListView(string wareHouseId, string searchField, string q)
         {
