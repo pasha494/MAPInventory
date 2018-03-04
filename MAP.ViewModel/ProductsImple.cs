@@ -5,35 +5,33 @@ using MAP.Inventory.Model;
 using System;
 using System.Collections;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MAP.Inventory.ModelImple
 {
     public class ProductsImple : IProductsImple
     {
-        General _General = new General();
+        readonly General _general = new General();
 
-        public long SaveProducts(ProductsModel _ProductsModel)
+        public long SaveProducts(ProductsModel productsModel)
         {
             long flg = 0;
             try
-            { 
-                ArrayList al = new ArrayList();
-                 
+            {
+                var al = new ArrayList
+                {
+                    productsModel.ProductID,
+                    productsModel.Code,
+                    productsModel.Name,
+                    productsModel.ProductCategory,
+                    productsModel.Status,
+                    productsModel.efDate,
+                    productsModel.Spec,
+                    productsModel.Price
+                };
 
-                al.Add(_ProductsModel.ProductID);
-                al.Add(_ProductsModel.Code);
-                al.Add(_ProductsModel.Name);
-                al.Add(_ProductsModel.ProductCategory);
-                al.Add(_ProductsModel.Status);
-                al.Add(_ProductsModel.efDate);
-                al.Add(_ProductsModel.Spec);
 
-                _General.Set(al, "sp_InsertUpdateProducts",out flg);
-                ///flg = DAL.ExecuteSP("sp_InsertUpdateProducts", Params, al);
 
+                _general.Set(al, "sp_InsertUpdateProducts",out flg);
             }
             catch (Exception ex)
             {
@@ -44,9 +42,9 @@ namespace MAP.Inventory.ModelImple
 
         string ConverDate(DateTime date)
         {
-            string str = "";
+            string str;
 
-            if (date != null)
+            if (date != DateTime.MinValue || date!=DateTime.MaxValue)
             {
                 str = date.Day + "-" + date.Month + "-" + date.Year;
             }
@@ -58,12 +56,12 @@ namespace MAP.Inventory.ModelImple
             return str;
         }
 
-        public ProductsModel EditProdcut(int ID)
+        public ProductsModel EditProdcut(int id)
         {
-            ProductsModel objProductsModel = new ProductsModel();
+            var objProductsModel = new ProductsModel();
             try
             {
-                DataTable dt = GetGridData(ID);
+                DataTable dt = GetGridData(id);
 
                  if (dt != null && dt.Rows.Count > 0)
                 {
@@ -72,10 +70,7 @@ namespace MAP.Inventory.ModelImple
                     objProductsModel.Name = dt.Rows[0]["Name"].ToString();
                     objProductsModel.ProductCategory = Convert.ToInt32(dt.Rows[0]["ProductCategoryID"].ToString());
                     objProductsModel.Status = Convert.ToInt32(dt.Rows[0]["Status"].ToString());
-                    if (dt.Rows[0]["eDate"] == DBNull.Value)
-                        objProductsModel.efDate = ConverDate(DateTime.Now);
-                    else
-                        objProductsModel.efDate = ConverDate(Convert.ToDateTime(dt.Rows[0]["eDate"]));
+                    objProductsModel.efDate = ConverDate(dt.Rows[0]["eDate"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(dt.Rows[0]["eDate"]));
 
                     objProductsModel.Spec = dt.Rows[0]["Spec"].ToString();
 
@@ -90,15 +85,13 @@ namespace MAP.Inventory.ModelImple
             return objProductsModel;
         }
 
-        public DataTable GetGridData(int ProductID)
+        public DataTable GetGridData(int productId)
         {
             DataTable dt = null;
 
             try
             {
-                DataSet ds = new DataSet();
-                ds = _General.Get(new ArrayList() { ProductID }, "sp_GetProductsData");
-               // ds = DAL.GetDataSet("sp_GetProductsData", new List<string>() { "ProductID" }, new ArrayList() { ProductID });
+                var ds = _general.Get(new ArrayList() { productId }, "sp_GetProductsData");
                 dt = ds.Tables[0];
             }
             catch (Exception ex)
@@ -109,13 +102,13 @@ namespace MAP.Inventory.ModelImple
             return dt;
         }
 
-        public long DeleteProduct(int ProductID)
+        public long DeleteProduct(int productId)
         {
             long flg = 0;
 
             try
             {
-                 _General.Set(new ArrayList() { ProductID }, "sp_DeleteProducts", out flg);
+                 _general.Set(new ArrayList() { productId }, "sp_DeleteProducts", out flg);
                // flg = DAL.ExecuteSP("sp_DeleteProducts", new List<string>() { "@NodeNo" }, new ArrayList() { ProductID });
 
             }

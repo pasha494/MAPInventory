@@ -682,7 +682,7 @@
 			/* fixed layout */ 
 			.gebo-fixed {max-width:940px;margin:0 auto}
 			.gebo-fixed header .container-fluid {max-width:940px;margin:0 auto}
-			.gebo-fixed #maincontainer {border-right:1px solid #ccc;border-left:1px solid #ccc}
+			.gebo-fixed #maincontainer {border-right:1px solid #cccccc;border-left:1px solid #cccccc}
 			.gebo-fixed .sidebar {left:50%;margin-left:-469px}
 			.gebo-fixed .sidebar_switch {left:50%;margin-left:-250px}
 			.gebo-fixed.sidebar_hidden .sidebar_switch {margin-left:-465px;left:50%}
@@ -699,7 +699,7 @@
 			
 			.gebo-fixed.sidebar_right .sidebar {left:auto;right:50%;margin-left:0;margin-right:-470px}
 			.gebo-fixed.sidebar_right .sidebar_switch {left:auto;right:50%;margin-left:0;margin-right:-465px}
-			.gebo-fixed.sidebar_hidden.sidebar_right .sidebar_switch {laeft:auto;margin-left:0;margin-right:-465px;right:50%}
+			.gebo-fixed.sidebar_hidden.sidebar_right .sidebar_switch {left:auto;margin-left:0;margin-right:-465px;right:50%}
 			
 		}
 			
@@ -772,10 +772,10 @@
 		@media (min-width: 1681px) {
 			body {max-width:1680px;margin:0 auto}
 			header .container-fluid {max-width:1640px;margin:0 auto}
-			#maincontainer {border-right:1px solid #ccc}
+			#maincontainer { border-right: 1px solid #ccc; border-left:1px solid #ccc}
 			.main_content {border-left:none}
 			.sidebar {left:50%;margin-left:-841px;border-left:1px solid #ccc}
 			.sidebar_switch {left:50%;margin-left:-620px}
-			.sidebar_hidden .main_content {border-left:1px solid #ccc}
+			/*.sidebar_hidden .main_content {border-left:1px solid #ccc}*/
 			.sidebar_hidden .sidebar_switch {margin-left:-832px;left:50%}
 		}

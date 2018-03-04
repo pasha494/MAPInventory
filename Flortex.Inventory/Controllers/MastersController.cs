@@ -25,10 +25,9 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult ProductsCategoryList()
         {
             PLog.Info("BEGIN::Controller > Home, Method > ProductCategoryList()");
-            string str = "";
             try
             {
-                str = LoadProductsCategory();
+                var str = LoadProductsCategory();
                 ViewBag.Data = str;
             }
             catch (Exception ex)
@@ -120,7 +119,7 @@ namespace MAP.Inventory.Web.Controllers
                 PLog.Error("Error::Controller > Home, Method > UpdateProductsCategory(string ID)", ex);
             }
             PLog.Info("END::Controller > Home, Method > UpdateProductsCategory(string ID)");
-            return View("ProductsCategory", objModel);
+            return View($"ProductsCategory", objModel);
         }
 
         [SessionExpire(FeatureKey = "DeleteProductsCategory", RequestType = 2)]
@@ -149,11 +148,10 @@ namespace MAP.Inventory.Web.Controllers
         public ActionResult ProductsList()
         {
             PLog.Info("BEGIN::Controller > Home, Method > ProductsList()");
-            string str = "";
 
             try
             {
-                str = LoadProducts();
+                var str = LoadProducts();
                 ViewBag.Data = str;
             }
             catch (Exception ex)
